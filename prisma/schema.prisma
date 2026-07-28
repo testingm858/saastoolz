@@ -110,11 +110,18 @@ model ToolUsage {
   success      Boolean  @default(true)
   creditsUsed  Int      @default(0)
   errorMessage String?
+  // Populated from Vercel's edge geo headers (x-vercel-ip-*) — free, no
+  // external lookup call needed. Absent in local dev, where those headers
+  // don't exist.
+  country      String?
+  region       String?
+  city         String?
   createdAt    DateTime @default(now())
 
   user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@index([toolId, createdAt])
+  @@index([country])
   @@map("tool_usages")
 }
 

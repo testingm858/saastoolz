@@ -12,6 +12,28 @@ export interface OrchestratorContext {
   identifier: string;
   plan: UserPlan;
   creditsRemaining: number;
+  country?: string;
+  region?: string;
+  city?: string;
+}
+
+// Vercel's edge network stamps every incoming request with the client's
+// geolocation — free, no external API call, and not present in local dev
+// (no edge in front of `next dev`), where these all come back undefined.
+function geoFromHeaders(req: NextRequest): { country?: string; region?: string; city?: string } {
+  const decode = (v: string | null) => {
+    if (!v) return undefined;
+    try {
+      return decodeURIComponent(v);
+    } catch {
+      return v;
+    }
+  };
+  return {
+    country: req.headers.get("x-vercel-ip-country") ?? undefined,
+    region: decode(req.headers.get("x-vercel-ip-country-region")),
+    city: decode(req.headers.get("x-vercel-ip-city")),
+  };
 }
 
 const PLAN_LIMITS: Record<UserPlan, { dailyUses: number; maxFileSizeMB: number }> = {
@@ -76,7 +98,7 @@ export async function orchestrate(
     }
   }
 
-  const ctx: OrchestratorContext = { userId, identifier, plan, creditsRemaining };
+  const ctx: OrchestratorContext = { userId, identifier, plan, creditsRemaining, ...geoFromHeaders(req) };
 
   // Block AI tools for free users
   if (tool.isPremium && plan === "FREE") {
@@ -151,12 +173,15 @@ export async function logUsage(
   try {
     const { default: prisma } = await import("./prisma");
     await prisma.toolUsage.create({
-      data: { userId: ctx.userId, toolId, category, plan: ctx.plan, latencyMs, success, creditsUsed, errorMessage },
+      data: {
+        userId: ctx.userId, toolId, category, plan: ctx.plan, latencyMs, success, creditsUsed, errorMessage,
+        country: ctx.country, region: ctx.region, city: ctx.city,
+      },
     });
   } catch { /* non-blocking */ }
 }
 
 function buildAnonCtx(req: NextRequest): OrchestratorContext {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-  return { identifier: `ip:${ip}`, plan: "FREE", creditsRemaining: 0 };
+  return { identifier: `ip:${ip}`, plan: "FREE", creditsRemaining: 0, ...geoFromHeaders(req) };
 }

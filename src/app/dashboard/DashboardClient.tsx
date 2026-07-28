@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Zap, CreditCard } from "lucide-react";
+import { Zap, CreditCard, BarChart3 } from "lucide-react";
 import type { PlanKey } from "@/lib/stripe";
 
 interface Props {
@@ -12,9 +12,10 @@ interface Props {
   credits: number;
   creditsMonthly: number;
   hasBillingAccount: boolean;
+  isAdmin: boolean;
 }
 
-export default function DashboardClient({ email, planKey, planName, credits, creditsMonthly, hasBillingAccount }: Props) {
+export default function DashboardClient({ email, planKey, planName, credits, creditsMonthly, hasBillingAccount, isAdmin }: Props) {
   const [loading, setLoading] = useState(false);
 
   async function openBillingPortal() {
@@ -66,6 +67,12 @@ export default function DashboardClient({ email, planKey, planName, credits, cre
           <Link href="/tools" className="text-sm bg-white border border-gray-200 px-4 py-2 rounded-lg hover:border-violet-300 transition-colors">
             Browse all tools
           </Link>
+          {isAdmin && (
+            <Link href="/admin" className="flex items-center gap-1.5 text-sm bg-white border border-gray-200 px-4 py-2 rounded-lg hover:border-violet-300 transition-colors">
+              <BarChart3 className="w-3.5 h-3.5" />
+              Admin analytics
+            </Link>
+          )}
         </div>
       </div>
     </div>

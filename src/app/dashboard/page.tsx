@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { PLANS, type PlanKey } from "@/lib/stripe";
+import { isAdminEmail } from "@/lib/admin";
 import DashboardClient from "./DashboardClient";
 
 export const metadata: Metadata = { title: "Dashboard" };
@@ -30,6 +31,7 @@ export default async function DashboardPage() {
       credits={user?.credits ?? 0}
       creditsMonthly={plan.credits}
       hasBillingAccount={!!subscription?.stripeCustomerId}
+      isAdmin={isAdminEmail(session?.user?.email)}
     />
   );
 }
