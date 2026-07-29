@@ -4,7 +4,7 @@
 import {
   mergePdfs, rotatePdf, addWatermark, addPageNumbers, removePages,
   extractPages, reorderPages, readMetadata, writeMetadata, compressPdf,
-  imagesToPdf, stampSignature,
+  imagesToPdf, stampSignature, splitPdfIntoChunks, splitPdfEveryPage,
 } from "@/tools/pdf/pdf-tools";
 import {
   compressImage, resizeImage, cropImage, rotateImage, convertImage,
@@ -137,12 +137,54 @@ export async function dispatchFile(toolId: string, formData: FormData): Promise<
     case "pdf-split": {
       const file = formData.get("file");
       const buffer = await fileToBuffer(file);
-      if (!Array.isArray(options.pages)) throw new Error('options.pages is required, e.g. {"pages": [1, 3, 5]}');
+      const originalSize = buffer.byteLength;
+
+      // "Extract all" — every page becomes its own single-page PDF, zipped.
+      if (options.mode === "all") {
+        const parts = await splitPdfEveryPage(buffer);
+        if (parts.length === 1) {
+          return {
+            bytes: parts[0], filename: buildDownloadName(fileName(file), "page-1", "pdf"), contentType: "application/pdf",
+            extraHeaders: sizeHeaders(originalSize, parts[0].byteLength),
+          };
+        }
+        const zip = new JSZip();
+        parts.forEach((p, i) => zip.file(`page-${i + 1}.pdf`, p));
+        const bytes = await zip.generateAsync({ type: "nodebuffer" });
+        return {
+          bytes, filename: buildDownloadName(fileName(file), "pages", "zip"), contentType: "application/zip",
+          extraHeaders: sizeHeaders(originalSize, bytes.byteLength),
+        };
+      }
+
+      // "Fixed" range — split into consecutive chunkSize-page files, zipped.
+      if (options.mode === "fixed") {
+        const chunkSize = Number(options.chunkSize);
+        if (!Number.isFinite(chunkSize) || chunkSize < 1) throw new Error("options.chunkSize must be a positive number for fixed-range split");
+        const parts = await splitPdfIntoChunks(buffer, chunkSize);
+        if (parts.length === 1) {
+          return {
+            bytes: parts[0].bytes, filename: buildDownloadName(fileName(file), "split", "pdf"), contentType: "application/pdf",
+            extraHeaders: sizeHeaders(originalSize, parts[0].bytes.byteLength),
+          };
+        }
+        const zip = new JSZip();
+        parts.forEach((p) => zip.file(`part-${p.from}-${p.to}.pdf`, p.bytes));
+        const bytes = await zip.generateAsync({ type: "nodebuffer" });
+        return {
+          bytes, filename: buildDownloadName(fileName(file), "split", "zip"), contentType: "application/zip",
+          extraHeaders: sizeHeaders(originalSize, bytes.byteLength),
+        };
+      }
+
+      // "Custom" range or "Select pages" — both resolve to an explicit page
+      // list on the client; the backend just extracts that subset into one PDF.
+      if (!Array.isArray(options.pages) || options.pages.length === 0) throw new Error('options.pages is required, e.g. {"pages": [1, 3, 5]}');
       const bytes = await extractPages(buffer, options.pages as number[]);
       const suffix = toolId === "pdf-split" ? "split" : "extracted";
       return {
         bytes, filename: buildDownloadName(fileName(file), suffix, "pdf"), contentType: "application/pdf",
-        extraHeaders: sizeHeaders(buffer.byteLength, bytes.byteLength),
+        extraHeaders: sizeHeaders(originalSize, bytes.byteLength),
       };
     }
 

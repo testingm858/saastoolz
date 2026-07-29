@@ -10,6 +10,7 @@ import ToolInterface from "@/components/ToolInterface";
 import FileToolInterface from "@/components/FileToolInterface";
 import WebhookTesterClient from "@/components/WebhookTesterClient";
 import JsonViewerClient from "@/components/JsonViewerClient";
+import AdSlot from "@/components/AdSlot";
 import { Lock } from "lucide-react";
 import Link from "next/link";
 
@@ -125,6 +126,9 @@ export default async function ToolPage({ params }: Props) {
         /* Tool interface */
         <ToolInterface tool={tool} />
       )}
+
+      {/* Single horizontal ad placement */}
+      <AdSlot />
 
       {/* Related tools */}
       {relatedTools.length > 0 && (

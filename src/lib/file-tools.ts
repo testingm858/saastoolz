@@ -97,10 +97,10 @@ export const FILE_TOOLS: Record<string, FileToolConfig> = {
     ],
   },
   "pdf-split": {
+    // No generic `fields` here — pdf-split gets a bespoke split-mode UI
+    // (range/pages, custom/fixed/all/select) rendered directly by
+    // FileToolInterface instead of the generic field-grid renderer.
     multiple: false, accept: "application/pdf", acceptLabel: "a PDF file", outputIsFile: true,
-    fields: [
-      { name: "pages", label: "Pages to split out", type: "pageRange", placeholder: "e.g. 1-3", required: true, helpText: "Comma-separated page numbers or ranges" },
-    ],
   },
   "pdf-organize": {
     multiple: false, accept: "application/pdf", acceptLabel: "a PDF file", outputIsFile: true,

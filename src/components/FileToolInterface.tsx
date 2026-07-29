@@ -1,11 +1,27 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Tool } from "@/lib/tools";
 import { FILE_TOOLS, type FileToolField } from "@/lib/file-tools";
 import { Upload, Download, Loader2, FileText, X, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useProgressSimulation, ProcessingPanel, SizeComparison } from "@/components/ProgressIndicator";
+
+// Segmented-control button used by the pdf-split mode selector below.
+function ModeButton({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "flex-1 text-sm font-semibold py-2.5 rounded-lg transition-colors",
+        active ? "bg-violet-600 text-white" : "bg-gray-50 text-gray-600 hover:bg-gray-100"
+      )}
+    >
+      {children}
+    </button>
+  );
+}
 
 function safeJsonParse(text: string): Record<string, unknown> {
   try {
@@ -70,8 +86,15 @@ function defaultFieldValues(fields: FileToolField[]): Record<string, string> {
   return values;
 }
 
+// "name:size:lastModified" per file — cheap identity signature used to tell
+// whether the auto-run engine's last-run snapshot is stale.
+function fileSig(list: File[]): string {
+  return list.map((f) => `${f.name}:${f.size}:${f.lastModified}`).join("|");
+}
+
 export default function FileToolInterface({ tool }: FileToolInterfaceProps) {
   const config = FILE_TOOLS[tool.id];
+  const isSplitTool = tool.id === "pdf-split";
   const [files, setFiles] = useState<File[]>([]);
   const [secondFile, setSecondFile] = useState<File | null>(null);
   const [isDraggingSecond, setIsDraggingSecond] = useState(false);
@@ -87,6 +110,35 @@ export default function FileToolInterface({ tool }: FileToolInterfaceProps) {
   const [sizeInfo, setSizeInfo] = useState<{ original: number; result: number } | null>(null);
   const dragCounter = useRef(0);
   const dragCounterSecond = useRef(0);
+
+  // pdf-split's bespoke split-mode config (Range -> Custom/Fixed, Pages ->
+  // Extract all/Select pages) — rendered instead of the generic field grid.
+  const [splitMode, setSplitMode] = useState<"range" | "pages">("range");
+  const [rangeMode, setRangeMode] = useState<"custom" | "fixed">("custom");
+  const [pagesMode, setPagesMode] = useState<"all" | "select">("all");
+  const [rangeFrom, setRangeFrom] = useState("");
+  const [rangeTo, setRangeTo] = useState("");
+  const [chunkSize, setChunkSize] = useState("5");
+  const [selectPagesText, setSelectPagesText] = useState("");
+
+  // Resolves the split UI's current selections into the {pages: [...]}` or
+  // {mode, chunkSize}` payload the backend expects, or null while incomplete.
+  function buildSplitPayload(): Record<string, unknown> | null {
+    if (splitMode === "range") {
+      if (rangeMode === "custom") {
+        const from = Number(rangeFrom);
+        const to = Number(rangeTo);
+        if (!Number.isInteger(from) || !Number.isInteger(to) || from < 1 || to < from) return null;
+        return { pages: Array.from({ length: to - from + 1 }, (_, i) => from + i) };
+      }
+      const size = Number(chunkSize);
+      if (!Number.isFinite(size) || size < 1) return null;
+      return { mode: "fixed", chunkSize: size };
+    }
+    if (pagesMode === "all") return { mode: "all" };
+    const pages = parsePageRange(selectPagesText);
+    return pages.length > 0 ? { pages } : null;
+  }
 
   function resetResults() {
     setError(null);
@@ -183,6 +235,10 @@ export default function FileToolInterface({ tool }: FileToolInterfaceProps) {
   }
 
   function buildOptionsJson(): string | null {
+    if (isSplitTool) {
+      const payload = buildSplitPayload();
+      return payload ? JSON.stringify(payload) : null;
+    }
     if (!config.fields || config.fields.length === 0) return null;
     const obj: Record<string, unknown> = {};
     for (const f of config.fields) {
@@ -208,6 +264,51 @@ export default function FileToolInterface({ tool }: FileToolInterfaceProps) {
     }
     return null;
   }
+
+  // A snapshot key of everything that would go into the next request, or
+  // null while the tool isn't ready to run yet (no file, missing required
+  // field/split config, etc). Used by the auto-run effect below to decide
+  // both *whether* to run and whether the inputs have actually changed since
+  // the last run — there's no manual "Run" button, so this is the only gate.
+  function computeRunKey(): string | null {
+    if (files.length === 0) return null;
+    if (config.secondFileInput && !secondFile) return null;
+
+    if (isSplitTool) {
+      const payload = buildSplitPayload();
+      if (!payload) return null;
+      return JSON.stringify({ f: fileSig(files), payload });
+    }
+
+    // image-resize accepts width OR height, but not neither — without this,
+    // selecting the image alone would immediately fire a doomed request
+    // before the user has typed either dimension.
+    if (tool.id === "image-resize" && !fieldValues.width?.trim() && !fieldValues.height?.trim()) return null;
+
+    if (missingRequiredField()) return null;
+    return JSON.stringify({ f: fileSig(files), s: secondFile ? fileSig([secondFile]) : null, fv: fieldValues });
+  }
+
+  const lastRunKeyRef = useRef<string | null>(null);
+  const [pendingAutoRun, setPendingAutoRun] = useState(false);
+
+  // No "Run" button — like ilovepdf.com/iloveimg.com, the operation starts
+  // on its own as soon as the inputs are ready. A short debounce avoids
+  // firing on every keystroke while typing e.g. a page range or watermark
+  // text; select/file changes just ride the same debounce for simplicity.
+  useEffect(() => {
+    const key = computeRunKey();
+    const isNew = !!key && key !== lastRunKeyRef.current;
+    setPendingAutoRun(isNew && !loading);
+    if (!isNew || loading) return;
+    const timer = setTimeout(() => {
+      lastRunKeyRef.current = key;
+      setPendingAutoRun(false);
+      handleRun();
+    }, 500);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [files, secondFile, fieldValues, splitMode, rangeMode, pagesMode, rangeFrom, rangeTo, chunkSize, selectPagesText, loading]);
 
   async function handleRun() {
     if (files.length === 0) { setError(`Choose ${config.acceptLabel} first`); return; }
@@ -309,6 +410,7 @@ export default function FileToolInterface({ tool }: FileToolInterfaceProps) {
 
   return (
     <div className="space-y-4">
+      <div className={cn("gap-4", isSplitTool && files.length > 0 ? "grid grid-cols-1 lg:grid-cols-[1fr_320px] items-start" : "space-y-4")}>
       {/* Dropzone */}
       <div
         className="bg-white border border-gray-200 rounded-2xl p-6"
@@ -356,6 +458,81 @@ export default function FileToolInterface({ tool }: FileToolInterfaceProps) {
             ))}
           </ul>
         )}
+      </div>
+
+      {/* Split-mode panel (pdf-split only) — appears once a file is chosen */}
+      {isSplitTool && files.length > 0 && (
+        <div className="bg-white border border-gray-200 rounded-2xl p-5 space-y-4 h-fit">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">How to split</p>
+
+          <div className="flex gap-2 bg-gray-50 rounded-xl p-1">
+            <ModeButton active={splitMode === "range"} onClick={() => setSplitMode("range")}>Range</ModeButton>
+            <ModeButton active={splitMode === "pages"} onClick={() => setSplitMode("pages")}>Pages</ModeButton>
+          </div>
+
+          {splitMode === "range" ? (
+            <>
+              <div className="flex gap-2 bg-gray-50 rounded-xl p-1">
+                <ModeButton active={rangeMode === "custom"} onClick={() => setRangeMode("custom")}>Custom</ModeButton>
+                <ModeButton active={rangeMode === "fixed"} onClick={() => setRangeMode("fixed")}>Fixed</ModeButton>
+              </div>
+
+              {rangeMode === "custom" ? (
+                <div>
+                  <p className="text-xs text-gray-500 mb-2">Extract a sequential range of pages into one PDF</p>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number" min={1} placeholder="From" value={rangeFrom}
+                      onChange={(e) => setRangeFrom(e.target.value)}
+                      className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-violet-400"
+                    />
+                    <span className="text-gray-400 text-sm shrink-0">to</span>
+                    <input
+                      type="number" min={1} placeholder="To" value={rangeTo}
+                      onChange={(e) => setRangeTo(e.target.value)}
+                      className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-violet-400"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <p className="text-xs text-gray-500 mb-2">Split into equal files of this many pages each</p>
+                  <input
+                    type="number" min={1} placeholder="e.g. 5" value={chunkSize}
+                    onChange={(e) => setChunkSize(e.target.value)}
+                    className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-violet-400"
+                  />
+                  <p className="flex items-start gap-1 text-xs text-gray-400 mt-1">
+                    <Info className="w-3 h-3 mt-0.5 shrink-0" /> Downloads as a .zip of multiple PDFs
+                  </p>
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              <div className="flex gap-2 bg-gray-50 rounded-xl p-1">
+                <ModeButton active={pagesMode === "all"} onClick={() => setPagesMode("all")}>Extract all</ModeButton>
+                <ModeButton active={pagesMode === "select"} onClick={() => setPagesMode("select")}>Select pages</ModeButton>
+              </div>
+
+              {pagesMode === "all" ? (
+                <p className="flex items-start gap-1 text-xs text-gray-400">
+                  <Info className="w-3 h-3 mt-0.5 shrink-0" /> Every page becomes its own PDF, downloaded as a .zip
+                </p>
+              ) : (
+                <div>
+                  <p className="text-xs text-gray-500 mb-2">Page numbers, separated by commas</p>
+                  <input
+                    type="text" placeholder="e.g. 1, 3, 5-8" value={selectPagesText}
+                    onChange={(e) => setSelectPagesText(e.target.value)}
+                    className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-violet-400"
+                  />
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
       </div>
 
       {/* Second dropzone (e.g. audio-watermark's watermark clip) */}
@@ -443,23 +620,17 @@ export default function FileToolInterface({ tool }: FileToolInterfaceProps) {
         </div>
       )}
 
-      {/* Run button */}
-      <button
-        onClick={handleRun}
-        disabled={loading}
-        className={cn(
-          "w-full py-3 px-6 rounded-xl font-semibold text-white transition-all",
-          "bg-violet-600 hover:bg-violet-700 active:scale-[.99]",
-          "disabled:opacity-60 disabled:cursor-not-allowed",
-          "flex items-center justify-center gap-2"
-        )}
-      >
-        {loading ? (
-          <><Loader2 className="w-4 h-4 animate-spin" /> {phase === "uploading" ? "Uploading..." : phase === "success" ? "Done!" : "Processing..."}</>
-        ) : (
-          `Run — ${tool.name}`
-        )}
-      </button>
+      {/* No manual "Run" button — processing starts on its own, iLovePDF/iLoveIMG-style */}
+      {!loading && files.length === 0 && (
+        <p className="text-center text-xs text-gray-400">
+          Choose {config.acceptLabel} above — processing starts automatically.
+        </p>
+      )}
+      {!loading && pendingAutoRun && (
+        <div className="flex items-center justify-center gap-2 text-sm text-violet-600 font-medium py-1">
+          <Loader2 className="w-3.5 h-3.5 animate-spin" /> Starting automatically…
+        </div>
+      )}
 
       {/* Progress animation (circular ring + linear bar) */}
       {loading && (

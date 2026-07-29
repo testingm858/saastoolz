@@ -106,6 +106,40 @@ export async function extractPages(buffer: ArrayBuffer, pageNumbers: number[]): 
   return out.save();
 }
 
+// Splits into consecutive chunks of `chunkSize` pages each — e.g. a 10-page
+// doc with chunkSize 3 becomes [1-3], [4-6], [7-9], [10-10].
+export async function splitPdfIntoChunks(
+  buffer: ArrayBuffer,
+  chunkSize: number
+): Promise<{ bytes: Uint8Array; from: number; to: number }[]> {
+  const src = await PDFDocument.load(buffer);
+  const total = src.getPageCount();
+  const size = Math.max(1, Math.floor(chunkSize));
+  const parts: { bytes: Uint8Array; from: number; to: number }[] = [];
+  for (let from = 1; from <= total; from += size) {
+    const to = Math.min(from + size - 1, total);
+    const out = await PDFDocument.create();
+    const pages = await out.copyPages(src, Array.from({ length: to - from + 1 }, (_, i) => from - 1 + i));
+    pages.forEach((p) => out.addPage(p));
+    parts.push({ bytes: await out.save(), from, to });
+  }
+  return parts;
+}
+
+// Splits every page of the document into its own single-page PDF.
+export async function splitPdfEveryPage(buffer: ArrayBuffer): Promise<Uint8Array[]> {
+  const src = await PDFDocument.load(buffer);
+  const total = src.getPageCount();
+  const outputs: Uint8Array[] = [];
+  for (let i = 0; i < total; i++) {
+    const out = await PDFDocument.create();
+    const [page] = await out.copyPages(src, [i]);
+    out.addPage(page);
+    outputs.push(await out.save());
+  }
+  return outputs;
+}
+
 export async function reorderPages(buffer: ArrayBuffer, order: number[]): Promise<Uint8Array> {
   const src = await PDFDocument.load(buffer);
   const total = src.getPageCount();
