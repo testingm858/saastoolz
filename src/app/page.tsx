@@ -120,16 +120,18 @@ export default function HomePage() {
       </section>
 
       {/* CTA Banner */}
-      <section className="relative overflow-hidden bg-gray-900 text-white py-16">
+      <section className="relative overflow-hidden bg-gray-900 text-white py-8">
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl" />
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-fuchsia-600/10 rounded-full blur-3xl" />
         </div>
-        <div className="relative max-w-3xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to get started?</h2>
-          <p className="text-gray-400 mb-8">Jump into any tool right now — no signup, no credit card.</p>
-          <Link href="/tools" className="inline-flex items-center gap-2 bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:shadow-lg hover:shadow-violet-900/50 transition-shadow">
-            Browse All Tools <ArrowRight className="w-5 h-5" />
+        <div className="relative max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+          <div>
+            <h2 className="text-2xl font-bold mb-1">Ready to get started?</h2>
+            <p className="text-gray-400">Jump into any tool right now — no signup, no credit card.</p>
+          </div>
+          <Link href="/tools" className="shrink-0 inline-flex items-center gap-2 bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white px-6 py-3 rounded-xl font-bold hover:shadow-lg hover:shadow-violet-900/50 transition-shadow">
+            Browse All Tools <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </section>
