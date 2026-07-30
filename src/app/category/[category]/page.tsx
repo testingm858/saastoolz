@@ -7,8 +7,12 @@ interface Props {
   params: Promise<{ category: string }>;
 }
 
+// PRO (ai-*) categories are hidden site-wide — only free categories get a
+// page at all; a stale/direct link to one 404s below.
 export async function generateStaticParams() {
-  return Object.keys(CATEGORY_META).map((category) => ({ category }));
+  return Object.keys(CATEGORY_META)
+    .filter((category) => !category.startsWith("ai-"))
+    .map((category) => ({ category }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -24,10 +28,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CategoryPage({ params }: Props) {
   const { category } = await params;
   const meta = CATEGORY_META[category];
-  if (!meta) notFound();
+  // PRO (ai-*) categories are hidden site-wide — no listing links here
+  // anymore, and a stale/direct link 404s instead of showing them.
+  if (!meta || category.startsWith("ai-")) notFound();
 
   const tools = getToolsByCategory(category as ToolCategory);
-  const isPremiumCat = category.startsWith("ai-");
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
@@ -36,12 +41,7 @@ export default async function CategoryPage({ params }: Props) {
         <div className="flex items-center gap-3 mb-3">
           <span className="text-5xl">{meta.icon}</span>
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-3xl font-bold text-gray-900">{meta.label}</h1>
-              {isPremiumCat && (
-                <span className="text-xs bg-violet-100 text-violet-700 px-2 py-0.5 rounded-full font-bold">PRO</span>
-              )}
-            </div>
+            <h1 className="text-3xl font-bold text-gray-900">{meta.label}</h1>
             <p className="text-gray-500 mt-1">{meta.description}</p>
           </div>
         </div>

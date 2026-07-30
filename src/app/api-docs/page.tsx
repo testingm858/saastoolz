@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ALL_TOOLS } from "@/lib/tools";
+import { FREE_TOOLS } from "@/lib/tools";
 
 export const metadata: Metadata = {
   title: "API Docs",
@@ -35,7 +35,7 @@ export default function ApiDocsPage() {
           <code className="text-xs bg-gray-100 px-1.5 py-0.5 rounded">toolId</code>{" "}
           is any tool slug, e.g. <code className="text-xs bg-gray-100 px-1.5 py-0.5 rounded">json-formatter</code> or{" "}
           <code className="text-xs bg-gray-100 px-1.5 py-0.5 rounded">bmi-calculator</code>. See the{" "}
-          <Link href="/tools" className="text-violet-600 hover:underline">full tool list</Link> ({ALL_TOOLS.length} tools) for every slug.
+          <Link href="/tools" className="text-violet-600 hover:underline">full tool list</Link> ({FREE_TOOLS.length} tools) for every slug.
         </p>
       </section>
 

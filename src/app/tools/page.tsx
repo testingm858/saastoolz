@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { ALL_TOOLS } from "@/lib/tools";
+import { FREE_TOOLS } from "@/lib/tools";
 import ToolsListClient from "./ToolsListClient";
 
 export const metadata: Metadata = {
   title: "All Tools",
-  description: `Browse all ${ALL_TOOLS.length} tools on SaaSToolz, searchable by name or category.`,
+  description: `Browse all ${FREE_TOOLS.length} tools on SaaSToolz, searchable by name or category.`,
 };
 
 export default function AllToolsPage() {

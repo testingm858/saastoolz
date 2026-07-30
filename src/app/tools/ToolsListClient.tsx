@@ -3,30 +3,24 @@
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
-import { ALL_TOOLS, CATEGORY_META, type ToolCategory } from "@/lib/tools";
+import { FREE_TOOLS, CATEGORY_META, type ToolCategory } from "@/lib/tools";
 import ToolCard from "@/components/ToolCard";
 import { cn } from "@/lib/utils";
 
-type PlanFilter = "all" | "free" | "premium";
-
-// Premium (AI) categories are hidden from this page's filters — the plan
-// filter's "premium" option and the "ai-*" category buttons stay fully
-// functional in code (reachable via /category/[category] directly, and
-// `plan` still supports "premium") but aren't linked to from here.
+// PRO tools are hidden site-wide — this page only ever lists FREE_TOOLS, and
+// the "ai-*" (Pro) categories are dropped from the category filter below.
+// /category/ai-* itself 404s now too, so there's nothing left to link to.
 const VISIBLE_CATEGORIES = Object.entries(CATEGORY_META).filter(([key]) => !key.startsWith("ai-"));
 
 export default function ToolsListClient() {
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
   const [category, setCategory] = useState<ToolCategory | "all">("all");
-  const [plan, setPlan] = useState<PlanFilter>("all");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return ALL_TOOLS.filter((tool) => {
+    return FREE_TOOLS.filter((tool) => {
       if (category !== "all" && tool.category !== category) return false;
-      if (plan === "free" && tool.isPremium) return false;
-      if (plan === "premium" && !tool.isPremium) return false;
       if (!q) return true;
       return (
         tool.name.toLowerCase().includes(q) ||
@@ -34,13 +28,13 @@ export default function ToolsListClient() {
         tool.tags?.some((t) => t.toLowerCase().includes(q))
       );
     });
-  }, [query, category, plan]);
+  }, [query, category]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">All Tools</h1>
-        <p className="text-gray-500 mt-1">{ALL_TOOLS.length} tools — search or filter to find what you need</p>
+        <p className="text-gray-500 mt-1">{FREE_TOOLS.length} tools — search or filter to find what you need</p>
       </div>
 
       {/* Search */}
@@ -57,21 +51,6 @@ export default function ToolsListClient() {
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-2 mb-8">
-        <div className="flex items-center gap-1 bg-gray-100 p-1 rounded-full mr-2">
-          {(["all", "free"] as PlanFilter[]).map((p) => (
-            <button
-              key={p}
-              onClick={() => setPlan(p)}
-              className={cn(
-                "px-3 py-1.5 rounded-full text-xs font-semibold transition-all capitalize",
-                plan === p ? "bg-white shadow text-gray-900" : "text-gray-500"
-              )}
-            >
-              {p}
-            </button>
-          ))}
-        </div>
-
         <button
           onClick={() => setCategory("all")}
           className={cn(
