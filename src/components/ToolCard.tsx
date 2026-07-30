@@ -4,17 +4,16 @@ import { Tool } from "@/lib/tools";
 import { cn } from "@/lib/utils";
 
 export default function ToolCard({ tool }: { tool: Tool }) {
-  return (
-    <Link
-      href={`/tools/${tool.id}`}
-      className={cn(
-        "group relative flex flex-col gap-2 p-4 rounded-xl border transition-all duration-200",
-        "bg-white hover:shadow-md hover:-translate-y-0.5",
-        tool.isPremium
-          ? "border-violet-100 hover:border-violet-300"
-          : "border-gray-100 hover:border-gray-200"
-      )}
-    >
+  const className = cn(
+    "group relative flex flex-col gap-2 p-4 rounded-xl border transition-all duration-200",
+    "bg-white",
+    tool.isPremium
+      ? "border-violet-100 cursor-default"
+      : "border-gray-100 hover:border-gray-200 hover:shadow-md hover:-translate-y-0.5"
+  );
+
+  const content = (
+    <>
       {/* Premium badge */}
       {tool.isPremium && (
         <span className="absolute top-3 right-3 flex items-center gap-1 text-xs bg-violet-100 text-violet-700 px-2 py-0.5 rounded-full font-semibold">
@@ -46,6 +45,18 @@ export default function ToolCard({ tool }: { tool: Tool }) {
           {tool.creditsPerUse} credits / use
         </span>
       )}
+    </>
+  );
+
+  // PRO tools are unlinked site-wide — the card still renders (badge and
+  // all) wherever tools are listed, it just isn't a navigable link.
+  if (tool.isPremium) {
+    return <div className={className}>{content}</div>;
+  }
+
+  return (
+    <Link href={`/tools/${tool.id}`} className={className}>
+      {content}
     </Link>
   );
 }

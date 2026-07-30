@@ -9,6 +9,12 @@ import { cn } from "@/lib/utils";
 
 type PlanFilter = "all" | "free" | "premium";
 
+// Premium (AI) categories are hidden from this page's filters — the plan
+// filter's "premium" option and the "ai-*" category buttons stay fully
+// functional in code (reachable via /category/[category] directly, and
+// `plan` still supports "premium") but aren't linked to from here.
+const VISIBLE_CATEGORIES = Object.entries(CATEGORY_META).filter(([key]) => !key.startsWith("ai-"));
+
 export default function ToolsListClient() {
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
@@ -52,7 +58,7 @@ export default function ToolsListClient() {
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-2 mb-8">
         <div className="flex items-center gap-1 bg-gray-100 p-1 rounded-full mr-2">
-          {(["all", "free", "premium"] as PlanFilter[]).map((p) => (
+          {(["all", "free"] as PlanFilter[]).map((p) => (
             <button
               key={p}
               onClick={() => setPlan(p)}
@@ -75,7 +81,7 @@ export default function ToolsListClient() {
         >
           All categories
         </button>
-        {Object.entries(CATEGORY_META).map(([key, meta]) => (
+        {VISIBLE_CATEGORIES.map(([key, meta]) => (
           <button
             key={key}
             onClick={() => setCategory(key as ToolCategory)}
