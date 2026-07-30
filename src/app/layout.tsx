@@ -12,15 +12,15 @@ const TOTAL_TOOLS = FREE_TOOLS.length;
 
 export const metadata: Metadata = {
   title: {
-    default: `ToolForge - ${TOTAL_TOOLS} Free Online Tools`,
-    template: "%s | ToolForge",
+    default: `SaaSToolz - ${TOTAL_TOOLS} Free Online Tools`,
+    template: "%s | SaaSToolz",
   },
   description: `Free PDF tools, image tools, audio tools, developer tools and calculators. ${TOTAL_TOOLS} tools in one platform. No signup required.`,
   keywords: ["pdf tools", "image tools", "audio tools", "developer tools", "online tools", "free tools"],
   openGraph: {
     type: "website",
-    siteName: "ToolForge",
-    title: `ToolForge - ${TOTAL_TOOLS} Free Online Tools`,
+    siteName: "SaaSToolz",
+    title: `SaaSToolz - ${TOTAL_TOOLS} Free Online Tools`,
     description: "Free PDF, image, audio and developer tools. No signup required.",
   },
   twitter: { card: "summary_large_image" },

@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Zap } from "lucide-react";
+import Image from "next/image";
 
 function SignInInner({ googleConfigured }: { googleConfigured: boolean }) {
   const params = useSearchParams();
@@ -18,8 +18,8 @@ function SignInInner({ googleConfigured }: { googleConfigured: boolean }) {
     <div className="max-w-md mx-auto px-4 py-20">
       <div className="bg-white border border-gray-100 rounded-2xl p-8 text-center">
         <div className="flex items-center justify-center gap-2 font-bold text-xl text-gray-900 mb-6">
-          <Zap className="w-6 h-6 text-violet-600" />
-          <span>ToolForge</span>
+          <Image src="/logo.jpeg" alt="SaaSToolz" width={28} height={28} className="w-7 h-7 rounded-lg object-cover" />
+          <span>SaaSToolz</span>
         </div>
 
         <h1 className="text-xl font-bold text-gray-900 mb-2">{isSignup ? "Create your account" : "Sign in"}</h1>

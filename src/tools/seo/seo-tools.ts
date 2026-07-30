@@ -2,7 +2,7 @@
 //
 // Every generator below produces an HTML/XML snippet whose entire purpose
 // is to be pasted directly into the user's own <head> — unlike a live
-// server-rendered page, so this isn't an XSS against ToolForge itself, but
+// server-rendered page, so this isn't an XSS against SaaSToolz itself, but
 // an unescaped attribute value is a real, direct XSS-in-waiting for
 // whatever site the user pastes it into (e.g. a title copied from
 // untrusted CMS/scraped content). Confirmed: an unescaped title of

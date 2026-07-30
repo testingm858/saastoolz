@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${tool.name} — Free Online Tool`,
     description: tool.description,
     keywords: tool.tags ?? [],
-    openGraph: { title: `${tool.name} | ToolForge`, description: tool.description },
+    openGraph: { title: `${tool.name} | SaaSToolz`, description: tool.description },
   };
 }
 

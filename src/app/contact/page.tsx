@@ -3,7 +3,7 @@ import { Mail, MessageSquare } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Get in touch with the ToolForge team.",
+  description: "Get in touch with the SaaSToolz team.",
 };
 
 export default function ContactPage() {
@@ -17,7 +17,7 @@ export default function ContactPage() {
 
       <div className="space-y-4">
         <a
-          href="mailto:support@toolforge.io"
+          href="mailto:support@saastoolz.com"
           className="flex items-start gap-4 bg-white border border-gray-100 rounded-2xl p-6 hover:border-violet-300 hover:shadow-md transition-all"
         >
           <div className="w-10 h-10 bg-violet-50 rounded-xl flex items-center justify-center shrink-0">
@@ -26,12 +26,12 @@ export default function ContactPage() {
           <div>
             <h2 className="font-semibold text-gray-900">General support</h2>
             <p className="text-sm text-gray-500 mt-0.5">Bugs, feature requests, or a tool you wish existed.</p>
-            <p className="text-sm text-violet-600 font-medium mt-2">support@toolforge.io</p>
+            <p className="text-sm text-violet-600 font-medium mt-2">support@saastoolz.com</p>
           </div>
         </a>
 
         <a
-          href="mailto:billing@toolforge.io"
+          href="mailto:billing@saastoolz.com"
           className="flex items-start gap-4 bg-white border border-gray-100 rounded-2xl p-6 hover:border-violet-300 hover:shadow-md transition-all"
         >
           <div className="w-10 h-10 bg-violet-50 rounded-xl flex items-center justify-center shrink-0">
@@ -40,7 +40,7 @@ export default function ContactPage() {
           <div>
             <h2 className="font-semibold text-gray-900">Billing</h2>
             <p className="text-sm text-gray-500 mt-0.5">Subscription, invoices, or refund questions.</p>
-            <p className="text-sm text-violet-600 font-medium mt-2">billing@toolforge.io</p>
+            <p className="text-sm text-violet-600 font-medium mt-2">billing@saastoolz.com</p>
           </div>
         </a>
       </div>

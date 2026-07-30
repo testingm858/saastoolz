@@ -1,4 +1,4 @@
-// ─── Toolforge — Central Tool Registry ───────────────────────────────────────
+// ─── SaaSToolz — Central Tool Registry ────────────────────────────────────────
 // Single source of truth for all 181 tools.
 // Consumed by: pages, API routes, SEO engine, orchestrator, sitemap.
 

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Zap, Shield, Star, Users, Gauge } from "lucide-react";
+import { ArrowRight, Zap, Shield, Star } from "lucide-react";
 import { FREE_TOOLS, CATEGORY_META } from "@/lib/tools";
 import ToolCard from "@/components/ToolCard";
 import HeroSearch from "@/components/HeroSearch";
@@ -8,13 +8,6 @@ const FEATURED_FREE = [
   "pdf-merge", "pdf-compress", "image-compress", "json-formatter",
   "password-generator", "qr-generator", "bmi-calculator", "hex-to-rgb",
   "word-counter", "uuid-generator", "regex-tester", "loan-calculator",
-];
-
-const STATS = [
-  { value: String(FREE_TOOLS.length), label: "Free tools", icon: Zap },
-  { value: "0", label: "Signup required", icon: Users },
-  { value: "0", label: "Cost, ever", icon: Star },
-  { value: "<1s", label: "Typical run time", icon: Gauge },
 ];
 
 export default function HomePage() {
@@ -39,8 +32,8 @@ export default function HomePage() {
           </div>
 
           <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 tracking-tight mb-6 leading-tight">
-            Every tool you need,<br />
-            <span className="bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">in one place</span>
+            All Tools,<br />
+            <span className="bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">One Place</span>
           </h1>
 
           <p className="text-xl text-gray-500 max-w-2xl mx-auto mb-10 leading-relaxed">
@@ -50,7 +43,7 @@ export default function HomePage() {
 
           <HeroSearch />
 
-          <div className="flex flex-wrap items-center justify-center gap-2 mt-6 mb-16">
+          <div className="flex flex-wrap items-center justify-center gap-2 mt-6">
             {categories.slice(0, 6).map(([key, meta]) => (
               <Link
                 key={key}
@@ -60,16 +53,6 @@ export default function HomePage() {
                 <span>{meta.icon}</span>
                 {meta.label}
               </Link>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
-            {STATS.map((s) => (
-              <div key={s.label} className="flex flex-col items-center gap-1.5 bg-white/60 backdrop-blur-sm rounded-2xl border border-gray-100 py-4 px-2">
-                <s.icon className="w-4 h-4 text-violet-500" />
-                <div className="text-2xl font-extrabold text-gray-900">{s.value}</div>
-                <div className="text-xs text-gray-500 text-center leading-tight">{s.label}</div>
-              </div>
             ))}
           </div>
         </div>
@@ -118,9 +101,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Why ToolForge */}
+      {/* Why SaaSToolz */}
       <section className="max-w-7xl mx-auto px-4 py-20">
-        <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Why ToolForge?</h2>
+        <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Why SaaSToolz?</h2>
         <div className="grid md:grid-cols-3 gap-6">
           {[
             { icon: <Zap className="w-6 h-6 text-white" />, gradient: "from-violet-500 to-purple-500", title: "Lightning Fast", desc: "Most tools process in your browser instantly - no waiting, no server round trips." },

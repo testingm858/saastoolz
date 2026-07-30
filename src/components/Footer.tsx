@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Zap } from "lucide-react";
+import Image from "next/image";
 
 const LINKS = {
   "Free Tools": [
@@ -10,11 +10,6 @@ const LINKS = {
     { label: "SEO Tools",       href: "/category/seo"       },
     { label: "Calculators",     href: "/category/calculator"},
     { label: "Design Tools",    href: "/category/design"    },
-  ],
-  "Product": [
-    { label: "Dashboard",       href: "/dashboard"},
-    { label: "API Docs",        href: "/api-docs" },
-    { label: "Changelog",       href: "/changelog"},
   ],
   "Company": [
     { label: "About",           href: "/about"  },
@@ -29,12 +24,12 @@ export default function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-400 mt-24">
       <div className="max-w-7xl mx-auto px-4 py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 mb-12">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2 text-white font-bold text-lg mb-3">
-              <Zap className="w-5 h-5 text-violet-400" />
-              ToolForge
+              <Image src="/logo.jpeg" alt="SaaSToolz" width={24} height={24} className="w-6 h-6 rounded-lg object-cover" />
+              SaaSToolz
             </Link>
             <p className="text-sm leading-relaxed">
               All the free tools you need in one place, forever.
@@ -59,10 +54,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm">© 2026 ToolForge. All rights reserved.</p>
-          <p className="text-sm">
-            Built for makers, developers & marketers. 🚀
-          </p>
+          <p className="text-sm">© 2026 SaaSToolz. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
-  description: "The terms that govern your use of ToolForge.",
+  description: "The terms that govern your use of SaaSToolz.",
 };
 
 const LAST_UPDATED = "July 15, 2026";
@@ -15,7 +15,7 @@ export default function TermsPage() {
 
       <div className="space-y-8 text-gray-600 text-sm leading-relaxed">
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">1. Using ToolForge</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">1. Using SaaSToolz</h2>
           <p>
             Free tools require no account and are available for personal and
             commercial use, subject to the daily usage limits shown on each tool.
@@ -78,8 +78,8 @@ export default function TermsPage() {
           <h2 className="text-lg font-semibold text-gray-900 mb-2">7. Contact</h2>
           <p>
             Questions about these terms? Reach us at{" "}
-            <a href="mailto:legal@toolforge.io" className="text-violet-600 hover:underline">
-              legal@toolforge.io
+            <a href="mailto:legal@saastoolz.com" className="text-violet-600 hover:underline">
+              legal@saastoolz.com
             </a>.
           </p>
         </section>

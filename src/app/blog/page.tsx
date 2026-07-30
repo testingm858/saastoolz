@@ -4,7 +4,7 @@ import { Newspaper } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Blog",
-  description: "Tips, tool guides and product updates from ToolForge.",
+  description: "Tips, tool guides and product updates from SaaSToolz.",
 };
 
 export default function BlogPage() {
@@ -13,7 +13,7 @@ export default function BlogPage() {
       <Newspaper className="w-10 h-10 text-gray-300 mx-auto mb-4" />
       <h1 className="text-2xl font-bold text-gray-900 mb-2">Nothing here yet</h1>
       <p className="text-gray-500 mb-8">
-        We&apos;re working on guides for getting the most out of ToolForge&apos;s
+        We&apos;re working on guides for getting the most out of SaaSToolz&apos;s
         tools. Check back soon — or see what shipped recently on the{" "}
         <Link href="/changelog" className="text-violet-600 hover:underline">changelog</Link>.
       </p>

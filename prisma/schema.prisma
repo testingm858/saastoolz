@@ -1,4 +1,4 @@
-// Toolforge — Prisma Schema
+// SaaSToolz — Prisma Schema
 //
 // Backed by Postgres (Neon, provisioned via the Vercel marketplace
 // integration). directUrl uses the unpooled connection string — Neon's

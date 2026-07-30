@@ -28,7 +28,7 @@ function runFfmpeg(args: string[]): Promise<void> {
 }
 
 function tempPath(ext: string): string {
-  return path.join(os.tmpdir(), `toolforge-${crypto.randomUUID()}.${ext}`);
+  return path.join(os.tmpdir(), `saastoolz-${crypto.randomUUID()}.${ext}`);
 }
 
 async function cleanup(...paths: string[]): Promise<void> {

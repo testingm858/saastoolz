@@ -1,4 +1,4 @@
-# ToolForge — Setup Guide
+# SaaSToolz — Setup Guide
 
 ## Quick Start (3 steps)
 

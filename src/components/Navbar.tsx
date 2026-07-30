@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { useSession, signOut } from "next-auth/react";
-import { Menu, X, Zap } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { CATEGORY_META } from "@/lib/tools";
 
 const TOOL_CATS = ["pdf", "image", "audio", "developer", "seo", "writing", "calculator", "design"];
@@ -17,10 +18,8 @@ export default function Navbar() {
       <nav className="max-w-screen-2xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
         {/* Logo */}
         <Link href="/" className="group flex items-center gap-2 font-bold text-xl text-gray-900 shrink-0">
-          <span className="flex items-center justify-center w-8 h-8 rounded-xl bg-gradient-to-br from-violet-600 to-purple-600 shadow-sm shadow-violet-200 group-hover:shadow-violet-300 transition-shadow">
-            <Zap className="w-4 h-4 text-white" fill="currentColor" />
-          </span>
-          <span>ToolForge</span>
+          <Image src="/logo.jpeg" alt="SaaSToolz" width={32} height={32} className="w-8 h-8 rounded-xl object-cover" />
+          <span>SaaSToolz</span>
         </Link>
 
         {/* Desktop nav — all 8 categories as direct links */}

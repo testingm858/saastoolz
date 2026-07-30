@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "How ToolForge collects, uses and protects your data.",
+  description: "How SaaSToolz collects, uses and protects your data.",
 };
 
 const LAST_UPDATED = "July 15, 2026";
@@ -77,8 +77,8 @@ export default function PrivacyPage() {
           <h2 className="text-lg font-semibold text-gray-900 mb-2">6. Contact</h2>
           <p>
             Questions about this policy? Reach us at{" "}
-            <a href="mailto:privacy@toolforge.io" className="text-violet-600 hover:underline">
-              privacy@toolforge.io
+            <a href="mailto:privacy@saastoolz.com" className="text-violet-600 hover:underline">
+              privacy@saastoolz.com
             </a>.
           </p>
         </section>

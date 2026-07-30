@@ -5,7 +5,7 @@ import ToolsListClient from "./ToolsListClient";
 
 export const metadata: Metadata = {
   title: "All Tools",
-  description: `Browse all ${ALL_TOOLS.length} tools on ToolForge, searchable by name or category.`,
+  description: `Browse all ${ALL_TOOLS.length} tools on SaaSToolz, searchable by name or category.`,
 };
 
 export default function AllToolsPage() {

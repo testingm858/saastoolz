@@ -5,15 +5,15 @@ import { FREE_TOOLS } from "@/lib/tools";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "Why ToolForge exists and how it's built.",
+  description: "Why SaaSToolz exists and how it's built.",
 };
 
 export default function AboutPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-16">
-      <h1 className="text-3xl font-bold text-gray-900 mb-4">About ToolForge</h1>
+      <h1 className="text-3xl font-bold text-gray-900 mb-4">About SaaSToolz</h1>
       <p className="text-gray-600 leading-relaxed mb-6">
-        ToolForge bundles {FREE_TOOLS.length}{" "}
+        SaaSToolz bundles {FREE_TOOLS.length}{" "}
         everyday tools into one place — free utilities that run without an
         account. The idea is simple: most
         &quot;online tool&quot; sites make you hunt across a dozen ad-choked

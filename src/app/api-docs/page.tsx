@@ -4,7 +4,7 @@ import { ALL_TOOLS } from "@/lib/tools";
 
 export const metadata: Metadata = {
   title: "API Docs",
-  description: "The REST endpoint that powers every ToolForge tool.",
+  description: "The REST endpoint that powers every SaaSToolz tool.",
 };
 
 const CODE_BLOCK_CLASS =
@@ -15,7 +15,7 @@ export default function ApiDocsPage() {
     <div className="max-w-3xl mx-auto px-4 py-16">
       <h1 className="text-3xl font-bold text-gray-900 mb-2">API</h1>
       <p className="text-gray-500 mb-10">
-        Every tool on ToolForge — free and Pro — runs through one endpoint.
+        Every tool on SaaSToolz — free and Pro — runs through one endpoint.
         This is the same API the web UI calls.
       </p>
 
@@ -99,7 +99,7 @@ export default function ApiDocsPage() {
 
       <section>
         <h2 className="text-lg font-semibold text-gray-900 mb-2">Example</h2>
-        <pre className={CODE_BLOCK_CLASS}>{`curl -X POST https://toolforge.io/api/tools/hash-generator \\
+        <pre className={CODE_BLOCK_CLASS}>{`curl -X POST https://saastoolz.com/api/tools/hash-generator \\
   -H "Content-Type: application/json" \\
   -d '{"input": "hello world"}'`}</pre>
       </section>
