@@ -53,6 +53,7 @@ export const metadata: Metadata = {
   },
   twitter: { card: "summary_large_image" },
   metadataBase: new URL(BASE_URL),
+  verification: { google: "7a9nGavijUksW8w5dciWXPvBwRbEh6tHMm5iypLwBkQ" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
