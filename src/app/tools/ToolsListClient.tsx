@@ -12,7 +12,9 @@ import { cn } from "@/lib/utils";
 // /category/ai-* itself 404s now too, so there's nothing left to link to.
 const VISIBLE_CATEGORIES = Object.entries(CATEGORY_META).filter(([key]) => !key.startsWith("ai-"));
 
-export default function ToolsListClient() {
+export type ToolStatsMap = Record<string, { views: number; likes: number }>;
+
+export default function ToolsListClient({ statsMap }: { statsMap: ToolStatsMap }) {
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
   const [category, setCategory] = useState<ToolCategory | "all">("all");
@@ -81,7 +83,12 @@ export default function ToolsListClient() {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
           {filtered.map((tool) => (
-            <ToolCard key={tool.id} tool={tool} />
+            <ToolCard
+              key={tool.id}
+              tool={tool}
+              visits={statsMap[tool.id]?.views ?? 0}
+              likes={statsMap[tool.id]?.likes ?? 0}
+            />
           ))}
         </div>
       )}
