@@ -69,6 +69,12 @@ export default async function ToolPage({ params }: Props) {
       })) !== null
     : false;
 
+  const relatedStats = await prisma.toolStats.findMany({
+    where: { toolId: { in: relatedTools.map((t) => t.id) } },
+    select: { toolId: true, views: true, likes: true },
+  });
+  const relatedStatsById = new Map(relatedStats.map((s) => [s.toolId, s]));
+
   const faqs = [
     { q: `Is ${tool.name} free?`, a: "Yes! This tool is completely free with no account required." },
     { q: `Is my data safe when using ${tool.name}?`, a: "Yes. We process files locally in your browser where possible. Files uploaded to our servers are deleted within 1 hour." },
@@ -158,7 +164,14 @@ export default async function ToolPage({ params }: Props) {
         <div className="mt-14">
           <h2 className="text-lg font-bold text-gray-900 mb-4">Related {catMeta?.label}</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-            {relatedTools.map((t) => <ToolCard key={t.id} tool={t} />)}
+            {relatedTools.map((t) => (
+              <ToolCard
+                key={t.id}
+                tool={t}
+                visits={relatedStatsById.get(t.id)?.views ?? 0}
+                likes={relatedStatsById.get(t.id)?.likes ?? 0}
+              />
+            ))}
           </div>
         </div>
       )}
