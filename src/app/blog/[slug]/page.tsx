@@ -1,10 +1,12 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Eye } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { renderMarkdown } from "@/lib/markdown";
 import { BASE_URL } from "@/lib/site";
+import { getVisitorId } from "@/lib/visitor";
+import LikeButton from "@/components/LikeButton";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +30,16 @@ export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = await prisma.blogPost.findUnique({ where: { slug } });
   if (!post || !post.published) notFound();
+
+  const [, visitorId] = await Promise.all([
+    prisma.blogPost.update({ where: { id: post.id }, data: { views: { increment: 1 } } }),
+    getVisitorId(),
+  ]);
+  const alreadyLiked = visitorId
+    ? (await prisma.like.findUnique({
+        where: { targetType_targetId_visitorId: { targetType: "blog", targetId: slug, visitorId } },
+      })) !== null
+    : false;
 
   const html = renderMarkdown(post.content);
   const postUrl = `${BASE_URL}/blog/${post.slug}`;
@@ -53,11 +65,17 @@ export default async function BlogPostPage({ params }: Props) {
       </Link>
 
       <h1 className="text-3xl font-bold text-gray-900 mb-2">{post.title}</h1>
-      {post.publishedAt && (
-        <p className="text-sm text-gray-400 mb-10">
-          {post.publishedAt.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
-        </p>
-      )}
+      <div className="flex items-center flex-wrap gap-4 mb-10">
+        {post.publishedAt && (
+          <p className="text-sm text-gray-400">
+            {post.publishedAt.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+          </p>
+        )}
+        <span className="flex items-center gap-1.5 text-sm text-gray-400">
+          <Eye className="w-4 h-4" /> {(post.views + 1).toLocaleString()} reads
+        </span>
+        <LikeButton targetType="blog" targetId={slug} initialLiked={alreadyLiked} initialLikes={post.likes} />
+      </div>
 
       <div
         className="text-gray-700

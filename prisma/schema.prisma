@@ -155,11 +155,39 @@ model BlogPost {
   content     String
   published   Boolean   @default(false)
   publishedAt DateTime?
+  views       Int       @default(0)
+  likes       Int       @default(0)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
   @@index([published, publishedAt])
   @@map("blog_posts")
+}
+
+// Per-tool engagement counters. Tools themselves are a static registry
+// (src/lib/tools.ts), not a DB table, so this keys directly off tool id
+// and is created lazily (upsert) on first view/like rather than seeded.
+model ToolStats {
+  toolId String @id
+  views  Int    @default(0)
+  likes  Int    @default(0)
+
+  @@map("tool_stats")
+}
+
+// Anonymous like toggle, shared by blog posts and tools. visitorId is a
+// random id stored in a first-party cookie (see src/lib/visitor.ts) — no
+// account required to like something.
+model Like {
+  id         String   @id @default(cuid())
+  targetType String
+  targetId   String
+  visitorId  String
+  createdAt  DateTime @default(now())
+
+  @@unique([targetType, targetId, visitorId])
+  @@index([targetType, targetId])
+  @@map("likes")
 }
 
 // ─── Tool Registry ────────────────────────────────────────────────────────────

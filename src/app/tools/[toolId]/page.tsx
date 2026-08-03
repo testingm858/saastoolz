@@ -1,14 +1,18 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { Eye, Wrench } from "lucide-react";
 import { getToolById, FREE_TOOLS, CATEGORY_META } from "@/lib/tools";
 import { isFileTool } from "@/lib/file-tools";
 import { BASE_URL } from "@/lib/site";
+import prisma from "@/lib/prisma";
+import { getVisitorId } from "@/lib/visitor";
 import ToolCard from "@/components/ToolCard";
 import ToolInterface from "@/components/ToolInterface";
 import FileToolInterface from "@/components/FileToolInterface";
 import WebhookTesterClient from "@/components/WebhookTesterClient";
 import JsonViewerClient from "@/components/JsonViewerClient";
 import AdSlot from "@/components/AdSlot";
+import LikeButton from "@/components/LikeButton";
 import Link from "next/link";
 
 interface Props {
@@ -21,6 +25,10 @@ interface Props {
 export async function generateStaticParams() {
   return FREE_TOOLS.map((tool) => ({ toolId: tool.id }));
 }
+
+// Per-view stats (visits, likes) make this dynamic per request instead of
+// statically generated — same tradeoff already made for the blog.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { toolId } = await params;
@@ -45,6 +53,21 @@ export default async function ToolPage({ params }: Props) {
   const catMeta = CATEGORY_META[tool.category];
   const relatedTools = FREE_TOOLS.filter((t) => t.category === tool.category && t.id !== tool.id).slice(0, 6);
   const toolUrl = `${BASE_URL}/tools/${tool.id}`;
+
+  const [stats, usedCount, visitorId] = await Promise.all([
+    prisma.toolStats.upsert({
+      where: { toolId: tool.id },
+      create: { toolId: tool.id, views: 1 },
+      update: { views: { increment: 1 } },
+    }),
+    prisma.toolUsage.count({ where: { toolId: tool.id } }),
+    getVisitorId(),
+  ]);
+  const alreadyLiked = visitorId
+    ? (await prisma.like.findUnique({
+        where: { targetType_targetId_visitorId: { targetType: "tool", targetId: tool.id, visitorId } },
+      })) !== null
+    : false;
 
   const faqs = [
     { q: `Is ${tool.name} free?`, a: "Yes! This tool is completely free with no account required." },
@@ -104,6 +127,15 @@ export default async function ToolPage({ params }: Props) {
             <h1 className="text-2xl font-bold text-gray-900">{tool.name}</h1>
             <p className="text-gray-500 text-sm mt-0.5">{tool.description}</p>
           </div>
+        </div>
+        <div className="flex items-center flex-wrap gap-4">
+          <span className="flex items-center gap-1.5 text-sm text-gray-400">
+            <Eye className="w-4 h-4" /> {stats.views.toLocaleString()} visits
+          </span>
+          <span className="flex items-center gap-1.5 text-sm text-gray-400">
+            <Wrench className="w-4 h-4" /> {usedCount.toLocaleString()} uses
+          </span>
+          <LikeButton targetType="tool" targetId={tool.id} initialLiked={alreadyLiked} initialLikes={stats.likes} />
         </div>
       </div>
 
