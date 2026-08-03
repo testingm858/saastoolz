@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getToolById, FREE_TOOLS, CATEGORY_META } from "@/lib/tools";
 import { isFileTool } from "@/lib/file-tools";
+import { BASE_URL } from "@/lib/site";
 import ToolCard from "@/components/ToolCard";
 import ToolInterface from "@/components/ToolInterface";
 import FileToolInterface from "@/components/FileToolInterface";
@@ -24,11 +25,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { toolId } = await params;
   const tool = getToolById(toolId);
-  if (!tool) return {};
+  if (!tool || tool.isPremium) return {};
   return {
     title: `${tool.name} — Free Online Tool`,
     description: tool.description,
     keywords: tool.tags ?? [],
+    alternates: { canonical: `/tools/${tool.id}` },
     openGraph: { title: `${tool.name} | SaaSToolz`, description: tool.description },
   };
 }
@@ -42,9 +44,49 @@ export default async function ToolPage({ params }: Props) {
 
   const catMeta = CATEGORY_META[tool.category];
   const relatedTools = FREE_TOOLS.filter((t) => t.category === tool.category && t.id !== tool.id).slice(0, 6);
+  const toolUrl = `${BASE_URL}/tools/${tool.id}`;
+
+  const faqs = [
+    { q: `Is ${tool.name} free?`, a: "Yes! This tool is completely free with no account required." },
+    { q: `Is my data safe when using ${tool.name}?`, a: "Yes. We process files locally in your browser where possible. Files uploaded to our servers are deleted within 1 hour." },
+    { q: `What file formats does ${tool.name} support?`, a: "Please refer to the tool interface above for supported formats and options." },
+  ];
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        name: tool.name,
+        description: tool.description,
+        url: toolUrl,
+        applicationCategory: "UtilitiesApplication",
+        operatingSystem: "Any (web-based)",
+        offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: BASE_URL },
+          { "@type": "ListItem", position: 2, name: catMeta?.label ?? tool.category, item: `${BASE_URL}/category/${tool.category}` },
+          { "@type": "ListItem", position: 3, name: tool.name, item: toolUrl },
+        ],
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: faqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.q,
+          acceptedAnswer: { "@type": "Answer", text: faq.a },
+        })),
+      },
+    ],
+  };
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-400 mb-6 flex items-center gap-2">
         <Link href="/" className="hover:text-gray-600">Home</Link>
@@ -93,11 +135,7 @@ export default async function ToolPage({ params }: Props) {
       <div className="mt-14 border-t border-gray-100 pt-10">
         <h2 className="text-lg font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
         <div className="space-y-4">
-          {[
-            { q: `Is ${tool.name} free?`, a: "Yes! This tool is completely free with no account required." },
-            { q: `Is my data safe when using ${tool.name}?`, a: "Yes. We process files locally in your browser where possible. Files uploaded to our servers are deleted within 1 hour." },
-            { q: `What file formats does ${tool.name} support?`, a: "Please refer to the tool interface above for supported formats and options." },
-          ].map((faq, i) => (
+          {faqs.map((faq, i) => (
             <div key={i} className="bg-white border border-gray-100 rounded-xl p-5">
               <h3 className="font-semibold text-gray-900 mb-2">{faq.q}</h3>
               <p className="text-gray-500 text-sm">{faq.a}</p>

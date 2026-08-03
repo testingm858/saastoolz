@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getToolsByCategory, CATEGORY_META, ToolCategory } from "@/lib/tools";
+import { BASE_URL } from "@/lib/site";
 import ToolCard from "@/components/ToolCard";
 
 interface Props {
@@ -18,10 +19,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category } = await params;
   const meta = CATEGORY_META[category];
-  if (!meta) return {};
+  if (!meta || category.startsWith("ai-")) return {};
   return {
     title: `${meta.label} — Free Online Tools`,
     description: meta.description,
+    alternates: { canonical: `/category/${category}` },
+    openGraph: { title: `${meta.label} | SaaSToolz`, description: meta.description },
   };
 }
 
@@ -33,9 +36,31 @@ export default async function CategoryPage({ params }: Props) {
   if (!meta || category.startsWith("ai-")) notFound();
 
   const tools = getToolsByCategory(category as ToolCategory);
+  const categoryUrl = `${BASE_URL}/category/${category}`;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        name: meta.label,
+        description: meta.description,
+        url: categoryUrl,
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: BASE_URL },
+          { "@type": "ListItem", position: 2, name: meta.label, item: categoryUrl },
+        ],
+      },
+    ],
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
       {/* Header */}
       <div className="mb-10">
         <div className="flex items-center gap-3 mb-3">

@@ -6,6 +6,7 @@ import { FREE_TOOLS } from "@/lib/tools";
 export const metadata: Metadata = {
   title: "About",
   description: "Why SaaSToolz exists and how it's built.",
+  alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {

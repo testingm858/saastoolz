@@ -4,6 +4,7 @@ import { ALL_TOOLS, FREE_TOOLS, AI_TOOLS } from "@/lib/tools";
 export const metadata: Metadata = {
   title: "Changelog",
   description: "What's new on SaaSToolz.",
+  alternates: { canonical: "/changelog" },
 };
 
 const ENTRIES = [

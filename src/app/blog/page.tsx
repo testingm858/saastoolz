@@ -5,6 +5,7 @@ import { Newspaper } from "lucide-react";
 export const metadata: Metadata = {
   title: "Blog",
   description: "Tips, tool guides and product updates from SaaSToolz.",
+  alternates: { canonical: "/blog" },
 };
 
 export default function BlogPage() {

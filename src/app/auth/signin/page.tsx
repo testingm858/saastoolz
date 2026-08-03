@@ -1,4 +1,7 @@
+import type { Metadata } from "next";
 import SignInClient from "./SignInClient";
+
+export const metadata: Metadata = { title: "Sign in", robots: { index: false, follow: false } };
 
 const PLACEHOLDER_IDS = new Set(["placeholder", "placeholder_add_yours", ""]);
 

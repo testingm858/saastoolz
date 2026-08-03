@@ -5,10 +5,38 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SessionProvider from "@/components/SessionProvider";
 import { FREE_TOOLS } from "@/lib/tools";
+import { BASE_URL } from "@/lib/site";
 
 const ADSENSE_CLIENT_ID = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
 
 const TOTAL_TOOLS = FREE_TOOLS.length;
+
+// Organization + WebSite (with a SearchAction so Google can offer a sitelinks
+// search box) — the one piece of structured data relevant on every page.
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${BASE_URL}/#organization`,
+      name: "SaaSToolz",
+      url: BASE_URL,
+      logo: `${BASE_URL}/logo.jpeg`,
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${BASE_URL}/#website`,
+      name: "SaaSToolz",
+      url: BASE_URL,
+      publisher: { "@id": `${BASE_URL}/#organization` },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: `${BASE_URL}/tools?q={search_term_string}`,
+        "query-input": "required name=search_term_string",
+      },
+    },
+  ],
+};
 
 export const metadata: Metadata = {
   title: {
@@ -24,13 +52,17 @@ export const metadata: Metadata = {
     description: "Free PDF, image, audio and developer tools. No signup required.",
   },
   twitter: { card: "summary_large_image" },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(BASE_URL),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
+        />
         {ADSENSE_CLIENT_ID && (
           <Script
             async

@@ -5,6 +5,7 @@ import { FREE_TOOLS } from "@/lib/tools";
 export const metadata: Metadata = {
   title: "API Docs",
   description: "The REST endpoint that powers every SaaSToolz tool.",
+  alternates: { canonical: "/api-docs" },
 };
 
 const CODE_BLOCK_CLASS =

@@ -4,6 +4,7 @@ import { Mail, MessageSquare } from "lucide-react";
 export const metadata: Metadata = {
   title: "Contact",
   description: "Get in touch with the SaaSToolz team.",
+  alternates: { canonical: "/contact" },
 };
 
 export default function ContactPage() {

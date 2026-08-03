@@ -1,8 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Zap, Shield, Star } from "lucide-react";
 import { FREE_TOOLS, CATEGORY_META } from "@/lib/tools";
 import ToolCard from "@/components/ToolCard";
 import HeroSearch from "@/components/HeroSearch";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 const FEATURED_FREE = [
   "pdf-merge", "pdf-compress", "image-compress", "json-formatter",

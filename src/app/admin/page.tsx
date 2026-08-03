@@ -6,7 +6,7 @@ import { isAdminEmail } from "@/lib/admin";
 import prisma from "@/lib/prisma";
 import { getToolById } from "@/lib/tools";
 
-export const metadata: Metadata = { title: "Admin" };
+export const metadata: Metadata = { title: "Admin", robots: { index: false, follow: false } };
 
 function formatCountryName(code: string | null): string {
   if (!code) return "Unknown";
