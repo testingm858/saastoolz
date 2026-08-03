@@ -1,9 +1,15 @@
 import Link from "next/link";
-import { Lock } from "lucide-react";
+import { Lock, Eye, Heart } from "lucide-react";
 import { Tool } from "@/lib/tools";
 import { cn } from "@/lib/utils";
 
-export default function ToolCard({ tool }: { tool: Tool }) {
+interface Props {
+  tool: Tool;
+  visits?: number;
+  likes?: number;
+}
+
+export default function ToolCard({ tool, visits, likes }: Props) {
   const className = cn(
     "group relative flex flex-col gap-2 p-4 rounded-xl border transition-all duration-200",
     "bg-white",
@@ -44,6 +50,18 @@ export default function ToolCard({ tool }: { tool: Tool }) {
         <span className="text-xs text-violet-500 font-medium mt-auto">
           {tool.creditsPerUse} credits / use
         </span>
+      )}
+
+      {/* Engagement stats */}
+      {(visits !== undefined || likes !== undefined) && (
+        <div className={cn("flex items-center gap-3 text-xs text-gray-400", !tool.creditsPerUse && "mt-auto pt-0.5")}>
+          {visits !== undefined && (
+            <span className="flex items-center gap-1"><Eye className="w-3 h-3" /> {visits.toLocaleString()}</span>
+          )}
+          {likes !== undefined && (
+            <span className="flex items-center gap-1"><Heart className="w-3 h-3" /> {likes.toLocaleString()}</span>
+          )}
+        </div>
       )}
     </>
   );

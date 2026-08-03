@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getToolsByCategory, CATEGORY_META, ToolCategory } from "@/lib/tools";
 import { BASE_URL } from "@/lib/site";
+import prisma from "@/lib/prisma";
 import ToolCard from "@/components/ToolCard";
 
 interface Props {
@@ -15,6 +16,10 @@ export async function generateStaticParams() {
     .filter((category) => !category.startsWith("ai-"))
     .map((category) => ({ category }));
 }
+
+// Per-card visit/like stats make this dynamic per request instead of
+// statically generated — same tradeoff already made for tool detail pages.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category } = await params;
@@ -37,6 +42,12 @@ export default async function CategoryPage({ params }: Props) {
 
   const tools = getToolsByCategory(category as ToolCategory);
   const categoryUrl = `${BASE_URL}/category/${category}`;
+
+  const stats = await prisma.toolStats.findMany({
+    where: { toolId: { in: tools.map((t) => t.id) } },
+    select: { toolId: true, views: true, likes: true },
+  });
+  const statsById = new Map(stats.map((s) => [s.toolId, s]));
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -76,7 +87,12 @@ export default async function CategoryPage({ params }: Props) {
       {/* Tools grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
         {tools.map((tool) => (
-          <ToolCard key={tool.id} tool={tool} />
+          <ToolCard
+            key={tool.id}
+            tool={tool}
+            visits={statsById.get(tool.id)?.views ?? 0}
+            likes={statsById.get(tool.id)?.likes ?? 0}
+          />
         ))}
       </div>
     </div>
