@@ -5,6 +5,11 @@ import prisma from "@/lib/prisma";
 
 // Only free tools/categories are listed — PRO tools and ai-* categories are
 // hidden and 404 site-wide, so they have no page worth crawling.
+// Revalidate hourly so newly published blog posts show up here without
+// needing a redeploy — sitemaps don't need to be real-time, crawlers only
+// re-fetch periodically anyway.
+export const revalidate = 3600;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE_URL, changeFrequency: "daily", priority: 1 },
