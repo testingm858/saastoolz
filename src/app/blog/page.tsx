@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { Newspaper } from "lucide-react";
+import { Newspaper, Eye, Heart } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { extractCoverImage } from "@/lib/markdown";
 
@@ -19,7 +19,7 @@ export default async function BlogPage() {
   const posts = await prisma.blogPost.findMany({
     where: { published: true },
     orderBy: { publishedAt: "desc" },
-    select: { slug: true, title: true, excerpt: true, publishedAt: true, content: true },
+    select: { slug: true, title: true, excerpt: true, publishedAt: true, content: true, views: true, likes: true },
   });
 
   if (posts.length === 0) {
@@ -68,7 +68,11 @@ export default async function BlogPage() {
                     {post.publishedAt.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
                   </p>
                 )}
-                {post.excerpt && <p className="text-gray-500 text-sm leading-relaxed line-clamp-2">{post.excerpt}</p>}
+                {post.excerpt && <p className="text-gray-500 text-sm leading-relaxed line-clamp-2 mb-3">{post.excerpt}</p>}
+                <div className="flex items-center gap-3 text-xs text-gray-400">
+                  <span className="flex items-center gap-1"><Eye className="w-3 h-3" /> {post.views.toLocaleString()}</span>
+                  <span className="flex items-center gap-1"><Heart className="w-3 h-3" /> {post.likes.toLocaleString()}</span>
+                </div>
               </div>
             </Link>
           );

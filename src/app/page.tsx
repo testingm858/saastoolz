@@ -2,10 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Zap, Shield, Star } from "lucide-react";
 import { FREE_TOOLS, CATEGORY_META } from "@/lib/tools";
+import prisma from "@/lib/prisma";
 import ToolCard from "@/components/ToolCard";
 import HeroSearch from "@/components/HeroSearch";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
+
+// Per-card visit/like stats make this dynamic per request instead of
+// statically generated — same tradeoff already made elsewhere for stats.
+export const dynamic = "force-dynamic";
 
 const FEATURED_FREE = [
   "pdf-merge", "pdf-compress", "image-compress", "json-formatter",
@@ -13,9 +18,15 @@ const FEATURED_FREE = [
   "word-counter", "uuid-generator", "regex-tester", "loan-calculator",
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
   const featuredFree = FREE_TOOLS.filter((t) => FEATURED_FREE.includes(t.id));
   const categories   = Object.entries(CATEGORY_META).filter(([k]) => !k.startsWith("ai-"));
+
+  const stats = await prisma.toolStats.findMany({
+    where: { toolId: { in: featuredFree.map((t) => t.id) } },
+    select: { toolId: true, views: true, likes: true },
+  });
+  const statsById = new Map(stats.map((s) => [s.toolId, s]));
 
   return (
     <div>
@@ -93,7 +104,12 @@ export default function HomePage() {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
           {featuredFree.map((tool) => (
-            <ToolCard key={tool.id} tool={tool} />
+            <ToolCard
+              key={tool.id}
+              tool={tool}
+              visits={statsById.get(tool.id)?.views ?? 0}
+              likes={statsById.get(tool.id)?.likes ?? 0}
+            />
           ))}
         </div>
 
