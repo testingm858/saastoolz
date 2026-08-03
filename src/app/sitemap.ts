@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
 import { FREE_TOOLS, CATEGORY_META } from "@/lib/tools";
 import { BASE_URL } from "@/lib/site";
+import prisma from "@/lib/prisma";
 
 // Only free tools/categories are listed — PRO tools and ai-* categories are
 // hidden and 404 site-wide, so they have no page worth crawling.
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE_URL, changeFrequency: "daily", priority: 1 },
     { url: `${BASE_URL}/tools`, changeFrequency: "daily", priority: 0.9 },
@@ -32,5 +33,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...categoryPages, ...toolPages];
+  const publishedPosts = await prisma.blogPost.findMany({
+    where: { published: true },
+    select: { slug: true, updatedAt: true },
+  });
+  const blogPages: MetadataRoute.Sitemap = publishedPosts.map((post) => ({
+    url: `${BASE_URL}/blog/${post.slug}`,
+    lastModified: post.updatedAt,
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+
+  return [...staticPages, ...categoryPages, ...toolPages, ...blogPages];
 }

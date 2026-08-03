@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
+import Link from "next/link";
+import { Newspaper } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { isAdminEmail } from "@/lib/admin";
@@ -70,7 +72,12 @@ export default async function AdminPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
-      <h1 className="text-2xl font-bold text-gray-900 mb-1">Admin</h1>
+      <div className="flex items-center justify-between mb-1">
+        <h1 className="text-2xl font-bold text-gray-900">Admin</h1>
+        <Link href="/admin/blog" className="flex items-center gap-1.5 text-sm bg-white border border-gray-200 px-4 py-2 rounded-lg hover:border-violet-300 transition-colors">
+          <Newspaper className="w-3.5 h-3.5" /> Manage blog
+        </Link>
+      </div>
       <p className="text-gray-500 text-sm mb-8">Tool usage and geographic analytics</p>
 
       {/* Stats */}
