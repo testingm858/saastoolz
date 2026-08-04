@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const { error } = await resend.emails.send({
-      from: "SaaSToolz Contact <onboarding@resend.dev>",
+      from: "SaaSToolz Contact <contact@saastoolz.com>",
       to: CONTACT_EMAIL,
       replyTo: email.trim(),
       subject: `[Contact] ${subject.trim()}`,
