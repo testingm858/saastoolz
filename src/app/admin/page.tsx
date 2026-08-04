@@ -7,6 +7,7 @@ import { authOptions } from "@/lib/auth";
 import { isAdminEmail } from "@/lib/admin";
 import prisma from "@/lib/prisma";
 import { getToolById } from "@/lib/tools";
+import AnalyticsBarChart from "@/components/admin/AnalyticsBarChart";
 
 export const metadata: Metadata = { title: "Admin", robots: { index: false, follow: false } };
 
@@ -33,7 +34,7 @@ export default async function AdminPage() {
     );
   }
 
-  const [totalRequests, toolCountsRaw, toolSuccessCounts, countryCountsRaw, recentErrors] = await Promise.all([
+  const [totalRequests, toolCountsRaw, toolSuccessCounts, countryCountsRaw, recentErrors, toolStats, blogPosts] = await Promise.all([
     prisma.toolUsage.count(),
     // `_count: true` (not `{ fieldName: true }`) gives the total row count
     // per group as a plain number — `_count: { fieldName: true }` instead
@@ -60,15 +61,41 @@ export default async function AdminPage() {
       take: 10,
       select: { toolId: true, errorMessage: true, createdAt: true, country: true, city: true },
     }),
+    prisma.toolStats.findMany({ orderBy: { views: "desc" }, take: 10 }),
+    prisma.blogPost.findMany({
+      orderBy: { views: "desc" },
+      take: 10,
+      select: { title: true, slug: true, views: true, likes: true, published: true },
+    }),
   ]);
 
   const toolCounts = [...toolCountsRaw].sort((a, b) => b._count - a._count);
   const countryCounts = [...countryCountsRaw].sort((a, b) => b._count - a._count);
   const successByTool = new Map(toolSuccessCounts.map((s) => [s.toolId, s._count]));
+  const usesByTool = new Map(toolCounts.map((t) => [t.toolId, t._count]));
   const overallSuccess = toolCounts.reduce((sum, t) => sum + (successByTool.get(t.toolId) ?? 0), 0);
   const uniqueCountries = countryCounts.filter((c) => c.country).length;
   const maxCountryCount = Math.max(1, ...countryCounts.map((c) => c._count));
   const maxToolCount = Math.max(1, ...toolCounts.map((t) => t._count));
+
+  const toolUsageChartData = toolCounts.slice(0, 10).map((t) => ({
+    name: getToolById(t.toolId)?.name ?? t.toolId,
+    Uses: t._count,
+  }));
+  const locationChartData = countryCounts.slice(0, 10).map((c) => ({
+    name: formatCountryName(c.country),
+    Uses: c._count,
+  }));
+  const toolEngagementChartData = toolStats.map((s) => ({
+    name: getToolById(s.toolId)?.name ?? s.toolId,
+    Visits: s.views,
+    Likes: s.likes,
+  }));
+  const blogChartData = blogPosts.map((p) => ({
+    name: p.title.length > 24 ? `${p.title.slice(0, 24)}…` : p.title,
+    Reads: p.views,
+    Likes: p.likes,
+  }));
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
@@ -98,6 +125,11 @@ export default async function AdminPage() {
       {/* Tool usage */}
       <section className="mb-10">
         <h2 className="text-lg font-bold text-gray-900 mb-3">Usage by tool</h2>
+        {toolUsageChartData.length > 0 && (
+          <div className="bg-white border border-gray-100 rounded-2xl p-5 mb-4">
+            <AnalyticsBarChart data={toolUsageChartData} xKey="name" bars={[{ key: "Uses", color: "#7c3aed", label: "Uses" }]} />
+          </div>
+        )}
         <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden">
           {toolCounts.length === 0 ? (
             <p className="p-6 text-sm text-gray-400 text-center">No usage recorded yet.</p>
@@ -147,6 +179,11 @@ export default async function AdminPage() {
       {/* Geographic distribution */}
       <section className="mb-10">
         <h2 className="text-lg font-bold text-gray-900 mb-3">Usage by location</h2>
+        {locationChartData.length > 0 && (
+          <div className="bg-white border border-gray-100 rounded-2xl p-5 mb-4">
+            <AnalyticsBarChart data={locationChartData} xKey="name" bars={[{ key: "Uses", color: "#d946ef", label: "Uses" }]} />
+          </div>
+        )}
         <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden">
           {countryCounts.length === 0 ? (
             <p className="p-6 text-sm text-gray-400 text-center">No usage recorded yet.</p>
@@ -185,6 +222,108 @@ export default async function AdminPage() {
         <p className="text-xs text-gray-400 mt-2">
           Location is derived from Vercel&apos;s edge network — not available for requests made against a local dev server.
         </p>
+      </section>
+
+      {/* Tool engagement (visits & likes) */}
+      <section className="mb-10">
+        <h2 className="text-lg font-bold text-gray-900 mb-3">Tool engagement — visits &amp; likes</h2>
+        {toolEngagementChartData.length > 0 && (
+          <div className="bg-white border border-gray-100 rounded-2xl p-5 mb-4">
+            <AnalyticsBarChart
+              data={toolEngagementChartData}
+              xKey="name"
+              bars={[
+                { key: "Visits", color: "#7c3aed", label: "Visits" },
+                { key: "Likes", color: "#ef4444", label: "Likes" },
+              ]}
+            />
+          </div>
+        )}
+        <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden">
+          {toolStats.length === 0 ? (
+            <p className="p-6 text-sm text-gray-400 text-center">No tool page visits recorded yet.</p>
+          ) : (
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-100 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                  <th className="px-5 py-3">Tool</th>
+                  <th className="px-5 py-3">Visits</th>
+                  <th className="px-5 py-3">Uses</th>
+                  <th className="px-5 py-3">Likes</th>
+                </tr>
+              </thead>
+              <tbody>
+                {toolStats.map((s) => {
+                  const tool = getToolById(s.toolId);
+                  return (
+                    <tr key={s.toolId} className="border-b border-gray-50 last:border-0">
+                      <td className="px-5 py-3">
+                        <div className="flex items-center gap-2 text-gray-900 font-medium">
+                          <span>{tool?.icon ?? "🔧"}</span>
+                          <span>{tool?.name ?? s.toolId}</span>
+                        </div>
+                      </td>
+                      <td className="px-5 py-3 text-gray-700 tabular-nums">{s.views.toLocaleString()}</td>
+                      <td className="px-5 py-3 text-gray-700 tabular-nums">{(usesByTool.get(s.toolId) ?? 0).toLocaleString()}</td>
+                      <td className="px-5 py-3 text-gray-700 tabular-nums">{s.likes.toLocaleString()}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </section>
+
+      {/* Blog performance */}
+      <section className="mb-10">
+        <h2 className="text-lg font-bold text-gray-900 mb-3">Blog performance</h2>
+        {blogChartData.length > 0 && (
+          <div className="bg-white border border-gray-100 rounded-2xl p-5 mb-4">
+            <AnalyticsBarChart
+              data={blogChartData}
+              xKey="name"
+              bars={[
+                { key: "Reads", color: "#7c3aed", label: "Reads" },
+                { key: "Likes", color: "#ef4444", label: "Likes" },
+              ]}
+            />
+          </div>
+        )}
+        <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden">
+          {blogPosts.length === 0 ? (
+            <p className="p-6 text-sm text-gray-400 text-center">No blog posts yet.</p>
+          ) : (
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-100 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                  <th className="px-5 py-3">Post</th>
+                  <th className="px-5 py-3">Reads</th>
+                  <th className="px-5 py-3">Likes</th>
+                  <th className="px-5 py-3">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {blogPosts.map((p) => (
+                  <tr key={p.slug} className="border-b border-gray-50 last:border-0">
+                    <td className="px-5 py-3">
+                      <Link href={`/blog/${p.slug}`} className="text-gray-900 font-medium hover:text-violet-600 transition-colors">
+                        {p.title}
+                      </Link>
+                    </td>
+                    <td className="px-5 py-3 text-gray-700 tabular-nums">{p.views.toLocaleString()}</td>
+                    <td className="px-5 py-3 text-gray-700 tabular-nums">{p.likes.toLocaleString()}</td>
+                    <td className="px-5 py-3">
+                      <span className={p.published ? "text-green-600" : "text-gray-400"}>
+                        {p.published ? "Published" : "Draft"}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       </section>
 
       {/* Recent errors */}
