@@ -2,7 +2,7 @@
 
 import { NextResponse } from "next/server";
 import { requireAdminEmail } from "@/lib/admin";
-import { slugify } from "@/lib/utils";
+import { adSlotKey, isAdPage, isAdPosition } from "@/lib/adPlacements";
 import prisma from "@/lib/prisma";
 
 interface Props {
@@ -21,19 +21,23 @@ export async function PATCH(req: Request, { params }: Props) {
   }
 
   const body = await req.json();
-  const data: { label?: string; key?: string; code?: string | null; enabled?: boolean } = {};
+  const data: { key?: string; page?: string; position?: string; code?: string | null; enabled?: boolean } = {};
 
-  if (typeof body.label === "string" && body.label.trim()) data.label = body.label.trim();
   if (typeof body.code === "string" || body.code === null) data.code = body.code;
   if (typeof body.enabled === "boolean") data.enabled = body.enabled;
 
-  if (typeof body.key === "string" && body.key.trim()) {
-    const nextKey = slugify(body.key);
-    if (!nextKey) return NextResponse.json({ error: "Invalid key" }, { status: 400 });
+  const nextPage = body.page !== undefined ? body.page : existing.page;
+  const nextPosition = body.position !== undefined ? body.position : existing.position;
+  if (body.page !== undefined || body.position !== undefined) {
+    if (!isAdPage(nextPage)) return NextResponse.json({ error: "Invalid page" }, { status: 400 });
+    if (!isAdPosition(nextPosition)) return NextResponse.json({ error: "Invalid position" }, { status: 400 });
+    const nextKey = adSlotKey(nextPage, nextPosition);
     if (nextKey !== existing.key) {
       const clash = await prisma.adSlot.findUnique({ where: { key: nextKey } });
-      if (clash) return NextResponse.json({ error: `Key "${nextKey}" is already in use` }, { status: 409 });
+      if (clash) return NextResponse.json({ error: "A slot already exists for that page and position" }, { status: 409 });
       data.key = nextKey;
+      data.page = nextPage;
+      data.position = nextPosition;
     }
   }
 

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { FREE_TOOLS } from "@/lib/tools";
 import prisma from "@/lib/prisma";
+import { getAdCodes } from "@/lib/ads";
 import ToolsListClient, { type ToolStatsMap } from "./ToolsListClient";
 
 export const metadata: Metadata = {
@@ -22,10 +23,11 @@ export default async function AllToolsPage() {
   const statsMap: ToolStatsMap = Object.fromEntries(
     stats.map((s) => [s.toolId, { views: s.views, likes: s.likes }])
   );
+  const adCodes = await getAdCodes("tools", ["top", "middle", "bottom"]);
 
   return (
     <Suspense fallback={null}>
-      <ToolsListClient statsMap={statsMap} />
+      <ToolsListClient statsMap={statsMap} adCodes={adCodes} />
     </Suspense>
   );
 }

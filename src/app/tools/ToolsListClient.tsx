@@ -1,10 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, Fragment } from "react";
 import { useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
 import { FREE_TOOLS, CATEGORY_META, type ToolCategory } from "@/lib/tools";
 import ToolCard from "@/components/ToolCard";
+import AdSlot from "@/components/AdSlot";
+import { adSlotKey } from "@/lib/adPlacements";
 import { cn } from "@/lib/utils";
 
 // PRO tools are hidden site-wide — this page only ever lists FREE_TOOLS, and
@@ -13,8 +15,9 @@ import { cn } from "@/lib/utils";
 const VISIBLE_CATEGORIES = Object.entries(CATEGORY_META).filter(([key]) => !key.startsWith("ai-"));
 
 export type ToolStatsMap = Record<string, { views: number; likes: number }>;
+type AdCodes = Record<string, string | null>;
 
-export default function ToolsListClient({ statsMap }: { statsMap: ToolStatsMap }) {
+export default function ToolsListClient({ statsMap, adCodes }: { statsMap: ToolStatsMap; adCodes: AdCodes }) {
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
   const [category, setCategory] = useState<ToolCategory | "all">("all");
@@ -31,6 +34,16 @@ export default function ToolsListClient({ statsMap }: { statsMap: ToolStatsMap }
       );
     });
   }, [query, category]);
+
+  // In-feed ads: split the list into 3 roughly-equal groups and place an ad
+  // row between each — same "tools-middle" slot reused at both insertion
+  // points, matching how in-feed ad units are typically deployed.
+  const groups = useMemo(() => {
+    const size = Math.ceil(filtered.length / 3);
+    return [0, 1, 2].map((i) => filtered.slice(i * size, (i + 1) * size)).filter((g) => g.length > 0);
+  }, [filtered]);
+
+  const gridClass = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3";
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
@@ -81,16 +94,27 @@ export default function ToolsListClient({ statsMap }: { statsMap: ToolStatsMap }
       {filtered.length === 0 ? (
         <p className="text-center text-gray-400 py-16">No tools match your search.</p>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-          {filtered.map((tool) => (
-            <ToolCard
-              key={tool.id}
-              tool={tool}
-              visits={statsMap[tool.id]?.views ?? 0}
-              likes={statsMap[tool.id]?.likes ?? 0}
-            />
+        <>
+          <AdSlot code={adCodes[adSlotKey("tools", "top")] ?? null} position="top" />
+          {groups.map((group, i) => (
+            <Fragment key={i}>
+              <div className={gridClass}>
+                {group.map((tool) => (
+                  <ToolCard
+                    key={tool.id}
+                    tool={tool}
+                    visits={statsMap[tool.id]?.views ?? 0}
+                    likes={statsMap[tool.id]?.likes ?? 0}
+                  />
+                ))}
+              </div>
+              {i < groups.length - 1 && (
+                <AdSlot code={adCodes[adSlotKey("tools", "middle")] ?? null} position="middle" />
+              )}
+            </Fragment>
           ))}
-        </div>
+          <AdSlot code={adCodes[adSlotKey("tools", "bottom")] ?? null} position="bottom" />
+        </>
       )}
     </div>
   );

@@ -3,45 +3,42 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Plus, Pencil, Trash2, ArrowLeft } from "lucide-react";
-import { slugify } from "@/lib/utils";
+import { AD_PAGES, AD_POSITIONS, WIRED_PLACEMENTS, pageLabel, positionLabel, type AdPage, type AdPosition } from "@/lib/adPlacements";
 import { cn } from "@/lib/utils";
 
 interface Slot {
   id: string;
   key: string;
-  label: string;
+  page: string;
+  position: string;
   code: string | null;
   enabled: boolean;
   createdAt: string;
   updatedAt: string;
 }
 
-type FormState = { key: string; label: string; code: string; enabled: boolean };
+type FormState = { page: AdPage; position: AdPosition; code: string; enabled: boolean };
 
-const EMPTY_FORM: FormState = { key: "", label: "", code: "", enabled: false };
+const EMPTY_FORM: FormState = { page: "home", position: "top", code: "", enabled: false };
 
-// Keys the app actually renders somewhere — everything else just sits in the
-// table until a page is wired up to read it.
-const WIRED_KEYS = new Set(["tool-page"]);
+const WIRED_KEYS = new Set(WIRED_PLACEMENTS.map((p) => p.key));
+const WIRED_DESCRIPTIONS = new Map(WIRED_PLACEMENTS.map((p) => [p.key, p.description]));
 
 export default function AdsAdminClient({ initialSlots }: { initialSlots: Slot[] }) {
   const [slots, setSlots] = useState<Slot[]>(initialSlots);
   const [editingId, setEditingId] = useState<string | "new" | null>(null);
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
-  const [keyTouched, setKeyTouched] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   function startNew() {
     setForm(EMPTY_FORM);
-    setKeyTouched(false);
     setError(null);
     setEditingId("new");
   }
 
   function startEdit(slot: Slot) {
-    setForm({ key: slot.key, label: slot.label, code: slot.code ?? "", enabled: slot.enabled });
-    setKeyTouched(true);
+    setForm({ page: slot.page as AdPage, position: slot.position as AdPosition, code: slot.code ?? "", enabled: slot.enabled });
     setError(null);
     setEditingId(slot.id);
   }
@@ -51,15 +48,7 @@ export default function AdsAdminClient({ initialSlots }: { initialSlots: Slot[] 
     setError(null);
   }
 
-  function setLabel(label: string) {
-    setForm((f) => ({ ...f, label, key: keyTouched ? f.key : slugify(label) }));
-  }
-
   async function save() {
-    if (!form.label.trim()) {
-      setError("Label is required");
-      return;
-    }
     setSaving(true);
     setError(null);
     try {
@@ -68,8 +57,8 @@ export default function AdsAdminClient({ initialSlots }: { initialSlots: Slot[] 
         method: isNew ? "POST" : "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          key: form.key,
-          label: form.label,
+          page: form.page,
+          position: form.position,
           code: form.code || null,
           enabled: form.enabled,
         }),
@@ -105,7 +94,7 @@ export default function AdsAdminClient({ initialSlots }: { initialSlots: Slot[] 
   }
 
   async function remove(slot: Slot) {
-    if (!confirm(`Delete "${slot.label}"? This can't be undone.`)) return;
+    if (!confirm(`Delete the "${pageLabel(slot.page)} — ${positionLabel(slot.position)}" ad slot? This can't be undone.`)) return;
     const res = await fetch(`/api/admin/ads/${slot.id}`, { method: "DELETE" });
     if (res.ok) setSlots((prev) => prev.filter((s) => s.id !== slot.id));
   }
@@ -133,30 +122,38 @@ export default function AdsAdminClient({ initialSlots }: { initialSlots: Slot[] 
       </div>
       <p className="text-xs text-gray-400 mb-8">
         Paste the raw embed code from AdSense, Adsterra, PropellerAds, or any other network — it&apos;s rendered
-        exactly as given (scripts included), not sanitized. Only <code className="font-mono">tool-page</code>{" "}
-        currently renders anywhere on the live site; other keys are held here until a page is wired to read them —
-        ask and a new placement can be added.
+        inside a sandboxed iframe exactly as given (scripts included), not sanitized. Left/Right positions are
+        narrow vertical placements; Top/Middle/Bottom are wide horizontal banners.
       </p>
 
       {isEditing ? (
         <div className="bg-white border border-gray-100 rounded-2xl p-6 space-y-4">
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Label</label>
-            <input
-              type="text" value={form.label} onChange={(e) => setLabel(e.target.value)}
-              placeholder="Tool page — horizontal banner"
-              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-violet-400"
-            />
+            <label className="block text-xs font-medium text-gray-600 mb-1.5">Key (page)</label>
+            <select
+              value={form.page}
+              onChange={(e) => setForm((f) => ({ ...f, page: e.target.value as AdPage }))}
+              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-violet-400 bg-white"
+            >
+              {AD_PAGES.map((p) => (
+                <option key={p.value} value={p.value}>{p.label}</option>
+              ))}
+            </select>
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Key</label>
-            <input
-              type="text" value={form.key}
-              onChange={(e) => { setKeyTouched(true); setForm((f) => ({ ...f, key: e.target.value })); }}
-              placeholder="tool-page"
-              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-violet-400 font-mono"
-            />
-            <p className="text-xs text-gray-400 mt-1">Identifies where this code is rendered in the codebase.</p>
+            <label className="block text-xs font-medium text-gray-600 mb-1.5">Label (position)</label>
+            <select
+              value={form.position}
+              onChange={(e) => setForm((f) => ({ ...f, position: e.target.value as AdPosition }))}
+              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-violet-400 bg-white"
+            >
+              {AD_POSITIONS.map((p) => (
+                <option key={p.value} value={p.value}>{p.label} ({p.orientation})</option>
+              ))}
+            </select>
+            {WIRED_DESCRIPTIONS.has(`${form.page}-${form.position}`) && (
+              <p className="text-xs text-violet-600 mt-1">{WIRED_DESCRIPTIONS.get(`${form.page}-${form.position}`)}</p>
+            )}
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1.5">Embed code</label>
@@ -193,7 +190,9 @@ export default function AdsAdminClient({ initialSlots }: { initialSlots: Slot[] 
             <div key={slot.id} className="flex items-center justify-between gap-4 px-5 py-4">
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-gray-900 text-sm truncate">{slot.label}</h3>
+                  <h3 className="font-semibold text-gray-900 text-sm truncate">
+                    {pageLabel(slot.page)} — {positionLabel(slot.position)}
+                  </h3>
                   <span className={cn(
                     "text-xs font-semibold px-2 py-0.5 rounded-full shrink-0",
                     slot.enabled ? "bg-green-50 text-green-700" : "bg-gray-100 text-gray-500"
@@ -206,7 +205,9 @@ export default function AdsAdminClient({ initialSlots }: { initialSlots: Slot[] 
                     <span className="text-xs font-semibold px-2 py-0.5 rounded-full shrink-0 bg-amber-50 text-amber-700">Not wired yet</span>
                   )}
                 </div>
-                <p className="text-xs text-gray-400 mt-0.5 font-mono truncate">{slot.key}</p>
+                <p className="text-xs text-gray-400 mt-0.5 truncate">
+                  {WIRED_DESCRIPTIONS.get(slot.key) ?? <span className="font-mono">{slot.key}</span>}
+                </p>
               </div>
               <div className="flex items-center gap-1 shrink-0">
                 <button

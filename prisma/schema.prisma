@@ -194,14 +194,16 @@ model Like {
 
 // Admin-managed ad placements. `code` is raw third-party embed HTML/JS
 // (AdSense, Adsterra, PropellerAds, etc) pasted verbatim from the network's
-// dashboard — it is rendered as-is (see RawHtml.tsx), not sanitized, since
-// stripping <script> tags would defeat the point of an ad embed. Only
-// isAdminEmail-gated routes can write to this table, same trust boundary as
-// the rest of /admin.
+// dashboard — rendered inside a sandboxed iframe (see AdFrame.tsx), not
+// sanitized, since stripping <script> tags would defeat the point of an ad
+// embed. `key` is derived from `page`+`position` (see src/lib/adPlacements.ts)
+// and is what the actual page components look up. Only isAdminEmail-gated
+// routes can write to this table, same trust boundary as the rest of /admin.
 model AdSlot {
   id        String   @id @default(cuid())
   key       String   @unique
-  label     String
+  page      String
+  position  String
   code      String?
   enabled   Boolean  @default(false)
   updatedAt DateTime @updatedAt

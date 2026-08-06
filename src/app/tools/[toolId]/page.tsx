@@ -12,6 +12,8 @@ import FileToolInterface from "@/components/FileToolInterface";
 import WebhookTesterClient from "@/components/WebhookTesterClient";
 import JsonViewerClient from "@/components/JsonViewerClient";
 import AdSlot from "@/components/AdSlot";
+import { getAdCodes } from "@/lib/ads";
+import { adSlotKey } from "@/lib/adPlacements";
 import LikeButton from "@/components/LikeButton";
 import Link from "next/link";
 
@@ -75,8 +77,7 @@ export default async function ToolPage({ params }: Props) {
   });
   const relatedStatsById = new Map(relatedStats.map((s) => [s.toolId, s]));
 
-  const adSlot = await prisma.adSlot.findUnique({ where: { key: "tool-page" } });
-  const adCode = adSlot?.enabled ? adSlot.code : null;
+  const adCodes = await getAdCodes("tool-action", ["middle", "bottom"]);
 
   const faqs = [
     { q: `Is ${tool.name} free?`, a: "Yes! This tool is completely free with no account required." },
@@ -159,8 +160,8 @@ export default async function ToolPage({ params }: Props) {
         <ToolInterface tool={tool} />
       )}
 
-      {/* Single horizontal ad placement */}
-      <AdSlot code={adCode} />
+      {/* Ad placement — before Related Tools */}
+      <AdSlot code={adCodes[adSlotKey("tool-action", "middle")] ?? null} position="middle" />
 
       {/* Related tools */}
       {relatedTools.length > 0 && (
@@ -191,6 +192,9 @@ export default async function ToolPage({ params }: Props) {
           ))}
         </div>
       </div>
+
+      {/* Ad placement — after FAQs */}
+      <AdSlot code={adCodes[adSlotKey("tool-action", "bottom")] ?? null} position="bottom" />
     </div>
   );
 }
