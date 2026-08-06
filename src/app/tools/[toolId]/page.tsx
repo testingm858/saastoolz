@@ -75,6 +75,9 @@ export default async function ToolPage({ params }: Props) {
   });
   const relatedStatsById = new Map(relatedStats.map((s) => [s.toolId, s]));
 
+  const adSlot = await prisma.adSlot.findUnique({ where: { key: "tool-page" } });
+  const adCode = adSlot?.enabled ? adSlot.code : null;
+
   const faqs = [
     { q: `Is ${tool.name} free?`, a: "Yes! This tool is completely free with no account required." },
     { q: `Is my data safe when using ${tool.name}?`, a: "Yes. We process files locally in your browser where possible. Files uploaded to our servers are deleted within 1 hour." },
@@ -157,7 +160,7 @@ export default async function ToolPage({ params }: Props) {
       )}
 
       {/* Single horizontal ad placement */}
-      <AdSlot />
+      <AdSlot code={adCode} />
 
       {/* Related tools */}
       {relatedTools.length > 0 && (
