@@ -52,6 +52,7 @@ import {
 import { checkHttpHeaders, checkRedirectChain, isPrivateIPv4, isPrivateIPv6 } from "@/tools/seo/network-tools";
 import { escapeAttr } from "@/tools/seo/seo-tools";
 import { isFileTool } from "@/lib/file-tools";
+import { MAX_UPLOAD_BYTES, MAX_UPLOAD_MB } from "@/lib/file-limits";
 import { dispatchFile } from "./file-dispatch";
 import { binaryOutput, isBinaryOutput } from "@/lib/binary-output";
 import { generateQrCode } from "@/tools/image/qr-tools";
@@ -67,10 +68,6 @@ import { convertCurrency } from "@/tools/calc/currency-converter";
 import { lookupIp } from "@/tools/dev/ip-lookup";
 
 const AI_IMAGE_TOOLS = new Set(["ai-image-generator", "ai-logo-generator"]);
-
-// Free-tier file size cap (Pro/Enterprise limits are documented in stripe.ts
-// PLANS but not yet enforced per-request here — see orchestrator.ts).
-const MAX_UPLOAD_BYTES = 10 * 1024 * 1024; // 10MB
 
 export async function POST(
   req: NextRequest,
@@ -101,7 +98,7 @@ export async function POST(
       const formData = await req.formData();
       for (const value of formData.getAll("file").concat(formData.getAll("files"))) {
         if (value instanceof File && value.size > MAX_UPLOAD_BYTES) {
-          throw new Error(`File "${value.name}" exceeds the 10MB free-tier limit`);
+          throw new Error(`File "${value.name}" exceeds the ${MAX_UPLOAD_MB}MB upload limit`);
         }
       }
       fileResult = await dispatchFile(toolId, formData);

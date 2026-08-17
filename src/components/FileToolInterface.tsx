@@ -6,6 +6,7 @@ import { FILE_TOOLS, type FileToolField } from "@/lib/file-tools";
 import { Upload, Download, Loader2, FileText, X, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useProgressSimulation, ProcessingPanel, SizeComparison } from "@/components/ProgressIndicator";
+import { MAX_UPLOAD_BYTES, MAX_UPLOAD_MB, formatMB } from "@/lib/file-limits";
 
 // Segmented-control button used by the pdf-split mode selector below.
 function ModeButton({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
@@ -151,7 +152,25 @@ export default function FileToolInterface({ tool }: FileToolInterfaceProps) {
   function addFiles(list: FileList | File[]) {
     const incoming = Array.from(list);
     if (incoming.length === 0) return;
+
+    // Checked client-side, before attempting any upload, because Vercel
+    // hard-rejects request bodies over ~4.5MB at the platform level — a
+    // request that size never reaches our code at all, so there's no
+    // server-side error to surface gracefully. Better to stop it here with
+    // a clear message than let the browser send a request doomed to fail.
+    const oversized = incoming.find((f) => f.size > MAX_UPLOAD_BYTES);
+    if (oversized) {
+      setError(`"${oversized.name}" is ${formatMB(oversized.size)}MB — the free upload limit is ${MAX_UPLOAD_MB}MB per file.`);
+      return;
+    }
+
     if (config.multiple) {
+      const existingTotal = files.reduce((sum, f) => sum + f.size, 0);
+      const incomingTotal = incoming.reduce((sum, f) => sum + f.size, 0);
+      if (existingTotal + incomingTotal > MAX_UPLOAD_BYTES) {
+        setError(`These files add up to more than ${MAX_UPLOAD_MB}MB combined — the free upload limit is ${MAX_UPLOAD_MB}MB per request.`);
+        return;
+      }
       setFiles((prev) => [...prev, ...incoming]);
     } else {
       setFiles(incoming.slice(0, 1));
@@ -201,7 +220,15 @@ export default function FileToolInterface({ tool }: FileToolInterfaceProps) {
   }
 
   function handleSecondFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    if (e.target.files?.[0]) { setSecondFile(e.target.files[0]); resetResults(); }
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > MAX_UPLOAD_BYTES) {
+        setError(`"${file.name}" is ${formatMB(file.size)}MB — the free upload limit is ${MAX_UPLOAD_MB}MB per file.`);
+      } else {
+        setSecondFile(file);
+        resetResults();
+      }
+    }
     e.target.value = "";
   }
 
@@ -227,7 +254,15 @@ export default function FileToolInterface({ tool }: FileToolInterfaceProps) {
     e.stopPropagation();
     dragCounterSecond.current = 0;
     setIsDraggingSecond(false);
-    if (e.dataTransfer.files?.[0]) { setSecondFile(e.dataTransfer.files[0]); resetResults(); }
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      if (file.size > MAX_UPLOAD_BYTES) {
+        setError(`"${file.name}" is ${formatMB(file.size)}MB — the free upload limit is ${MAX_UPLOAD_MB}MB per file.`);
+      } else {
+        setSecondFile(file);
+        resetResults();
+      }
+    }
   }
 
   function setField(name: string, value: string) {
@@ -374,6 +409,10 @@ export default function FileToolInterface({ tool }: FileToolInterfaceProps) {
       stopProgress();
 
       if (outcome.status < 200 || outcome.status >= 300) {
+        if (outcome.status === 413) {
+          setError(`This upload is too large — the free upload limit is ${MAX_UPLOAD_MB}MB per file.`);
+          return;
+        }
         const data = safeJsonParse(await outcome.blob.text());
         if (data.error === "premium_required" || data.error === "rate_limited") {
           setError(`${data.error === "premium_required" ? "🔒" : "⏱️"} ${data.message}`);
@@ -432,7 +471,7 @@ export default function FileToolInterface({ tool }: FileToolInterfaceProps) {
           <span className="text-sm text-gray-600 font-medium">
             {isDragging ? "Drop to upload" : `Drop ${config.acceptLabel} here, or click to browse`}
           </span>
-          <span className="text-xs text-gray-400">Max 10MB per file</span>
+          <span className="text-xs text-gray-400">Max {MAX_UPLOAD_MB}MB per file</span>
           <input
             type="file"
             accept={config.accept}
