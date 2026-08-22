@@ -77,6 +77,11 @@ export default async function BlogPostPage({ params }: Props) {
         <LikeButton targetType="blog" targetId={slug} initialLiked={alreadyLiked} initialLikes={post.likes} />
       </div>
 
+      {post.coverImage && (
+        // eslint-disable-next-line @next/next/no-img-element -- data: URL, not a static asset next/image can optimize
+        <img src={post.coverImage} alt={post.title} className="w-full aspect-video object-cover rounded-2xl mb-10" />
+      )}
+
       <div
         className="text-gray-700
           [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:text-gray-900 [&_h1]:mt-8 [&_h1]:mb-4

@@ -3,6 +3,7 @@
 import { NextResponse } from "next/server";
 import { requireAdminEmail } from "@/lib/admin";
 import { slugify } from "@/lib/utils";
+import { validateCoverImage } from "@/lib/file-limits";
 import prisma from "@/lib/prisma";
 
 export async function GET() {
@@ -26,6 +27,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "title and content are required" }, { status: 400 });
   }
 
+  const coverImageResult = validateCoverImage(body.coverImage);
+  if (!coverImageResult.ok) {
+    return NextResponse.json({ error: coverImageResult.error }, { status: 400 });
+  }
+
   const requestedSlug = typeof body.slug === "string" && body.slug.trim() ? slugify(body.slug) : slugify(title);
   if (!requestedSlug) {
     return NextResponse.json({ error: "Could not derive a valid slug from the title" }, { status: 400 });
@@ -42,6 +48,7 @@ export async function POST(req: Request) {
       title,
       slug: requestedSlug,
       excerpt,
+      coverImage: coverImageResult.value,
       content,
       published,
       publishedAt: published ? new Date() : null,

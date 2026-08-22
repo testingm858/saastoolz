@@ -19,7 +19,7 @@ export default async function BlogPage() {
   const posts = await prisma.blogPost.findMany({
     where: { published: true },
     orderBy: { publishedAt: "desc" },
-    select: { slug: true, title: true, excerpt: true, publishedAt: true, content: true, views: true, likes: true },
+    select: { slug: true, title: true, excerpt: true, coverImage: true, publishedAt: true, content: true, views: true, likes: true },
   });
 
   if (posts.length === 0) {
@@ -45,7 +45,7 @@ export default async function BlogPage() {
       <p className="text-gray-500 mb-10">Tips, tool guides and product updates.</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {posts.map((post) => {
-          const cover = extractCoverImage(post.content);
+          const cover = post.coverImage ?? extractCoverImage(post.content);
           return (
             <Link
               key={post.slug}
@@ -53,7 +53,11 @@ export default async function BlogPage() {
               className="block bg-white border border-gray-100 rounded-2xl overflow-hidden hover:border-violet-200 hover:shadow-md transition-all"
             >
               <div className="relative aspect-video bg-gradient-to-br from-violet-100 to-fuchsia-100">
-                {cover ? (
+                {post.coverImage ? (
+                  // data: URL (uploaded cover) — next/image's optimizer doesn't apply to these
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={post.coverImage} alt={post.title} className="absolute inset-0 w-full h-full object-cover" />
+                ) : cover ? (
                   <Image src={cover} alt={post.title} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover" />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center">

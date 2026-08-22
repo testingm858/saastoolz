@@ -3,6 +3,7 @@
 import { NextResponse } from "next/server";
 import { requireAdminEmail } from "@/lib/admin";
 import { slugify } from "@/lib/utils";
+import { validateCoverImage } from "@/lib/file-limits";
 import prisma from "@/lib/prisma";
 
 interface Props {
@@ -25,6 +26,7 @@ export async function PATCH(req: Request, { params }: Props) {
     title?: string;
     slug?: string;
     excerpt?: string | null;
+    coverImage?: string | null;
     content?: string;
     published?: boolean;
     publishedAt?: Date | null;
@@ -33,6 +35,12 @@ export async function PATCH(req: Request, { params }: Props) {
   if (typeof body.title === "string" && body.title.trim()) data.title = body.title.trim();
   if (typeof body.content === "string") data.content = body.content;
   if (typeof body.excerpt === "string" || body.excerpt === null) data.excerpt = body.excerpt?.trim() || null;
+
+  if (body.coverImage !== undefined) {
+    const coverImageResult = validateCoverImage(body.coverImage);
+    if (!coverImageResult.ok) return NextResponse.json({ error: coverImageResult.error }, { status: 400 });
+    data.coverImage = coverImageResult.value;
+  }
 
   if (typeof body.slug === "string" && body.slug.trim()) {
     const nextSlug = slugify(body.slug);

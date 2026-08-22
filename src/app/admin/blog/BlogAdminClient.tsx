@@ -1,16 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
-import { Plus, Pencil, Trash2, Eye, EyeOff, ArrowLeft } from "lucide-react";
-import { slugify } from "@/lib/utils";
-import { cn } from "@/lib/utils";
+import { Plus, Pencil, Trash2, Eye, EyeOff, ArrowLeft, Upload, X } from "lucide-react";
+import { slugify, cn } from "@/lib/utils";
+import { MAX_COVER_IMAGE_BYTES, MAX_COVER_IMAGE_MB, formatMB } from "@/lib/file-limits";
 
 interface Post {
   id: string;
   title: string;
   slug: string;
   excerpt: string | null;
+  coverImage: string | null;
   content: string;
   published: boolean;
   publishedAt: string | null;
@@ -18,9 +19,64 @@ interface Post {
   updatedAt: string;
 }
 
-type FormState = { title: string; slug: string; excerpt: string; content: string; published: boolean };
+type FormState = { title: string; slug: string; excerpt: string; coverImage: string; content: string; published: boolean };
 
-const EMPTY_FORM: FormState = { title: "", slug: "", excerpt: "", content: "", published: false };
+const EMPTY_FORM: FormState = { title: "", slug: "", excerpt: "", coverImage: "", content: "", published: false };
+
+function CoverImageField({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  function onFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setError("Please choose an image file");
+      return;
+    }
+    if (file.size > MAX_COVER_IMAGE_BYTES) {
+      setError(`"${file.name}" is ${formatMB(file.size)}MB — the cover image limit is ${MAX_COVER_IMAGE_MB}MB`);
+      return;
+    }
+    setError(null);
+    const reader = new FileReader();
+    reader.onload = () => onChange(String(reader.result || ""));
+    reader.readAsDataURL(file);
+  }
+
+  return (
+    <div>
+      <label className="block text-xs font-medium text-gray-600 mb-1.5">Cover image (optional)</label>
+      {value ? (
+        <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-gray-200 bg-gray-50">
+          {/* eslint-disable-next-line @next/next/no-img-element -- data: URL, not a static asset */}
+          <img src={value} alt="Cover preview" className="w-full h-full object-cover" />
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            title="Remove cover image"
+            className="absolute top-2 right-2 p-1.5 bg-white/90 text-gray-600 hover:text-red-600 rounded-lg shadow-sm transition-colors"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => fileRef.current?.click()}
+          className="flex flex-col items-center justify-center gap-1.5 w-full aspect-video rounded-lg border-2 border-dashed border-gray-200 text-gray-400 hover:border-violet-300 hover:text-violet-500 hover:bg-violet-50/30 transition-colors"
+        >
+          <Upload className="w-5 h-5" />
+          <span className="text-xs font-medium">Upload cover image</span>
+          <span className="text-[11px] text-gray-400">Shown on the blog list — max {MAX_COVER_IMAGE_MB}MB</span>
+        </button>
+      )}
+      <input ref={fileRef} type="file" accept="image/*" onChange={onFile} className="hidden" />
+      {error && <p className="text-xs text-red-600 mt-1.5">{error}</p>}
+    </div>
+  );
+}
 
 export default function BlogAdminClient({ initialPosts }: { initialPosts: Post[] }) {
   const [posts, setPosts] = useState<Post[]>(initialPosts);
@@ -38,7 +94,7 @@ export default function BlogAdminClient({ initialPosts }: { initialPosts: Post[]
   }
 
   function startEdit(post: Post) {
-    setForm({ title: post.title, slug: post.slug, excerpt: post.excerpt ?? "", content: post.content, published: post.published });
+    setForm({ title: post.title, slug: post.slug, excerpt: post.excerpt ?? "", coverImage: post.coverImage ?? "", content: post.content, published: post.published });
     setSlugTouched(true);
     setError(null);
     setEditingId(post.id);
@@ -69,6 +125,7 @@ export default function BlogAdminClient({ initialPosts }: { initialPosts: Post[]
           title: form.title,
           slug: form.slug,
           excerpt: form.excerpt || null,
+          coverImage: form.coverImage || null,
           content: form.content,
           published: form.published,
         }),
@@ -159,6 +216,7 @@ export default function BlogAdminClient({ initialPosts }: { initialPosts: Post[]
               className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-violet-400"
             />
           </div>
+          <CoverImageField value={form.coverImage} onChange={(coverImage) => setForm((f) => ({ ...f, coverImage }))} />
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1.5">Content (Markdown)</label>
             <textarea

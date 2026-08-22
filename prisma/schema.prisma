@@ -152,6 +152,7 @@ model BlogPost {
   title       String
   slug        String    @unique
   excerpt     String?
+  coverImage  String?   // data: URL, uploaded from /admin/blog (see MAX_COVER_IMAGE_BYTES)
   content     String
   published   Boolean   @default(false)
   publishedAt DateTime?
