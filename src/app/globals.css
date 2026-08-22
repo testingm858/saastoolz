@@ -52,3 +52,10 @@ html { scroll-behavior: smooth; }
 .progress-shimmer {
   animation: progress-shimmer 1.4s ease-in-out infinite;
 }
+
+/* Invoice Generator — isolate #invoice-preview for the browser Print button */
+@media print {
+  body * { visibility: hidden; }
+  #invoice-preview, #invoice-preview * { visibility: visible; }
+  #invoice-preview { position: fixed; top: 0; left: 0; width: 100%; }
+}

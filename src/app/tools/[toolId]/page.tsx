@@ -11,6 +11,7 @@ import ToolInterface from "@/components/ToolInterface";
 import FileToolInterface from "@/components/FileToolInterface";
 import WebhookTesterClient from "@/components/WebhookTesterClient";
 import JsonViewerClient from "@/components/JsonViewerClient";
+import InvoiceGeneratorClient from "@/components/invoice/InvoiceGeneratorClient";
 import AdSlot from "@/components/AdSlot";
 import { getAdCodes } from "@/lib/ads";
 import { adSlotKey } from "@/lib/adPlacements";
@@ -116,8 +117,10 @@ export default async function ToolPage({ params }: Props) {
     ],
   };
 
+  const wide = tool.id === "invoice-generator";
+
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10">
+    <div className={`${wide ? "max-w-7xl" : "max-w-5xl"} mx-auto px-4 py-10`}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* Breadcrumb */}
@@ -153,6 +156,8 @@ export default async function ToolPage({ params }: Props) {
         <WebhookTesterClient />
       ) : tool.id === "json-viewer" ? (
         <JsonViewerClient />
+      ) : tool.id === "invoice-generator" ? (
+        <InvoiceGeneratorClient />
       ) : isFileTool(tool.id) ? (
         <FileToolInterface tool={tool} />
       ) : (

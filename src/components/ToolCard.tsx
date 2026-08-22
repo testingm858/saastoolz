@@ -27,7 +27,8 @@ export default function ToolCard({ tool, visits, likes }: Props) {
         </span>
       )}
       {tool.isNew && (
-        <span className="absolute top-3 right-3 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-semibold">
+        <span className="absolute top-3 right-3 flex items-center gap-1 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-semibold">
+          {tool.isUpdated && <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" title="Recently updated" />}
           NEW
         </span>
       )}

@@ -1,5 +1,5 @@
-// Shared by word-to-pdf.ts, invoice-generator.ts, resume-builder.ts, and
-// pdf-tools.ts (addWatermark/stampSignature) — every pdf-lib text-layout tool
+// Shared by word-to-pdf.ts, resume-builder.ts, and pdf-tools.ts
+// (addWatermark/stampSignature) — every pdf-lib text-layout tool
 // that embeds a StandardFonts font and draws free-form user-provided text
 // with it.
 //

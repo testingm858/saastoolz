@@ -97,8 +97,8 @@ export default function ToolInterface({ tool }: ToolInterfaceProps) {
       const contentType = res.headers.get("content-type") ?? "";
 
       // Some tools take text/JSON input but produce a downloadable file
-      // (qr-generator, base64-to-image, invoice-generator, ...) — those come
-      // back as a raw binary body instead of JSON.
+      // (qr-generator, base64-to-image, ...) — those come back as a raw
+      // binary body instead of JSON.
       if (res.ok && !contentType.includes("application/json")) {
         const blob = await res.blob();
         const disposition = res.headers.get("content-disposition") ?? "";
@@ -244,7 +244,6 @@ export default function ToolInterface({ tool }: ToolInterfaceProps) {
       "base64-to-image": "Paste a base64 data URL or raw base64 string",
       "barcode-generator": 'Enter JSON: {"text": "012345678905", "type": "code128"}',
       "yaml-formatter": "Paste your YAML here",
-      "invoice-generator": 'Enter JSON — see placeholder for the shape',
       "resume-builder": 'Enter JSON — see placeholder for the shape',
     };
     if (labels[tool.id]) return labels[tool.id];
@@ -308,7 +307,6 @@ export default function ToolInterface({ tool }: ToolInterfaceProps) {
       "qr-generator": '{"text": "https://example.com"}',
       "base64-to-image": "data:image/png;base64,iVBORw0KGgo...",
       "barcode-generator": '{"text": "012345678905", "type": "code128"}',
-      "invoice-generator": '{\n  "from": {"name": "Acme Inc.", "email": "billing@acme.com"},\n  "to": {"name": "Jane Doe", "email": "jane@example.com"},\n  "items": [{"description": "Design work", "quantity": 10, "unitPrice": 75}],\n  "taxRatePct": 8.5\n}',
       "resume-builder": '{\n  "name": "Jane Doe",\n  "title": "Product Designer",\n  "email": "jane@example.com",\n  "summary": "Product designer with 6 years of experience...",\n  "experience": [{"title": "Senior Designer", "company": "Acme Inc.", "dates": "2022–Present", "bullets": ["Led redesign of core product"]}],\n  "education": [{"degree": "BFA Design", "school": "State University", "dates": "2014–2018"}],\n  "skills": ["Figma", "User Research", "Prototyping"]\n}',
 
       "ai-blog-writer": 'Type a topic, or: {"topic": "...", "keywords": "...", "tone": "...", "wordCount": 800}',
@@ -543,7 +541,7 @@ export default function ToolInterface({ tool }: ToolInterfaceProps) {
         </div>
       )}
 
-      {/* File result (e.g. qr-generator, base64-to-image, invoice-generator) */}
+      {/* File result (e.g. qr-generator, base64-to-image) */}
       {fileUrl && (
         <div className="bg-white border border-gray-200 rounded-2xl p-6 text-center">
           {fileIsImage ? (

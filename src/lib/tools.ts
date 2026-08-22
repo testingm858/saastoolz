@@ -30,6 +30,7 @@ export interface Tool {
   apiProvider?: string; // openai | elevenlabs | stability | etc.
   creditsPerUse?: number;
   isNew?: boolean;
+  isUpdated?: boolean; // shows a small pulsing dot on the NEW badge for a recently-reworked tool
   tags?: string[];
 }
 
@@ -135,8 +136,8 @@ export const FREE_TOOLS: Tool[] = [
   { id: "username-generator",  name: "Username Generator",     description: "Generate unique usernames for any platform",                 category: "writing",   isPremium: false, icon: "👤", tags: ["username","generator","random"] },
   { id: "slug-generator",      name: "Slug Generator",         description: "Convert any text to URL-friendly slugs",                    category: "writing",   isPremium: false, icon: "🔗", tags: ["slug","url","generator","seo"] },
   { id: "word-to-html",        name: "Word to HTML",           description: "Convert Word document content to clean HTML",               category: "writing",   isPremium: false, icon: "🔀", tags: ["word","html","convert"] },
-  { id: "invoice-generator",   name: "Invoice Generator",      description: "Create professional invoices and download as PDF",          category: "writing",   isPremium: false, icon: "🧾", tags: ["invoice","generator","pdf","billing"], isNew: true },
-  { id: "resume-builder",      name: "Resume Builder",         description: "Build a professional resume and export as PDF",             category: "writing",   isPremium: false, icon: "📋", tags: ["resume","cv","builder","pdf"], isNew: true },
+  { id: "invoice-generator",   name: "Invoice Generator",      description: "Create professional invoices and download as PDF",          category: "writing",   isPremium: false, icon: "🧾", tags: ["invoice","generator","pdf","billing"], isNew: true, isUpdated: true },
+  { id: "resume-builder",      name: "Resume Builder",         description: "Build a professional resume and export as PDF",             category: "writing",   isPremium: false, icon: "📋", tags: ["resume","cv","builder","pdf"] },
   { id: "contract-builder",    name: "Contract Builder",       description: "Generate legal contract templates (NDA, freelance, etc.)",  category: "writing",   isPremium: false, icon: "📜", tags: ["contract","nda","legal","template"] },
 
   // Calculators

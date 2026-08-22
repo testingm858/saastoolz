@@ -59,7 +59,6 @@ import { generateQrCode } from "@/tools/image/qr-tools";
 import { base64ToImage } from "@/tools/image/base64-image";
 import { generateBarcode } from "@/tools/image/barcode-tools";
 import { formatYaml } from "@/tools/dev/yaml-formatter";
-import { generateInvoicePdf } from "@/tools/pdf/invoice-generator";
 import { generateResumePdf } from "@/tools/pdf/resume-builder";
 import { generateText, generateImageUrl } from "@/lib/ai-provider";
 import { AI_PROMPT_TOOLS } from "@/tools/ai/prompts";
@@ -252,7 +251,6 @@ const STRUCTURED_JSON_TOOLS = new Set([
   "keyword-density",
   "qr-generator",
   "barcode-generator",
-  "invoice-generator",
   "resume-builder",
   "currency-converter",
   "ip-lookup",
@@ -693,11 +691,6 @@ async function dispatch(toolId: string, rawBody: Record<string, unknown>): Promi
 
     case "yaml-formatter":
       return formatYaml(body.input as string);
-
-    case "invoice-generator": {
-      const bytes = await generateInvoicePdf(body as unknown as Parameters<typeof generateInvoicePdf>[0]);
-      return binaryOutput(bytes, "application/pdf", "invoice.pdf");
-    }
 
     case "resume-builder": {
       const bytes = await generateResumePdf(body as unknown as Parameters<typeof generateResumePdf>[0]);
