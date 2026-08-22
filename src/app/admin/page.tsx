@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Newspaper, Megaphone } from "lucide-react";
+import { Newspaper, Megaphone, Sparkles } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { isAdminEmail } from "@/lib/admin";
@@ -107,6 +107,9 @@ export default async function AdminPage() {
           </Link>
           <Link href="/admin/blog" className="flex items-center gap-1.5 text-sm bg-white border border-gray-200 px-4 py-2 rounded-lg hover:border-violet-300 transition-colors">
             <Newspaper className="w-3.5 h-3.5" /> Manage blog
+          </Link>
+          <Link href="/admin/announcements" className="flex items-center gap-1.5 text-sm bg-white border border-gray-200 px-4 py-2 rounded-lg hover:border-violet-300 transition-colors">
+            <Sparkles className="w-3.5 h-3.5" /> Announcements
           </Link>
         </div>
       </div>

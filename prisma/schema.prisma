@@ -212,6 +212,24 @@ model AdSlot {
   @@map("ad_slots")
 }
 
+// Admin-managed "what's new" notices shown in a dismissible banner on the
+// homepage — e.g. "Invoice Generator just got a major upgrade". Only the
+// single most recently created `enabled` row is shown at a time; admins keep
+// older ones around (disabled) as a simple history rather than deleting.
+model Announcement {
+  id        String   @id @default(cuid())
+  badge     String   @default("UPDATE")
+  title     String
+  message   String?
+  linkUrl   String?
+  linkText  String?
+  enabled   Boolean  @default(true)
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+
+  @@map("announcements")
+}
+
 // ─── Tool Registry ────────────────────────────────────────────────────────────
 
 model Tool {

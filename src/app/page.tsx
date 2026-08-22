@@ -6,8 +6,10 @@ import prisma from "@/lib/prisma";
 import ToolCard from "@/components/ToolCard";
 import HeroSearch from "@/components/HeroSearch";
 import AdSlot from "@/components/AdSlot";
+import AnnouncementBanner from "@/components/AnnouncementBanner";
 import { getAdCodes } from "@/lib/ads";
 import { adSlotKey } from "@/lib/adPlacements";
+import { getActiveAnnouncement } from "@/lib/announcements";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
@@ -32,9 +34,12 @@ export default async function HomePage() {
   const statsById = new Map(stats.map((s) => [s.toolId, s]));
 
   const adCodes = await getAdCodes("home", ["bottom", "middle"]);
+  const announcement = await getActiveAnnouncement();
 
   return (
     <div>
+      {announcement && <AnnouncementBanner {...announcement} />}
+
       {/* Hero */}
       <section className="relative overflow-hidden bg-white border-b border-gray-100">
         {/* Decorative gradient blobs — pure CSS, no images/JS */}
