@@ -48,7 +48,11 @@ function maxCompressionOptions(format: ImageFormat, quality: number) {
   }
 }
 
-export async function compressImage(buffer: ArrayBuffer, quality = 40): Promise<{ bytes: Buffer; format: ImageFormat; originalSize: number; newSize: number }> {
+// 75 is the widely-cited JPEG/WebP "sweet spot" — visually indistinguishable
+// from the source for almost all photos while still cutting file size
+// substantially. The old default of 40 was tuned purely for minimum size and
+// contradicted this tool's own "without visible quality loss" description.
+export async function compressImage(buffer: ArrayBuffer, quality = 75): Promise<{ bytes: Buffer; format: ImageFormat; originalSize: number; newSize: number }> {
   if (!Number.isFinite(quality) || quality < 1 || quality > 100) throw new Error("quality must be between 1 and 100");
   const img = sharp(Buffer.from(buffer));
   const meta = await img.metadata();

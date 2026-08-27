@@ -192,20 +192,22 @@ export async function writeMetadata(
   return doc.save();
 }
 
-// Maximum-strength compression: rasterizes every page to a small,
-// aggressively-recompressed JPEG and rebuilds the PDF from those images —
-// the same technique iLovePDF's "Extreme" compression level uses. This
+// Rasterizes every page to a recompressed JPEG and rebuilds the PDF from
+// those images — the same technique iLovePDF's compression levels use. This
 // squeezes far more out of image-heavy PDFs than structural compaction
 // alone (which can't touch embedded image data), at the cost of the page
-// becoming a flat image: text is no longer selectable/searchable.
-async function rasterizeAndRecompress(buffer: ArrayBuffer): Promise<Uint8Array> {
+// becoming a flat image: text is no longer selectable/searchable. `scale`
+// controls render DPI (pdf.js base is 72 DPI, so scale 2 = ~144 DPI) and
+// `quality` is the JPEG re-encode quality — together they set where a given
+// compression level lands on the size/fidelity tradeoff.
+async function rasterizeAndRecompress(buffer: ArrayBuffer, scale: number, quality: number): Promise<Uint8Array> {
   const srcDoc = await PDFDocument.load(buffer);
   const pageSizes = srcDoc.getPages().map((p) => p.getSize());
-  const { images } = await renderPdfPagesToJpg(buffer, { scale: 1 }); // 72 DPI — as small as a rendered page gets while staying legible
+  const { images } = await renderPdfPagesToJpg(buffer, { scale });
 
   const outDoc = await PDFDocument.create();
   for (let i = 0; i < images.length; i++) {
-    const recompressed = await sharp(images[i]).jpeg({ quality: 25, mozjpeg: true }).toBuffer();
+    const recompressed = await sharp(images[i]).jpeg({ quality, mozjpeg: true }).toBuffer();
     const img = await outDoc.embedJpg(recompressed);
     const size = pageSizes[i] ?? { width: img.width, height: img.height };
     const page = outDoc.addPage([size.width, size.height]);
@@ -214,18 +216,44 @@ async function rasterizeAndRecompress(buffer: ArrayBuffer): Promise<Uint8Array> 
   return outDoc.save({ useObjectStreams: true });
 }
 
-export async function compressPdf(buffer: ArrayBuffer): Promise<{ bytes: Uint8Array; originalSize: number; newSize: number; note: string }> {
+export type PdfCompressionLevel = "low" | "recommended" | "extreme";
+
+// "recommended" renders at pdf.js's normal ~144 DPI and a high JPEG quality —
+// a strong size reduction on image-heavy PDFs with no visible quality loss
+// for on-screen reading. "extreme" trades down to 72 DPI / quality 25 for
+// the smallest possible file, at a real, visible cost. Both still fall back
+// to structural-only compaction below if that happens to come out smaller.
+const RASTER_PRESETS: Record<Exclude<PdfCompressionLevel, "low">, { scale: number; quality: number }> = {
+  recommended: { scale: 2, quality: 78 },
+  extreme: { scale: 1, quality: 25 },
+};
+
+export async function compressPdf(
+  buffer: ArrayBuffer,
+  level: PdfCompressionLevel = "recommended"
+): Promise<{ bytes: Uint8Array; originalSize: number; newSize: number; note: string }> {
   const originalSize = buffer.byteLength;
 
   const structDoc = await PDFDocument.load(buffer);
   const structBytes = await structDoc.save({ useObjectStreams: true });
+
+  if (level === "low") {
+    return {
+      bytes: structBytes,
+      originalSize,
+      newSize: structBytes.byteLength,
+      note: "Light compression applied: structural compaction only (shared object streams) — text stays fully selectable and searchable.",
+    };
+  }
+
+  const preset = RASTER_PRESETS[level];
 
   // Rasterizing can fail for unusual PDFs (huge pages, exotic encodings) —
   // fall back to the structural-only result rather than erroring the whole
   // operation out over a "go as small as possible" best-effort step.
   let rasterBytes: Uint8Array | null = null;
   try {
-    rasterBytes = await rasterizeAndRecompress(buffer);
+    rasterBytes = await rasterizeAndRecompress(buffer, preset.scale, preset.quality);
   } catch {
     rasterBytes = null;
   }
@@ -241,8 +269,10 @@ export async function compressPdf(buffer: ArrayBuffer): Promise<{ bytes: Uint8Ar
     originalSize,
     newSize: bytes.byteLength,
     note: useRaster
-      ? "Maximum compression applied: pages were rasterized and re-encoded at low quality for the smallest possible file size. Text is no longer selectable/searchable."
-      : "This PDF was already tightly encoded, or maximum-compression rasterizing would have produced a larger file - structural compaction (shared object streams) was used instead.",
+      ? level === "extreme"
+        ? "Maximum compression applied: pages were rasterized and re-encoded at low quality for the smallest possible file size. Text is no longer selectable/searchable."
+        : "Compression applied: pages were rasterized and re-encoded at high quality for a strong size reduction with minimal visible loss. Text is no longer selectable/searchable."
+      : "This PDF was already tightly encoded, or rasterizing would have produced a larger file — structural compaction (shared object streams) was used instead.",
   };
 }
 

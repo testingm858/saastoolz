@@ -125,6 +125,13 @@ export const FILE_TOOLS: Record<string, FileToolConfig> = {
   },
   "pdf-compress": {
     multiple: false, accept: "application/pdf", acceptLabel: "a PDF file", outputIsFile: true,
+    fields: [
+      { name: "level", label: "Compression level", type: "select", defaultValue: "recommended", options: [
+        { label: "Low — keep text selectable", value: "low" },
+        { label: "Recommended — high quality, strong compression", value: "recommended" },
+        { label: "Extreme — smallest possible file", value: "extreme" },
+      ], helpText: "Recommended balances a strong size reduction with high visual quality. Extreme rasterizes pages harder for the smallest file, at a visible quality cost." },
+    ],
   },
   "pdf-sign": {
     multiple: false, accept: "application/pdf", acceptLabel: "a PDF file", outputIsFile: true,
@@ -140,7 +147,7 @@ export const FILE_TOOLS: Record<string, FileToolConfig> = {
   "image-compress": {
     multiple: false, accept: "image/*", acceptLabel: "an image", outputIsFile: true,
     fields: [
-      { name: "quality", label: "Quality", type: "number", defaultValue: 40, min: 1, max: 100, helpText: "Defaults to maximum compression. Raise this if the result looks too lossy." },
+      { name: "quality", label: "Quality", type: "number", defaultValue: 75, min: 1, max: 100, helpText: "Defaults to a high-quality balance of size and clarity. Lower this for smaller files, or raise it if you need the result closer to the original." },
     ],
   },
   "image-resize": {

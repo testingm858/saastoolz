@@ -236,7 +236,8 @@ export async function dispatchFile(toolId: string, formData: FormData): Promise<
     case "pdf-compress": {
       const file = formData.get("file");
       const buffer = await fileToBuffer(file);
-      const { bytes, originalSize, newSize, note } = await compressPdf(buffer);
+      const level = (options.level as Parameters<typeof compressPdf>[1]) ?? "recommended";
+      const { bytes, originalSize, newSize, note } = await compressPdf(buffer, level);
       return {
         bytes, filename: buildDownloadName(fileName(file), "compressed", "pdf"), contentType: "application/pdf",
         extraHeaders: { ...sizeHeaders(originalSize, newSize), "X-Note": note },

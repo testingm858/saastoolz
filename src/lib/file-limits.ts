@@ -1,9 +1,13 @@
-// Vercel enforces a hard ~4.5MB request-body ceiling on serverless functions
-// (FUNCTION_PAYLOAD_TOO_LARGE) — this is a platform limit, not something
-// next.config.ts/vercel.json can raise. We stay under it with headroom for
-// multipart boundaries and any other form fields in the same request.
-export const MAX_UPLOAD_BYTES = 4 * 1024 * 1024; // 4MB
-export const MAX_UPLOAD_MB = 4;
+// Now running as a persistent Node process on Hostinger, not Vercel
+// serverless functions — the old 4MB cap existed only to stay under
+// Vercel's hard ~4.5MB FUNCTION_PAYLOAD_TOO_LARGE ceiling, which no longer
+// applies. 50MB comfortably covers real-world PDFs and images (including
+// scanned/OCR PDFs and camera-original photos) while keeping worst-case
+// per-request memory use predictable on a single VPS. If Hostinger's own
+// reverse proxy/hPanel Node app config caps request bodies lower than this,
+// that limit needs raising there too — this constant can't override it.
+export const MAX_UPLOAD_BYTES = 50 * 1024 * 1024; // 50MB
+export const MAX_UPLOAD_MB = 50;
 
 // Blog cover images are stored inline as base64 data: URLs (no external
 // storage is wired up), which travel through the same Vercel body-limit
