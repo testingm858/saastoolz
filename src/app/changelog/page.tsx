@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Changelog",
   description: "What's new on SaaSToolz.",
   alternates: { canonical: "/changelog" },
+  openGraph: { title: "Changelog | SaaSToolz", description: "What's new on SaaSToolz." },
 };
 
 const ENTRIES = [

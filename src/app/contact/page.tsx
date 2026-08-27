@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Contact",
   description: "Get in touch with the SaaSToolz team.",
   alternates: { canonical: "/contact" },
+  openGraph: { title: "Contact | SaaSToolz", description: "Get in touch with the SaaSToolz team." },
 };
 
 export default function ContactPage() {

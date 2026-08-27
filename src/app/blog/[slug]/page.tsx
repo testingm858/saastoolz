@@ -52,6 +52,7 @@ export default async function BlogPostPage({ params }: Props) {
     datePublished: post.publishedAt?.toISOString(),
     dateModified: post.updatedAt.toISOString(),
     url: postUrl,
+    image: post.coverImage ?? `${postUrl}/opengraph-image`,
     author: { "@type": "Organization", name: "SaaSToolz" },
     publisher: { "@type": "Organization", name: "SaaSToolz", logo: { "@type": "ImageObject", url: `${BASE_URL}/logo.jpeg` } },
   };

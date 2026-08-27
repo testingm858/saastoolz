@@ -4,6 +4,7 @@ export const metadata: Metadata = {
   title: "Privacy Policy",
   description: "How SaaSToolz collects, uses and protects your data.",
   alternates: { canonical: "/privacy" },
+  openGraph: { title: "Privacy Policy | SaaSToolz", description: "How SaaSToolz collects, uses and protects your data." },
 };
 
 const LAST_UPDATED = "July 15, 2026";

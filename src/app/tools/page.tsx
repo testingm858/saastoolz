@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   title: "All Tools",
   description: `Browse all ${FREE_TOOLS.length} tools on SaaSToolz, searchable by name or category.`,
   alternates: { canonical: "/tools" },
+  openGraph: {
+    title: "All Tools | SaaSToolz",
+    description: `Browse all ${FREE_TOOLS.length} tools on SaaSToolz, searchable by name or category.`,
+  },
 };
 
 // Per-card visit/like stats make this dynamic per request instead of

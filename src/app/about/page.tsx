@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "About",
   description: "Why SaaSToolz exists and how it's built.",
   alternates: { canonical: "/about" },
+  openGraph: { title: "About | SaaSToolz", description: "Why SaaSToolz exists and how it's built." },
 };
 
 export default function AboutPage() {

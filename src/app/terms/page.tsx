@@ -4,6 +4,7 @@ export const metadata: Metadata = {
   title: "Terms of Service",
   description: "The terms that govern your use of SaaSToolz.",
   alternates: { canonical: "/terms" },
+  openGraph: { title: "Terms of Service | SaaSToolz", description: "The terms that govern your use of SaaSToolz." },
 };
 
 const LAST_UPDATED = "July 15, 2026";

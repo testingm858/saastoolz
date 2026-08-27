@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "API Docs",
   description: "The REST endpoint that powers every SaaSToolz tool.",
   alternates: { canonical: "/api-docs" },
+  openGraph: { title: "API Docs | SaaSToolz", description: "The REST endpoint that powers every SaaSToolz tool." },
 };
 
 const CODE_BLOCK_CLASS =

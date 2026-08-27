@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Blog",
   description: "Tips, tool guides and product updates from SaaSToolz.",
   alternates: { canonical: "/blog" },
+  openGraph: { title: "Blog | SaaSToolz", description: "Tips, tool guides and product updates from SaaSToolz." },
 };
 
 // Posts are published live through /admin/blog with no redeploy — always
