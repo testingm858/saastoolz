@@ -12,6 +12,8 @@ import FileToolInterface from "@/components/FileToolInterface";
 import WebhookTesterClient from "@/components/WebhookTesterClient";
 import JsonViewerClient from "@/components/JsonViewerClient";
 import InvoiceGeneratorClient from "@/components/invoice/InvoiceGeneratorClient";
+import MetaTagGeneratorClient from "@/components/MetaTagGeneratorClient";
+import RobotsTxtGeneratorClient from "@/components/RobotsTxtGeneratorClient";
 import AdSlot from "@/components/AdSlot";
 import { getAdCodes } from "@/lib/ads";
 import { adSlotKey } from "@/lib/adPlacements";
@@ -158,6 +160,10 @@ export default async function ToolPage({ params }: Props) {
         <JsonViewerClient />
       ) : tool.id === "invoice-generator" ? (
         <InvoiceGeneratorClient />
+      ) : tool.id === "meta-tag-generator" ? (
+        <MetaTagGeneratorClient />
+      ) : tool.id === "robots-txt" ? (
+        <RobotsTxtGeneratorClient />
       ) : isFileTool(tool.id) ? (
         <FileToolInterface tool={tool} />
       ) : (
