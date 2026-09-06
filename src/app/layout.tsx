@@ -3,6 +3,8 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SessionProvider from "@/components/SessionProvider";
+import PageViewTracker from "@/components/analytics/PageViewTracker";
+import { Suspense } from "react";
 import Script from "next/script";
 import { FREE_TOOLS } from "@/lib/tools";
 import { BASE_URL } from "@/lib/site";
@@ -58,18 +60,39 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
+        {/* google-adsense-account is Google's recommended, framework-agnostic
+            site-verification signal — a plain <meta> tag that never mutates
+            the DOM itself, so (unlike the loader script below) it can't
+            cause a hydration mismatch no matter where it's rendered. */}
+        <meta name="google-adsense-account" content="ca-pub-7420276461237909" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
         />
       </head>
       <body className="bg-gray-50 text-gray-900 antialiased" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
+        {/* AdSense loader — deliberately `afterInteractive` in <body>, not a
+            raw <head> tag. adsbygoogle.js injects its own extra <script>
+            tags into the DOM as soon as it runs; if that happens before or
+            during hydration, it shifts whatever siblings React expects to
+            find afterward and breaks hydration on them (we hit this with
+            both a raw tag and next/script's `beforeInteractive`, in both
+            <head> and reordered positions — the DOM mutation itself is the
+            problem, not where the tag sits). `afterInteractive` mounts the
+            script only once hydration has already finished, so there's
+            nothing left for it to conflict with. AdSense's own verification
+            crawler executes JavaScript, so it finds the script here fine;
+            the <meta> tag above is the primary, hydration-safe verification
+            signal either way. */}
         <Script
           async
+          strategy="afterInteractive"
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7420276461237909"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
         />
+        <Suspense fallback={null}>
+          <PageViewTracker />
+        </Suspense>
         <SessionProvider>
           <Navbar />
           <main className="min-h-screen">{children}</main>

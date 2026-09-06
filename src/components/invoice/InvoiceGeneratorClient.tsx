@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Printer, Image as ImageIcon, FileDown, Loader2 } from "lucide-react";
-import { CURRENCIES, defaultInvoice, type Invoice } from "@/lib/invoice";
+import { CURRENCIES, calcTotals, defaultInvoice, type Invoice } from "@/lib/invoice";
 import { TemplateCorporate } from "./InvoiceTemplates";
 import InvoiceEditor from "./InvoiceEditor";
 import { cn } from "@/lib/utils";
@@ -44,9 +44,35 @@ export default function InvoiceGeneratorClient() {
     }, 800);
   }, []);
 
+  // Fire-and-forget capture of who this invoice was for, for the admin
+  // dashboard — the invoice content itself (line items, etc.) never leaves
+  // the browser, only this metadata. Best-effort: never blocks the export.
+  const reportGenerated = useCallback((invoice: Invoice) => {
+    if (!invoice.company.name.trim()) return; // nothing meaningful to attribute this to
+    const total = calcTotals(invoice.items).grand;
+    fetch("/api/invoices", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        invoiceNumber: invoice.number,
+        companyName: invoice.company.name,
+        companyEmail: invoice.company.email,
+        companyVat: invoice.company.taxNo,
+        customerName: invoice.customer.name,
+        customerCompany: invoice.customer.company,
+        customerEmail: invoice.customer.email,
+        currency: invoice.currency,
+        total,
+      }),
+    }).catch(() => {
+      /* non-blocking */
+    });
+  }, []);
+
   const handleExport = useCallback(async (type: "print" | "png" | "pdf") => {
     if (!inv) return;
     if (type === "print") {
+      reportGenerated(inv);
       window.print();
       return;
     }
@@ -74,13 +100,14 @@ export default function InvoiceGeneratorClient() {
         pdf.addImage(imgData, "PNG", 0, 0, printableWidth, imgHeight);
         pdf.save(`${inv.number || "invoice"}.pdf`);
       }
+      reportGenerated(inv);
     } catch (err) {
       console.error(err);
       setError("Export failed. Please try again.");
     } finally {
       setExporting(null);
     }
-  }, [inv]);
+  }, [inv, reportGenerated]);
 
   if (!inv) {
     return (

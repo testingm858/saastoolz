@@ -33,6 +33,7 @@ model User {
   subscription Subscription?
   toolUsages   ToolUsage[]
   jobs         Job[]
+  invoices     Invoice[]
 
   @@map("users")
 }
@@ -229,6 +230,85 @@ model Announcement {
   createdAt DateTime @default(now())
 
   @@map("announcements")
+}
+
+// ─── Invoice Generator — customer/company capture ─────────────────────────────
+//
+// The Invoice Generator tool itself is fully client-side (no account, no
+// server-stored invoice content) — this only captures the *metadata* of each
+// generated invoice (who it was for, which company issued it) for admin
+// analysis, not the invoice document itself. `Company` is deduplicated by
+// name+email so the admin dashboard can answer "how many invoices has this
+// company generated" — there's no company login, so this is a best-effort
+// match on the free-text fields the issuer typed into the editor.
+
+model Company {
+  id        String    @id @default(cuid())
+  name      String
+  email     String?
+  vatNumber String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  invoices Invoice[]
+
+  @@unique([name, email])
+  @@map("companies")
+}
+
+model Invoice {
+  id              String   @id @default(cuid())
+  invoiceNumber   String
+  companyId       String
+  customerName    String?
+  customerCompany String?
+  customerEmail   String?
+  currency        String   @default("USD")
+  total           Float?
+  userId          String?
+  createdAt       DateTime @default(now())
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  user    User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([companyId])
+  @@index([invoiceNumber])
+  @@map("invoices")
+}
+
+// ─── Site Analytics ────────────────────────────────────────────────────────────
+//
+// Lightweight first-party analytics — page views (for visit/unique-visitor
+// counts) and per-tool time-on-page. visitorId is the same anonymous cookie
+// used for Likes (see src/lib/visitor.ts); userId is populated when signed in.
+// Not present locally for anything geo-related since Vercel's edge headers
+// don't exist under `next dev`.
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  visitorId String?
+  userId    String?
+  referrer  String?
+  createdAt DateTime @default(now())
+
+  @@index([path])
+  @@index([createdAt])
+  @@index([visitorId])
+  @@map("page_views")
+}
+
+model ToolVisit {
+  id         String   @id @default(cuid())
+  toolId     String
+  visitorId  String?
+  userId     String?
+  durationMs Int?
+  createdAt  DateTime @default(now())
+
+  @@index([toolId])
+  @@index([createdAt])
+  @@map("tool_visits")
 }
 
 // ─── Tool Registry ────────────────────────────────────────────────────────────

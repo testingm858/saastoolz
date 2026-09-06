@@ -11,7 +11,18 @@ import { getAdCodes } from "@/lib/ads";
 import { adSlotKey } from "@/lib/adPlacements";
 import { getActiveAnnouncement } from "@/lib/announcements";
 
-export const metadata: Metadata = { alternates: { canonical: "/" } };
+const HOME_TITLE = "Free Online Tools for PDF, Images, SEO, Coding & More | SaaSToolz";
+const HOME_DESCRIPTION =
+  "Use 115 free online tools for PDF conversion, image editing, developer utilities, SEO, writing, calculators and more. No signup required.";
+
+export const metadata: Metadata = {
+  // `absolute` bypasses the root layout's `"%s | SaaSToolz"` title template —
+  // this title already ends in "| SaaSToolz" itself.
+  title: { absolute: HOME_TITLE },
+  description: HOME_DESCRIPTION,
+  alternates: { canonical: "/" },
+  openGraph: { title: HOME_TITLE, description: HOME_DESCRIPTION },
+};
 
 // Per-card visit/like stats make this dynamic per request instead of
 // statically generated — same tradeoff already made elsewhere for stats.
