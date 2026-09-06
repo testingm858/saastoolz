@@ -220,7 +220,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     metaDescription:
       "Create a professional invoice in your browser and export it as PDF or PNG in seconds. Free, no signup, no watermark, no account required.",
     intro:
-      "Invoice Generator lets you build a professional invoice — your company details, a customer, line items with tax and discounts, and totals — then export it as a print-ready PDF or PNG, entirely in your browser, with no account or recurring subscription.",
+      "Invoice Generator lets you build a professional invoice — fill your details, then export it as a print-ready PDF or PNG, entirely in your browser.",
     steps: [
       "Fill in your company details (name, logo, VAT/tax number, contact info).",
       "Add the customer's details and one or more line items with quantity, price, discount and tax.",
