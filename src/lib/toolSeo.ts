@@ -68,6 +68,27 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "Is my data safe when using this tool?", a: "Yes. Files are processed securely and deleted from our servers within 1 hour." },
     ],
   },
+  "pdf-split": {
+    title: "Split PDF Online Free — Extract Pages, No Signup | SaaSToolz",
+    metaDescription:
+      "Split a PDF into a custom page range, equal-sized chunks, or specific page numbers. Free, instant, no signup.",
+    intro:
+      "Split PDF breaks one PDF into multiple files — pull out a range of pages, cut it into equal-sized chunks, or extract specific page numbers — without installing anything. Files are uploaded securely and deleted from our servers within 1 hour.",
+    steps: [
+      "Upload the PDF you want to split.",
+      "Choose Range (a custom page range or fixed-size chunks) or Pages (every page, or specific page numbers).",
+      "Enter the range, chunk size, or page numbers for the mode you picked.",
+      "Click \"Split PDF\" and download the result — one PDF for a single range, or a .zip for multiple files.",
+    ],
+    faqs: [
+      { q: "What's the difference between Range and Pages mode?", a: "Range mode pulls out a continuous span of pages, or splits the whole document into equal-sized chunks. Pages mode extracts specific, individually chosen page numbers, or every page as its own file." },
+      { q: "Do I get one file back or several?", a: "A single custom range downloads as one PDF; fixed-size chunks, \"extract all,\" and multi-page selections download as a .zip containing multiple PDFs." },
+      { q: "Can I select non-consecutive pages?", a: "Yes — in Pages mode, enter comma-separated page numbers and ranges, like 1, 3, 5-8." },
+      { q: "Will splitting affect quality or formatting?", a: "No. Pages are extracted as-is with no re-compression or re-rendering, so content looks exactly as it did in the original." },
+      { q: "Is there a limit on how many pages I can split?", a: "Free use covers typical document lengths; very large PDFs may take a little longer to process." },
+      { q: "Is my data safe when using this tool?", a: "Yes. Files are processed securely and deleted from our servers within 1 hour." },
+    ],
+  },
   "pdf-to-word": {
     title: "Convert PDF to Word Online Free, No Signup | SaaSToolz",
     metaDescription:
@@ -213,6 +234,48 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "Can I exclude ambiguous characters like 0/O or 1/l?", a: "Yes — toggle that option on if you need to type the password manually and want to avoid easily-confused characters." },
       { q: "Is length or complexity more important?", a: "Length matters more. A longer password with fewer character types generally resists brute-force attacks better than a shorter, highly complex one — aim for at least 12–16 characters." },
       { q: "What's a passphrase, and is it a good alternative?", a: "Several random, unrelated words strung together (not a memorable quote or lyric). It can work well if it's genuinely long and random — but a purely random character string is generally stronger for the same length." },
+    ],
+  },
+  "word-counter": {
+    title: "Word Counter Online Free — Words, Characters & Reading Time | SaaSToolz",
+    metaDescription:
+      "Count words, characters, sentences and estimated reading time as you type or paste. Free, instant, no signup.",
+    intro:
+      "Word Counter gives you an instant breakdown of your text — word count, character count (with and without spaces), sentence and paragraph count, and estimated reading time — useful for hitting a word limit or checking how long a piece will take to read.",
+    steps: [
+      "Paste or type your text into Word Counter.",
+      "Click \"Run\" to get the count — or just keep editing and re-run any time.",
+      "Review the word, character, sentence and paragraph counts.",
+      "Check the estimated reading time shown alongside the counts.",
+    ],
+    faqs: [
+      { q: "Does this tool send my text to a server?", a: "Yes — the text is sent to our servers to compute the counts and the result is returned to you; we don't store the content itself." },
+      { q: "Does the character count include spaces?", a: "Both totals are shown — character count with spaces and without — so you can use whichever limit applies to you." },
+      { q: "How is reading time calculated?", a: "At roughly 200 words per minute, a common average adult silent-reading speed — treat it as a useful estimate rather than an exact figure." },
+      { q: "What counts as a sentence or paragraph?", a: "Sentences are counted by splitting on periods, question marks and exclamation points, so unusual abbreviations can occasionally shift the count by one. Paragraphs are counted by blank lines between blocks of text." },
+      { q: "Is there a text length limit?", a: "No hard limit for typical use — very long documents may take a moment longer to process." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "loan-calculator": {
+    title: "Loan / EMI Calculator — Free, Instant Amortization | SaaSToolz",
+    metaDescription:
+      "Calculate your monthly EMI, total interest and full amortization schedule for any loan amount, rate and term. Free, instant, no signup.",
+    intro:
+      "Loan / EMI Calculator works out your fixed monthly payment (EMI), the total interest you'll pay over the life of the loan, and a full month-by-month amortization schedule — enter the loan amount, annual interest rate, and term to see the breakdown.",
+    steps: [
+      "Enter the loan amount, annual interest rate, and term in months.",
+      "The calculator computes your monthly EMI and total interest instantly.",
+      "Review the amortization schedule showing principal and interest per payment.",
+      "Adjust any value to compare different loan scenarios.",
+    ],
+    faqs: [
+      { q: "Is the Loan / EMI Calculator accurate?", a: "Yes — it uses the standard reducing-balance EMI formula; results are for informational purposes and shouldn't replace advice from your lender or a financial advisor for major decisions." },
+      { q: "Does this tool send my numbers to a server?", a: "Yes — your loan amount, rate and term are sent to our servers to compute the result and the result is returned to you; we don't store the values." },
+      { q: "What is EMI?", a: "Equated Monthly Installment — the fixed amount you pay each month, combining both principal and interest, that keeps every payment the same size over the loan's term." },
+      { q: "Why does the loan term need to be in months?", a: "Interest accrues monthly, so the calculation needs a whole number of months — enter years × 12 if your loan term is given in years." },
+      { q: "What's the difference between this and the Mortgage Calculator?", a: "This calculator computes EMI for any general loan from the amount, rate and term directly. The Mortgage Calculator adds a home price and down payment percentage on top, specific to home loans." },
+      { q: "Can I use this for any type of loan?", a: "Yes — personal loans, auto loans, student loans, or any fixed-rate installment loan, not just mortgages." },
     ],
   },
   "invoice-generator": {
