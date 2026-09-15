@@ -31,7 +31,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     metaDescription:
       "Combine multiple PDF files into one document in seconds. Drag, drop, reorder pages, and download — free, no signup, no watermark.",
     intro:
-      "Merge PDF lets you combine two or more PDF files into a single document without installing anything. Upload your files, drag them into the order you want, and download one merged PDF — everything runs in your browser, so your files never sit on a server longer than it takes to process them.",
+      "Merge PDF lets you combine two or more PDF files into a single document without installing anything. Upload your files, drag them into the order you want, and download one merged PDF — files are uploaded securely and deleted from our servers within 1 hour.",
     steps: [
       "Upload two or more PDF files using the file picker or by dragging them in.",
       "Drag the thumbnails to put the pages in the order you want the final document to read.",
@@ -65,6 +65,27 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "Can I compress a password-protected PDF?", a: "Unlock it first with the Unlock PDF tool, then compress it — encrypted files can't be re-processed directly." },
       { q: "What actually makes a PDF large in the first place?", a: "Embedded images almost always dominate — especially scanned pages saved at high resolution. Embedded fonts and page count matter too, but far less." },
       { q: "Which compression level should I pick?", a: "Recommended for most cases. Use Low if the document must stay perfectly text-selectable and sharp; use Extreme only when you're up against a hard size limit, like a 5MB upload cap." },
+      { q: "Is my data safe when using this tool?", a: "Yes. Files are processed securely and deleted from our servers within 1 hour." },
+    ],
+  },
+  "pdf-split": {
+    title: "Split PDF Online Free — Extract Pages, No Signup | SaaSToolz",
+    metaDescription:
+      "Split a PDF into a custom page range, equal-sized chunks, or specific page numbers. Free, instant, no signup.",
+    intro:
+      "Split PDF breaks one PDF into multiple files — pull out a range of pages, cut it into equal-sized chunks, or extract specific page numbers — without installing anything. Files are uploaded securely and deleted from our servers within 1 hour.",
+    steps: [
+      "Upload the PDF you want to split.",
+      "Choose Range (a custom page range or fixed-size chunks) or Pages (every page, or specific page numbers).",
+      "Enter the range, chunk size, or page numbers for the mode you picked.",
+      "Click \"Split PDF\" and download the result — one PDF for a single range, or a .zip for multiple files.",
+    ],
+    faqs: [
+      { q: "What's the difference between Range and Pages mode?", a: "Range mode pulls out a continuous span of pages, or splits the whole document into equal-sized chunks. Pages mode extracts specific, individually chosen page numbers, or every page as its own file." },
+      { q: "Do I get one file back or several?", a: "A single custom range downloads as one PDF; fixed-size chunks, \"extract all,\" and multi-page selections download as a .zip containing multiple PDFs." },
+      { q: "Can I select non-consecutive pages?", a: "Yes — in Pages mode, enter comma-separated page numbers and ranges, like 1, 3, 5-8." },
+      { q: "Will splitting affect quality or formatting?", a: "No. Pages are extracted as-is with no re-compression or re-rendering, so content looks exactly as it did in the original." },
+      { q: "Is there a limit on how many pages I can split?", a: "Free use covers typical document lengths; very large PDFs may take a little longer to process." },
       { q: "Is my data safe when using this tool?", a: "Yes. Files are processed securely and deleted from our servers within 1 hour." },
     ],
   },
@@ -170,7 +191,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "What's the difference between PNG and SVG download?", a: "PNG is a fixed-resolution image good for screens and most printing; SVG is a vector file that scales to any size (like a billboard) with no quality loss." },
       { q: "What's the difference between a QR code and a barcode?", a: "A traditional barcode encodes data in one line and holds relatively little (usually just a product number); a QR code encodes data in two dimensions and can hold dramatically more — a full URL, a WiFi password, a whole contact card." },
       { q: "Will the QR code still scan if part of it is damaged or covered by a logo?", a: "Usually yes — QR codes include built-in error correction specifically so they keep working with partial damage or a small logo overlay, as long as it doesn't cover too much of the pattern." },
-      { q: "Is my data safe when using this tool?", a: "Yes — WiFi passwords and contact details are encoded directly into the QR code in your browser and are not stored on our servers." },
+      { q: "Is my data safe when using this tool?", a: "Yes — WiFi passwords and contact details are sent to our servers only to generate the QR code and are not stored afterward." },
     ],
   },
   "json-formatter": {
@@ -189,7 +210,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "What happens if my JSON is invalid?", a: "The tool highlights the syntax error and tells you roughly where the problem is (a missing comma, unmatched bracket, trailing comma, etc.) so you can fix it quickly." },
       { q: "Can I minify JSON with this tool too?", a: "This tool formats/beautifies; use JSON Minifier if you need the compact, whitespace-free version for production." },
       { q: "Is there a size limit?", a: "Very large JSON payloads (tens of megabytes) may be slower to render, but there's no hard limit for typical API responses or config files." },
-      { q: "Does this tool send my JSON anywhere?", a: "No — formatting and validation happen entirely in your browser; the content of what you paste is never sent to a server." },
+      { q: "Does this tool send my JSON anywhere?", a: "Yes — the JSON you paste is sent to our servers to be formatted and validated, and the result is returned to you; we don't store the content itself." },
       { q: "What's the most common JSON syntax error?", a: "A trailing comma after the last item in an object or array — allowed in JavaScript object literals, but not valid JSON. Unquoted keys and single quotes instead of double quotes are close runners-up." },
       { q: "What's the difference between formatting and minifying?", a: "Formatting adds indentation and line breaks for readability; minifying strips all of that out for the smallest possible payload. Use JSON Minifier when you need the compact version." },
     ],
@@ -197,9 +218,9 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
   "password-generator": {
     title: "Strong Password Generator — Free, Secure, No Signup | SaaSToolz",
     metaDescription:
-      "Generate strong, random passwords with custom length and character rules. Free, created locally in your browser — never sent to a server.",
+      "Generate strong, random passwords with custom length and character rules. Free, no signup, and never stored on our servers.",
     intro:
-      "Password Generator creates cryptographically random passwords using the character sets you choose (uppercase, lowercase, numbers, symbols) at whatever length you need — generated entirely in your browser, so the password is never transmitted anywhere before you copy it.",
+      "Password Generator creates cryptographically random passwords using the character sets you choose (uppercase, lowercase, numbers, symbols) at whatever length you need. Your chosen options are sent to our servers to generate the password, which is returned to you and not logged or stored.",
     steps: [
       "Set your desired password length.",
       "Choose which character types to include — uppercase, lowercase, numbers, symbols.",
@@ -208,11 +229,53 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     ],
     faqs: [
       { q: "How long should my password be?", a: "At least 12–16 characters with a mix of character types for most accounts; longer is better, and length matters more than complexity for resisting brute-force attacks." },
-      { q: "Is the generated password sent to your servers?", a: "No — generation happens entirely in your browser using the Web Crypto API's random number generator; nothing is transmitted or logged." },
+      { q: "Is the generated password sent to your servers?", a: "The password is generated on our servers and sent back to you over an encrypted connection; it isn't logged or stored anywhere." },
       { q: "Should I reuse a generated password across sites?", a: "No — use a unique password per account (ideally stored in a password manager) so a breach on one site can't compromise your other accounts." },
       { q: "Can I exclude ambiguous characters like 0/O or 1/l?", a: "Yes — toggle that option on if you need to type the password manually and want to avoid easily-confused characters." },
       { q: "Is length or complexity more important?", a: "Length matters more. A longer password with fewer character types generally resists brute-force attacks better than a shorter, highly complex one — aim for at least 12–16 characters." },
       { q: "What's a passphrase, and is it a good alternative?", a: "Several random, unrelated words strung together (not a memorable quote or lyric). It can work well if it's genuinely long and random — but a purely random character string is generally stronger for the same length." },
+    ],
+  },
+  "word-counter": {
+    title: "Word Counter Online Free — Words, Characters & Reading Time | SaaSToolz",
+    metaDescription:
+      "Count words, characters, sentences and estimated reading time as you type or paste. Free, instant, no signup.",
+    intro:
+      "Word Counter gives you an instant breakdown of your text — word count, character count (with and without spaces), sentence and paragraph count, and estimated reading time — useful for hitting a word limit or checking how long a piece will take to read.",
+    steps: [
+      "Paste or type your text into Word Counter.",
+      "Click \"Run\" to get the count — or just keep editing and re-run any time.",
+      "Review the word, character, sentence and paragraph counts.",
+      "Check the estimated reading time shown alongside the counts.",
+    ],
+    faqs: [
+      { q: "Does this tool send my text to a server?", a: "Yes — the text is sent to our servers to compute the counts and the result is returned to you; we don't store the content itself." },
+      { q: "Does the character count include spaces?", a: "Both totals are shown — character count with spaces and without — so you can use whichever limit applies to you." },
+      { q: "How is reading time calculated?", a: "At roughly 200 words per minute, a common average adult silent-reading speed — treat it as a useful estimate rather than an exact figure." },
+      { q: "What counts as a sentence or paragraph?", a: "Sentences are counted by splitting on periods, question marks and exclamation points, so unusual abbreviations can occasionally shift the count by one. Paragraphs are counted by blank lines between blocks of text." },
+      { q: "Is there a text length limit?", a: "No hard limit for typical use — very long documents may take a moment longer to process." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "loan-calculator": {
+    title: "Loan / EMI Calculator — Free, Instant Amortization | SaaSToolz",
+    metaDescription:
+      "Calculate your monthly EMI, total interest and full amortization schedule for any loan amount, rate and term. Free, instant, no signup.",
+    intro:
+      "Loan / EMI Calculator works out your fixed monthly payment (EMI), the total interest you'll pay over the life of the loan, and a full month-by-month amortization schedule — enter the loan amount, annual interest rate, and term to see the breakdown.",
+    steps: [
+      "Enter the loan amount, annual interest rate, and term in months.",
+      "The calculator computes your monthly EMI and total interest instantly.",
+      "Review the amortization schedule showing principal and interest per payment.",
+      "Adjust any value to compare different loan scenarios.",
+    ],
+    faqs: [
+      { q: "Is the Loan / EMI Calculator accurate?", a: "Yes — it uses the standard reducing-balance EMI formula; results are for informational purposes and shouldn't replace advice from your lender or a financial advisor for major decisions." },
+      { q: "Does this tool send my numbers to a server?", a: "Yes — your loan amount, rate and term are sent to our servers to compute the result and the result is returned to you; we don't store the values." },
+      { q: "What is EMI?", a: "Equated Monthly Installment — the fixed amount you pay each month, combining both principal and interest, that keeps every payment the same size over the loan's term." },
+      { q: "Why does the loan term need to be in months?", a: "Interest accrues monthly, so the calculation needs a whole number of months — enter years × 12 if your loan term is given in years." },
+      { q: "What's the difference between this and the Mortgage Calculator?", a: "This calculator computes EMI for any general loan from the amount, rate and term directly. The Mortgage Calculator adds a home price and down payment percentage on top, specific to home loans." },
+      { q: "Can I use this for any type of loan?", a: "Yes — personal loans, auto loans, student loans, or any fixed-rate installment loan, not just mortgages." },
     ],
   },
   "invoice-generator": {
@@ -330,7 +393,7 @@ const FILE_FAQS = (tool: Tool): ToolFaq[] => [
 const NON_FILE_STEP_TEMPLATES: Partial<Record<ToolCategory, (name: string) => string[]>> = {
   developer: (name) => [
     `Paste your content into ${name}.`,
-    "The tool processes it instantly in your browser.",
+    "The tool processes it and shows the result.",
     "Review the output.",
     "Copy the result to your clipboard.",
   ],
@@ -371,10 +434,19 @@ const GENERIC_GENERATE_STEPS = (name: string): string[] => [
   "Copy or download the output.",
 ];
 
+// Single source of truth for the "does this send my data anywhere"
+// question — driven by tool.processing so a tool's own registry entry can
+// never disagree with its FAQ answer.
+function processingFaq(tool: Tool): ToolFaq {
+  return tool.processing === "client"
+    ? { q: "Does this tool send my data to a server?", a: "No — it runs entirely in your browser; nothing you enter is transmitted or stored." }
+    : { q: "Does this tool send my data to a server?", a: "Yes — your input is sent to our servers to process the request and the result is returned to you; we don't store the content itself." };
+}
+
 const NON_FILE_FAQ_BANK: Partial<Record<ToolCategory, (tool: Tool) => ToolFaq[]>> = {
-  developer: () => [
+  developer: (tool) => [
     { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
-    { q: "Does this tool send my data to a server?", a: "No — processing happens entirely in your browser; nothing you paste is transmitted or stored." },
+    processingFaq(tool),
     { q: "Can I use this for production work?", a: "Yes — it's built for exactly that: quick, reliable formatting and validation during development." },
     { q: "Is there a size limit on what I can paste in?", a: "Very large inputs may render more slowly, but there's no hard limit for typical use cases." },
   ],
@@ -384,29 +456,29 @@ const NON_FILE_FAQ_BANK: Partial<Record<ToolCategory, (tool: Tool) => ToolFaq[]>
     { q: "Do I need any technical knowledge to use it?", a: "No — fill in the form fields and copy the generated output; no coding required." },
     { q: "Can I use the output on multiple sites?", a: "Yes — generate fresh output for as many pages or sites as you need." },
   ],
-  writing: () => [
+  writing: (tool) => [
     { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
-    { q: "Is my text sent to a server?", a: "No — text is processed entirely in your browser and never transmitted." },
+    processingFaq(tool),
     { q: "Can I use this for commercial work?", a: "Yes — there are no restrictions on how you use the output." },
     { q: "Is there a text length limit?", a: "Very long input may render more slowly, but there's no hard limit for typical use." },
   ],
   calculator: (tool) => [
     { q: `Is the ${tool.name} accurate?`, a: "Yes — it uses the standard formula for this calculation; results are for informational purposes and shouldn't replace professional advice for major decisions." },
     { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
-    { q: "Is my data saved anywhere?", a: "No — calculations happen entirely in your browser and nothing you enter is stored." },
+    processingFaq(tool),
     { q: "Can I use this on mobile?", a: "Yes — it works on any modern browser, desktop or mobile." },
   ],
-  design: () => [
+  design: (tool) => [
     { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
     { q: "Can I copy the generated CSS directly into my project?", a: "Yes — the output is standard CSS, ready to paste into any stylesheet." },
     { q: "Does the preview match what I'll see in production?", a: "The live preview reflects standard CSS rendering — always verify in your actual target browsers for pixel-perfect results." },
-    { q: "Is there a limit on how many times I can generate?", a: "No — generate and adjust as many times as you need." },
+    processingFaq(tool),
   ],
 };
 
 const GENERIC_GENERATE_FAQS = (tool: Tool): ToolFaq[] => [
   { q: `Is ${tool.name} free to use?`, a: "Yes — completely free, with no signup required." },
-  { q: "Is my data sent to a server?", a: "No — this runs entirely in your browser; nothing you enter is transmitted or stored." },
+  processingFaq(tool),
   { q: "Can I use the result for commercial projects?", a: "Yes — there are no restrictions on how you use the output." },
   { q: "Is there a limit on how many times I can use this?", a: "No — use it as many times as you need, completely free." },
 ];
@@ -416,9 +488,13 @@ function fallbackTitle(tool: Tool): string {
 }
 
 function fallbackDescription(tool: Tool): string {
-  const suffix = isFileTool(tool.id)
-    ? "Free, browser-based, no signup — files are processed securely and removed within 1 hour."
-    : "100% free, no signup, and works instantly in your browser.";
+  const fileBased = isFileTool(tool.id);
+  const suffix =
+    tool.processing === "client"
+      ? "100% free, no signup, and works instantly in your browser."
+      : fileBased
+        ? "Free, no signup — files are uploaded securely and removed from our servers within 1 hour."
+        : "Free, no signup — processed on our servers and never stored.";
   return `${tool.description}. ${suffix}`;
 }
 
@@ -433,9 +509,12 @@ export function getToolSeo(tool: Tool): ToolSeoContent {
   const faqs = fileBased
     ? FILE_FAQS(tool)
     : (NON_FILE_FAQ_BANK[tool.category]?.(tool) ?? GENERIC_GENERATE_FAQS(tool));
-  const introSuffix = fileBased
-    ? "It runs in your browser and files are removed from our servers within 1 hour."
-    : "Everything happens instantly in your browser — nothing you enter is sent to a server.";
+  const introSuffix =
+    tool.processing === "client"
+      ? "Everything happens instantly in your browser — nothing you enter is sent to a server."
+      : fileBased
+        ? "Files are uploaded securely and removed from our servers within 1 hour."
+        : "Your input is sent to our servers to process the request; we don't store the content itself.";
 
   return {
     title: fallbackTitle(tool),

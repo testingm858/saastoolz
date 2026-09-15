@@ -32,11 +32,30 @@ export interface Tool {
   isNew?: boolean;
   isUpdated?: boolean; // shows a small pulsing dot on the NEW badge for a recently-reworked tool
   tags?: string[];
+  // Where the tool's actual work happens — drives the "runs in your
+  // browser" vs "processed on our servers and deleted within 1 hour" copy
+  // in toolSeo.ts. Verified per tool by reading its handler, not inferred:
+  // "client" means the file/text content never leaves the browser at all.
+  processing: "client" | "server";
+}
+
+type ToolDef = Omit<Tool, "processing">;
+
+// Tools whose file/text content is processed entirely in the browser and
+// never sent to a server (invoice-generator renders the PDF/PNG client-side
+// with html2canvas/jsPDF; json-viewer just does JSON.parse + tree render).
+// Every other tool round-trips through /api/tools/[toolId] or a file
+// dispatch route server-side, including ones whose old copy claimed
+// otherwise.
+const CLIENT_SIDE_TOOL_IDS = new Set(["invoice-generator", "json-viewer"]);
+
+function withProcessing(defs: ToolDef[]): Tool[] {
+  return defs.map((t) => ({ ...t, processing: CLIENT_SIDE_TOOL_IDS.has(t.id) ? "client" : "server" }));
 }
 
 // ─── FREE TOOLS (No AI) ──────────────────────────────────────────────────────
 
-export const FREE_TOOLS: Tool[] = [
+const FREE_TOOL_DEFS: ToolDef[] = [
   // PDF Tools
   { id: "pdf-merge",           name: "Merge PDF",              description: "Combine multiple PDF files into one document",                   category: "pdf",       isPremium: false, icon: "📄", tags: ["pdf","merge","combine"] },
   { id: "pdf-split",           name: "Split PDF",              description: "Split a PDF into individual pages or page ranges",               category: "pdf",       isPremium: false, icon: "✂️", tags: ["pdf","split","separate"] },
@@ -47,7 +66,7 @@ export const FREE_TOOLS: Tool[] = [
   { id: "jpg-to-pdf",          name: "JPG to PDF",             description: "Convert JPG images to PDF documents",                            category: "pdf",       isPremium: false, icon: "🖼️", tags: ["jpg","pdf","convert"] },
   { id: "pdf-ocr",             name: "PDF OCR",                description: "Make scanned PDFs searchable — extracts text in 14 languages",   category: "pdf",       isPremium: false, icon: "🔍", tags: ["pdf","ocr","text","scan"] },
   { id: "pdf-rotate",          name: "Rotate PDF",             description: "Rotate PDF pages by 90, 180 or 270 degrees",                    category: "pdf",       isPremium: false, icon: "🔄", tags: ["pdf","rotate"] },
-  { id: "pdf-unlock",          name: "Unlock PDF",             description: "Remove password protection from PDF files",                      category: "pdf",       isPremium: false, icon: "🔓", tags: ["pdf","unlock","password"] },
+  { id: "pdf-unlock",          name: "Unlock PDF",             description: "Remove password protection from a PDF you own, using its password",  category: "pdf",       isPremium: false, icon: "🔓", tags: ["pdf","unlock","password"] },
   { id: "pdf-protect",         name: "Protect PDF",            description: "Add password protection to your PDF files",                      category: "pdf",       isPremium: false, icon: "🔒", tags: ["pdf","protect","password"] },
   { id: "pdf-watermark",       name: "Add Watermark",          description: "Add text or image watermarks to PDF pages",                      category: "pdf",       isPremium: false, icon: "💧", tags: ["pdf","watermark"] },
   { id: "pdf-page-numbers",    name: "Add Page Numbers",       description: "Add page numbers to PDF documents",                              category: "pdf",       isPremium: false, icon: "🔢", tags: ["pdf","page numbers"] },
@@ -169,9 +188,13 @@ export const FREE_TOOLS: Tool[] = [
   { id: "svg-blob-generator",  name: "SVG Blob Generator",     description: "Generate organic SVG blob shapes for backgrounds and decorations", category: "design", isPremium: false, icon: "💧", tags: ["svg","blob","generator","design"] },
 ];
 
-// ─── AI / PREMIUM TOOLS ──────────────────────────────────────────────────────
+export const FREE_TOOLS: Tool[] = withProcessing(FREE_TOOL_DEFS);
 
-export const AI_TOOLS: Tool[] = [
+// ─── AI / PREMIUM TOOLS ──────────────────────────────────────────────────────
+// All AI tools call third-party AI provider APIs server-side (API keys can't
+// live in the browser), so every one of these is "server" too.
+
+const AI_TOOL_DEFS: ToolDef[] = [
   // AI Writing & Content
   { id: "ai-blog-writer",         name: "AI Blog Writer",              description: "Generate full SEO-optimized blog posts with AI",                   category: "ai-content",  isPremium: true, icon: "✍️",  apiProvider: "openai",     creditsPerUse: 3 },
   { id: "ai-content-repurposer",  name: "AI Content Repurposer",       description: "Turn one piece of content into tweets, LinkedIn posts, emails",     category: "ai-content",  isPremium: true, icon: "♻️",  apiProvider: "openai",     creditsPerUse: 2 },
@@ -247,6 +270,8 @@ export const AI_TOOLS: Tool[] = [
   { id: "ai-language-detector",   name: "AI Language Detector",         description: "Detect the language of any text instantly",                       category: "ai-language", isPremium: true, icon: "🔍",  apiProvider: "openai",     creditsPerUse: 1 },
   { id: "ai-sentiment-analyzer",  name: "AI Sentiment Analyzer",        description: "Analyze sentiment, tone and emotion in any text",                 category: "ai-language", isPremium: true, icon: "😊",  apiProvider: "openai",     creditsPerUse: 1 },
 ];
+
+export const AI_TOOLS: Tool[] = withProcessing(AI_TOOL_DEFS);
 
 // ─── Combined registry ────────────────────────────────────────────────────────
 

@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
 import type { Metadata } from "next";
 import { Eye, Wrench } from "lucide-react";
 import { getToolById, FREE_TOOLS, CATEGORY_META } from "@/lib/tools";
@@ -21,6 +22,9 @@ import RobotsTxtGeneratorClient from "@/components/RobotsTxtGeneratorClient";
 import AdSlot from "@/components/AdSlot";
 import { getAdCodes } from "@/lib/ads";
 import { adSlotKey } from "@/lib/adPlacements";
+import { canShowAds } from "@/lib/ads/policy";
+import { isBotOrPrefetchRequest } from "@/lib/bot-detect";
+import Disclaimer from "@/components/Disclaimer";
 import LikeButton from "@/components/LikeButton";
 import ToolTimeTracker from "@/components/analytics/ToolTimeTracker";
 import Link from "next/link";
@@ -28,6 +32,22 @@ import Link from "next/link";
 interface Props {
   params: Promise<{ toolId: string }>;
 }
+
+// YMYL ("Your Money or Your Life") tools — health, finance, or legal
+// calculators/templates — get a disclaimer so a bare number or template
+// doesn't read as professional advice.
+const DISCLAIMER_TOOLS: Record<string, "medical" | "financial" | "legal"> = {
+  "pregnancy-calculator": "medical",
+  "bmi-calculator": "medical",
+  "calorie-calculator": "medical",
+  "bmr-calculator": "medical",
+  "loan-calculator": "financial",
+  "mortgage-calculator": "financial",
+  "roi-calculator": "financial",
+  "gst-calculator": "financial",
+  "currency-converter": "financial",
+  "contract-builder": "legal",
+};
 
 // PRO tools are hidden site-wide — only free tools get a page at all
 // (isPremium is still checked below as a hard gate for any tool reached by
@@ -70,15 +90,23 @@ export default async function ToolPage({ params }: Props) {
     : FREE_TOOLS.filter((t) => t.category === tool.category && t.id !== tool.id).slice(0, 6);
   const toolUrl = `${BASE_URL}/tools/${tool.id}`;
 
-  const [stats, usedCount, visitorId] = await Promise.all([
-    prisma.toolStats.upsert({
-      where: { toolId: tool.id },
-      create: { toolId: tool.id, views: 1 },
-      update: { views: { increment: 1 } },
-    }),
+  // Don't count bot/crawler requests (including AdSense's own crawler) or
+  // Next.js route prefetches as real visits — just read the current count
+  // for those instead of incrementing it.
+  const requestIsBot = isBotOrPrefetchRequest(await headers());
+  const [statsRaw, usedCount, visitorId] = await Promise.all([
+    requestIsBot
+      ? prisma.toolStats.findUnique({ where: { toolId: tool.id }, select: { views: true, likes: true } })
+      : prisma.toolStats.upsert({
+          where: { toolId: tool.id },
+          create: { toolId: tool.id, views: 1 },
+          update: { views: { increment: 1 } },
+          select: { views: true, likes: true },
+        }),
     prisma.toolUsage.count({ where: { toolId: tool.id } }),
     getVisitorId(),
   ]);
+  const stats = statsRaw ?? { views: 0, likes: 0 };
   const alreadyLiked = visitorId
     ? (await prisma.like.findUnique({
         where: { targetType_targetId_visitorId: { targetType: "tool", targetId: tool.id, visitorId } },
@@ -91,7 +119,8 @@ export default async function ToolPage({ params }: Props) {
   });
   const relatedStatsById = new Map(relatedStats.map((s) => [s.toolId, s]));
 
-  const adCodes = await getAdCodes("tool-action", ["middle", "bottom"]);
+  const showAds = canShowAds(`/tools/${tool.id}`);
+  const adCodes = showAds ? await getAdCodes("tool-action", ["middle", "bottom"]) : {};
 
   const seo = getToolSeo(tool);
   const { faqs, steps, intro } = seo;
@@ -159,12 +188,16 @@ export default async function ToolPage({ params }: Props) {
           </div>
         </div>
         <div className="flex items-center flex-wrap gap-4">
-          <span className="flex items-center gap-1.5 text-sm text-gray-400">
-            <Eye className="w-4 h-4" /> {stats.views.toLocaleString()} visits
-          </span>
-          <span className="flex items-center gap-1.5 text-sm text-gray-400">
-            <Wrench className="w-4 h-4" /> {usedCount.toLocaleString()} uses
-          </span>
+          {stats.views >= 10 && (
+            <span className="flex items-center gap-1.5 text-sm text-gray-400">
+              <Eye className="w-4 h-4" /> {stats.views.toLocaleString()} visits
+            </span>
+          )}
+          {usedCount >= 10 && (
+            <span className="flex items-center gap-1.5 text-sm text-gray-400">
+              <Wrench className="w-4 h-4" /> {usedCount.toLocaleString()} uses
+            </span>
+          )}
           <LikeButton targetType="tool" targetId={tool.id} initialLiked={alreadyLiked} initialLikes={stats.likes} />
         </div>
       </div>
@@ -188,6 +221,8 @@ export default async function ToolPage({ params }: Props) {
         /* Tool interface */
         <ToolInterface tool={tool} />
       )}
+
+      {DISCLAIMER_TOOLS[tool.id] && <Disclaimer type={DISCLAIMER_TOOLS[tool.id]} />}
 
       {/* Step-by-step usage instructions */}
       {steps.length > 0 && (

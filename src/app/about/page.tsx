@@ -24,13 +24,15 @@ export default function AboutPage() {
         own.
       </p>
       <p className="text-gray-600 leading-relaxed mb-10">
-        Tools that can run in your browser do — nothing about your file or
-        text content touches our servers.
+        A couple of tools (Invoice Generator, JSON Viewer) run entirely in
+        your browser. Everything else is processed on our servers, and file
+        uploads are deleted within 1 hour — see our{" "}
+        <Link href="/privacy" className="text-violet-600 hover:underline">Privacy Policy</Link> for the full picture.
       </p>
 
       <div className="grid md:grid-cols-3 gap-6 mb-12">
         {[
-          { icon: <Zap className="w-5 h-5 text-violet-600" />, title: "Fast", desc: "Most tools process instantly, client-side." },
+          { icon: <Zap className="w-5 h-5 text-violet-600" />, title: "Fast", desc: "Get a result in seconds — no queues, no waiting." },
           { icon: <Shield className="w-5 h-5 text-green-600" />, title: "Private", desc: "We don't store your files or content." },
           { icon: <Star className="w-5 h-5 text-amber-500" />, title: "Honest free tier", desc: "No trial expiry on free tools, ever." },
         ].map((f) => (
@@ -40,6 +42,17 @@ export default function AboutPage() {
             <p className="text-sm text-gray-500">{f.desc}</p>
           </div>
         ))}
+      </div>
+
+      <div className="border border-gray-100 rounded-2xl p-6 mb-12">
+        <h2 className="text-lg font-bold text-gray-900 mb-2">Who runs SaaSToolz</h2>
+        <p className="text-gray-600 text-sm leading-relaxed">
+          SaaSToolz is operated by{" "}
+          <span className="text-amber-600">[TODO(owner): operator or company name]</span>, based in{" "}
+          <span className="text-amber-600">[TODO(owner): country]</span>. For
+          questions, reach us via the{" "}
+          <Link href="/contact" className="text-violet-600 hover:underline">Contact</Link> page.
+        </p>
       </div>
 
       <div className="bg-gray-900 text-white rounded-2xl p-8 text-center">

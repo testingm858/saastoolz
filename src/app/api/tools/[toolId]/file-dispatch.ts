@@ -395,11 +395,9 @@ export async function dispatchFile(toolId: string, formData: FormData): Promise<
     }
 
     case "pdf-unlock": {
-      // password is optional here: a PDF can be restricted with only an
-      // owner password (readable with no prompt, but edit/print/copy are
-      // locked) — see isEncrypted()/unlockPdf's doc comment in
-      // pdf-protect.ts. unlockPdf itself asks for one only if the file
-      // actually needs it to open.
+      // unlockPdf() itself requires and authenticates the password against
+      // the file (open or owner password) before removing any protection —
+      // see pdf-protect.ts.
       const file = formData.get("file");
       const buffer = await fileToBuffer(file);
       const password = typeof options.password === "string" ? options.password : undefined;

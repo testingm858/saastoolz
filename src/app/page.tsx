@@ -5,10 +5,7 @@ import { FREE_TOOLS, CATEGORY_META } from "@/lib/tools";
 import prisma from "@/lib/prisma";
 import ToolCard from "@/components/ToolCard";
 import HeroSearch from "@/components/HeroSearch";
-import AdSlot from "@/components/AdSlot";
 import AnnouncementBanner from "@/components/AnnouncementBanner";
-import { getAdCodes } from "@/lib/ads";
-import { adSlotKey } from "@/lib/adPlacements";
 import { getActiveAnnouncement } from "@/lib/announcements";
 
 const HOME_TITLE = "Free Online Tools for PDF, Images, SEO, Coding & More | SaaSToolz";
@@ -44,7 +41,6 @@ export default async function HomePage() {
   });
   const statsById = new Map(stats.map((s) => [s.toolId, s]));
 
-  const adCodes = await getAdCodes("home", ["bottom", "middle"]);
   const announcement = await getActiveAnnouncement();
 
   return (
@@ -92,11 +88,6 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* Ad placement — bottom of Hero */}
-      <div className="max-w-7xl mx-auto px-4">
-        <AdSlot code={adCodes[adSlotKey("home", "bottom")] ?? null} position="bottom" />
-      </div>
 
       {/* Free Tool Categories */}
       <section className="max-w-7xl mx-auto px-4 py-16">
@@ -151,8 +142,8 @@ export default async function HomePage() {
         <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Why SaaSToolz?</h2>
         <div className="grid md:grid-cols-3 gap-6">
           {[
-            { icon: <Zap className="w-6 h-6 text-white" />, gradient: "from-violet-500 to-purple-500", title: "Lightning Fast", desc: "Most tools process in your browser instantly - no waiting, no server round trips." },
-            { icon: <Shield className="w-6 h-6 text-white" />, gradient: "from-emerald-500 to-teal-500", title: "Privacy First", desc: "Files processed locally where possible. We never store your data. GDPR compliant." },
+            { icon: <Zap className="w-6 h-6 text-white" />, gradient: "from-violet-500 to-purple-500", title: "Lightning Fast", desc: "Get results in seconds - no signup and no waiting in a queue." },
+            { icon: <Shield className="w-6 h-6 text-white" />, gradient: "from-emerald-500 to-teal-500", title: "Privacy First", desc: "Client-side tools never leave your device. Server-side tools are processed securely and deleted within 1 hour." },
             { icon: <Star className="w-6 h-6 text-white" />, gradient: "from-amber-500 to-orange-500", title: "Free Forever", desc: `${FREE_TOOLS.length} tools are completely free with no account required. The free tier is genuinely useful.` },
           ].map((f) => (
             <div key={f.title} className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all">
@@ -163,11 +154,6 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
-
-      {/* Ad placement — after Why SaaSToolz? */}
-      <div className="max-w-7xl mx-auto px-4">
-        <AdSlot code={adCodes[adSlotKey("home", "middle")] ?? null} position="middle" />
-      </div>
 
       {/* CTA Banner */}
       <section className="relative overflow-hidden bg-gray-900 text-white py-8">
