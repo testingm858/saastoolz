@@ -31,7 +31,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     metaDescription:
       "Combine multiple PDF files into one document in seconds. Drag, drop, reorder pages, and download — free, no signup, no watermark.",
     intro:
-      "Merge PDF lets you combine two or more PDF files into a single document without installing anything. Upload your files, drag them into the order you want, and download one merged PDF — everything runs in your browser, so your files never sit on a server longer than it takes to process them.",
+      "Merge PDF lets you combine two or more PDF files into a single document without installing anything. Upload your files, drag them into the order you want, and download one merged PDF — files are uploaded securely and deleted from our servers within 1 hour.",
     steps: [
       "Upload two or more PDF files using the file picker or by dragging them in.",
       "Drag the thumbnails to put the pages in the order you want the final document to read.",
@@ -170,7 +170,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "What's the difference between PNG and SVG download?", a: "PNG is a fixed-resolution image good for screens and most printing; SVG is a vector file that scales to any size (like a billboard) with no quality loss." },
       { q: "What's the difference between a QR code and a barcode?", a: "A traditional barcode encodes data in one line and holds relatively little (usually just a product number); a QR code encodes data in two dimensions and can hold dramatically more — a full URL, a WiFi password, a whole contact card." },
       { q: "Will the QR code still scan if part of it is damaged or covered by a logo?", a: "Usually yes — QR codes include built-in error correction specifically so they keep working with partial damage or a small logo overlay, as long as it doesn't cover too much of the pattern." },
-      { q: "Is my data safe when using this tool?", a: "Yes — WiFi passwords and contact details are encoded directly into the QR code in your browser and are not stored on our servers." },
+      { q: "Is my data safe when using this tool?", a: "Yes — WiFi passwords and contact details are sent to our servers only to generate the QR code and are not stored afterward." },
     ],
   },
   "json-formatter": {
@@ -189,7 +189,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "What happens if my JSON is invalid?", a: "The tool highlights the syntax error and tells you roughly where the problem is (a missing comma, unmatched bracket, trailing comma, etc.) so you can fix it quickly." },
       { q: "Can I minify JSON with this tool too?", a: "This tool formats/beautifies; use JSON Minifier if you need the compact, whitespace-free version for production." },
       { q: "Is there a size limit?", a: "Very large JSON payloads (tens of megabytes) may be slower to render, but there's no hard limit for typical API responses or config files." },
-      { q: "Does this tool send my JSON anywhere?", a: "No — formatting and validation happen entirely in your browser; the content of what you paste is never sent to a server." },
+      { q: "Does this tool send my JSON anywhere?", a: "Yes — the JSON you paste is sent to our servers to be formatted and validated, and the result is returned to you; we don't store the content itself." },
       { q: "What's the most common JSON syntax error?", a: "A trailing comma after the last item in an object or array — allowed in JavaScript object literals, but not valid JSON. Unquoted keys and single quotes instead of double quotes are close runners-up." },
       { q: "What's the difference between formatting and minifying?", a: "Formatting adds indentation and line breaks for readability; minifying strips all of that out for the smallest possible payload. Use JSON Minifier when you need the compact version." },
     ],
@@ -197,9 +197,9 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
   "password-generator": {
     title: "Strong Password Generator — Free, Secure, No Signup | SaaSToolz",
     metaDescription:
-      "Generate strong, random passwords with custom length and character rules. Free, created locally in your browser — never sent to a server.",
+      "Generate strong, random passwords with custom length and character rules. Free, no signup, and never stored on our servers.",
     intro:
-      "Password Generator creates cryptographically random passwords using the character sets you choose (uppercase, lowercase, numbers, symbols) at whatever length you need — generated entirely in your browser, so the password is never transmitted anywhere before you copy it.",
+      "Password Generator creates cryptographically random passwords using the character sets you choose (uppercase, lowercase, numbers, symbols) at whatever length you need. Your chosen options are sent to our servers to generate the password, which is returned to you and not logged or stored.",
     steps: [
       "Set your desired password length.",
       "Choose which character types to include — uppercase, lowercase, numbers, symbols.",
@@ -208,7 +208,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     ],
     faqs: [
       { q: "How long should my password be?", a: "At least 12–16 characters with a mix of character types for most accounts; longer is better, and length matters more than complexity for resisting brute-force attacks." },
-      { q: "Is the generated password sent to your servers?", a: "No — generation happens entirely in your browser using the Web Crypto API's random number generator; nothing is transmitted or logged." },
+      { q: "Is the generated password sent to your servers?", a: "The password is generated on our servers and sent back to you over an encrypted connection; it isn't logged or stored anywhere." },
       { q: "Should I reuse a generated password across sites?", a: "No — use a unique password per account (ideally stored in a password manager) so a breach on one site can't compromise your other accounts." },
       { q: "Can I exclude ambiguous characters like 0/O or 1/l?", a: "Yes — toggle that option on if you need to type the password manually and want to avoid easily-confused characters." },
       { q: "Is length or complexity more important?", a: "Length matters more. A longer password with fewer character types generally resists brute-force attacks better than a shorter, highly complex one — aim for at least 12–16 characters." },
@@ -330,7 +330,7 @@ const FILE_FAQS = (tool: Tool): ToolFaq[] => [
 const NON_FILE_STEP_TEMPLATES: Partial<Record<ToolCategory, (name: string) => string[]>> = {
   developer: (name) => [
     `Paste your content into ${name}.`,
-    "The tool processes it instantly in your browser.",
+    "The tool processes it and shows the result.",
     "Review the output.",
     "Copy the result to your clipboard.",
   ],
@@ -371,10 +371,19 @@ const GENERIC_GENERATE_STEPS = (name: string): string[] => [
   "Copy or download the output.",
 ];
 
+// Single source of truth for the "does this send my data anywhere"
+// question — driven by tool.processing so a tool's own registry entry can
+// never disagree with its FAQ answer.
+function processingFaq(tool: Tool): ToolFaq {
+  return tool.processing === "client"
+    ? { q: "Does this tool send my data to a server?", a: "No — it runs entirely in your browser; nothing you enter is transmitted or stored." }
+    : { q: "Does this tool send my data to a server?", a: "Yes — your input is sent to our servers to process the request and the result is returned to you; we don't store the content itself." };
+}
+
 const NON_FILE_FAQ_BANK: Partial<Record<ToolCategory, (tool: Tool) => ToolFaq[]>> = {
-  developer: () => [
+  developer: (tool) => [
     { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
-    { q: "Does this tool send my data to a server?", a: "No — processing happens entirely in your browser; nothing you paste is transmitted or stored." },
+    processingFaq(tool),
     { q: "Can I use this for production work?", a: "Yes — it's built for exactly that: quick, reliable formatting and validation during development." },
     { q: "Is there a size limit on what I can paste in?", a: "Very large inputs may render more slowly, but there's no hard limit for typical use cases." },
   ],
@@ -384,29 +393,29 @@ const NON_FILE_FAQ_BANK: Partial<Record<ToolCategory, (tool: Tool) => ToolFaq[]>
     { q: "Do I need any technical knowledge to use it?", a: "No — fill in the form fields and copy the generated output; no coding required." },
     { q: "Can I use the output on multiple sites?", a: "Yes — generate fresh output for as many pages or sites as you need." },
   ],
-  writing: () => [
+  writing: (tool) => [
     { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
-    { q: "Is my text sent to a server?", a: "No — text is processed entirely in your browser and never transmitted." },
+    processingFaq(tool),
     { q: "Can I use this for commercial work?", a: "Yes — there are no restrictions on how you use the output." },
     { q: "Is there a text length limit?", a: "Very long input may render more slowly, but there's no hard limit for typical use." },
   ],
   calculator: (tool) => [
     { q: `Is the ${tool.name} accurate?`, a: "Yes — it uses the standard formula for this calculation; results are for informational purposes and shouldn't replace professional advice for major decisions." },
     { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
-    { q: "Is my data saved anywhere?", a: "No — calculations happen entirely in your browser and nothing you enter is stored." },
+    processingFaq(tool),
     { q: "Can I use this on mobile?", a: "Yes — it works on any modern browser, desktop or mobile." },
   ],
-  design: () => [
+  design: (tool) => [
     { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
     { q: "Can I copy the generated CSS directly into my project?", a: "Yes — the output is standard CSS, ready to paste into any stylesheet." },
     { q: "Does the preview match what I'll see in production?", a: "The live preview reflects standard CSS rendering — always verify in your actual target browsers for pixel-perfect results." },
-    { q: "Is there a limit on how many times I can generate?", a: "No — generate and adjust as many times as you need." },
+    processingFaq(tool),
   ],
 };
 
 const GENERIC_GENERATE_FAQS = (tool: Tool): ToolFaq[] => [
   { q: `Is ${tool.name} free to use?`, a: "Yes — completely free, with no signup required." },
-  { q: "Is my data sent to a server?", a: "No — this runs entirely in your browser; nothing you enter is transmitted or stored." },
+  processingFaq(tool),
   { q: "Can I use the result for commercial projects?", a: "Yes — there are no restrictions on how you use the output." },
   { q: "Is there a limit on how many times I can use this?", a: "No — use it as many times as you need, completely free." },
 ];
@@ -416,9 +425,13 @@ function fallbackTitle(tool: Tool): string {
 }
 
 function fallbackDescription(tool: Tool): string {
-  const suffix = isFileTool(tool.id)
-    ? "Free, browser-based, no signup — files are processed securely and removed within 1 hour."
-    : "100% free, no signup, and works instantly in your browser.";
+  const fileBased = isFileTool(tool.id);
+  const suffix =
+    tool.processing === "client"
+      ? "100% free, no signup, and works instantly in your browser."
+      : fileBased
+        ? "Free, no signup — files are uploaded securely and removed from our servers within 1 hour."
+        : "Free, no signup — processed on our servers and never stored.";
   return `${tool.description}. ${suffix}`;
 }
 
@@ -433,9 +446,12 @@ export function getToolSeo(tool: Tool): ToolSeoContent {
   const faqs = fileBased
     ? FILE_FAQS(tool)
     : (NON_FILE_FAQ_BANK[tool.category]?.(tool) ?? GENERIC_GENERATE_FAQS(tool));
-  const introSuffix = fileBased
-    ? "It runs in your browser and files are removed from our servers within 1 hour."
-    : "Everything happens instantly in your browser — nothing you enter is sent to a server.";
+  const introSuffix =
+    tool.processing === "client"
+      ? "Everything happens instantly in your browser — nothing you enter is sent to a server."
+      : fileBased
+        ? "Files are uploaded securely and removed from our servers within 1 hour."
+        : "Your input is sent to our servers to process the request; we don't store the content itself.";
 
   return {
     title: fallbackTitle(tool),
