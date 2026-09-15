@@ -120,7 +120,7 @@ export default async function ToolPage({ params }: Props) {
   const relatedStatsById = new Map(relatedStats.map((s) => [s.toolId, s]));
 
   const showAds = canShowAds(`/tools/${tool.id}`);
-  const adCodes = showAds ? await getAdCodes("tool-action", ["middle", "bottom"]) : {};
+  const adCodes = showAds ? await getAdCodes("tool-action", ["top", "middle", "bottom"]) : {};
 
   const seo = getToolSeo(tool);
   const { faqs, steps, intro } = seo;
@@ -240,6 +240,10 @@ export default async function ToolPage({ params }: Props) {
           </ol>
         </div>
       )}
+
+      {/* Ad placement — after "How to use", before the guide content. Well
+          clear of the tool interface (dropzone/Run/Download) above it. */}
+      <AdSlot code={adCodes[adSlotKey("tool-action", "top")] ?? null} position="top" />
 
       {/* Long-form supporting content — reserved for flagship tools, not
           applied to every tool page (see comments in InvoiceGuideContent

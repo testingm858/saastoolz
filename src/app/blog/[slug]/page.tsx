@@ -7,6 +7,10 @@ import { renderMarkdown } from "@/lib/markdown";
 import { BASE_URL } from "@/lib/site";
 import { getVisitorId } from "@/lib/visitor";
 import LikeButton from "@/components/LikeButton";
+import AdSlot from "@/components/AdSlot";
+import { getAdCodes } from "@/lib/ads";
+import { adSlotKey } from "@/lib/adPlacements";
+import { canShowAds } from "@/lib/ads/policy";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +47,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   const html = renderMarkdown(post.content);
   const postUrl = `${BASE_URL}/blog/${post.slug}`;
+  const adCodes = canShowAds(`/blog/${post.slug}`) ? await getAdCodes("blog-post", ["middle", "bottom"]) : {};
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -83,6 +88,8 @@ export default async function BlogPostPage({ params }: Props) {
         <img src={post.coverImage} alt={post.title} className="w-full aspect-video object-cover rounded-2xl mb-10" />
       )}
 
+      <AdSlot code={adCodes[adSlotKey("blog-post", "middle")] ?? null} position="middle" />
+
       <div
         className="text-gray-700
           [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:text-gray-900 [&_h1]:mt-8 [&_h1]:mb-4
@@ -99,6 +106,8 @@ export default async function BlogPostPage({ params }: Props) {
           [&_hr]:border-gray-100 [&_hr]:my-8"
         dangerouslySetInnerHTML={{ __html: html }}
       />
+
+      <AdSlot code={adCodes[adSlotKey("blog-post", "bottom")] ?? null} position="bottom" />
     </div>
   );
 }

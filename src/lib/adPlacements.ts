@@ -8,6 +8,7 @@ export const AD_PAGES = [
   { value: "home", label: "Home Page" },
   { value: "tools", label: "Tools Page" },
   { value: "tool-action", label: "Tool Action Page" },
+  { value: "blog-post", label: "Blog Post" },
 ] as const;
 
 export const AD_POSITIONS = [
@@ -47,12 +48,17 @@ export function positionLabel(position: string): string {
 
 // Every placement actually wired into a page right now, for the admin
 // list's "Live placement" vs "Not wired yet" badge.
+//
+// AdSense policy allows ads only on pages with individual publisher content
+// — tool pages and blog posts — never on index/listing pages (home, the
+// /tools index, category pages) or account/legal/admin screens. "home" and
+// "tools" placements exist as AD_PAGES options for backward compatibility
+// with any slots an admin already configured, but nothing renders them
+// anymore; don't wire them back in.
 export const WIRED_PLACEMENTS: { key: string; description: string }[] = [
-  { key: adSlotKey("home", "bottom"), description: "Home — bottom of Hero section" },
-  { key: adSlotKey("home", "middle"), description: 'Home — after "Why SaaSToolz?" section' },
-  { key: adSlotKey("tools", "top"), description: "Tools page — above the tool list" },
-  { key: adSlotKey("tools", "middle"), description: "Tools page — in-feed, between tool groups" },
-  { key: adSlotKey("tools", "bottom"), description: "Tools page — below the tool list" },
+  { key: adSlotKey("tool-action", "top"), description: "Tool page — after \"How to use\" steps, before the guide" },
   { key: adSlotKey("tool-action", "middle"), description: "Tool page — before Related Tools" },
   { key: adSlotKey("tool-action", "bottom"), description: "Tool page — after the FAQ section" },
+  { key: adSlotKey("blog-post", "middle"), description: "Blog post — after the cover image, before the article" },
+  { key: adSlotKey("blog-post", "bottom"), description: "Blog post — after the article content" },
 ];
