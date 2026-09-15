@@ -63,13 +63,21 @@ available to reuse.
   of this change.
 - **Build** (`npm run build`): fails during page-data collection with
   `Failed to load external module @napi-rs/canvas-...: Cannot find native
-  binding` — confirmed this is a **pre-existing local environment issue**,
-  reproduced identically on `master` with zero fixes applied. It's a
-  native-binary resolution problem in this dev environment (the message
-  suggests reinstalling `node_modules`), not something introduced by this
-  branch. Recommend verifying the build succeeds in the actual deploy
-  environment, or resolving the native-binding issue locally, before
-  merging.
+  binding` — confirmed **pre-existing**, reproduced identically on `master`
+  with zero fixes applied, so nothing introduced by this branch. Root-caused
+  it precisely: it's not the npm optional-dependency bug the error message
+  suggests, and not a Turbopack bug either (reproduced the identical failure
+  under plain webpack too, and via a direct `node -e "require('@napi-rs/
+  canvas')"`). A direct require of the platform binary
+  (`@napi-rs/canvas-win32-x64-msvc`) returns: *"An Application Control
+  policy has blocked this file"* — **this machine's Windows security policy
+  (Application Control / WDAC / endpoint protection) is blocking that
+  specific `.node` native binary from loading**, full stop. This is local
+  to this one Windows dev machine, unrelated to any code in this repo, and
+  won't affect Hostinger's Linux server (no Windows Application Control
+  there). Not something fixable from within this session — resolving it
+  requires either an exception for that file in this machine's security
+  policy (an admin/IT action) or building on a different machine.
 
 ## Live verification
 
@@ -94,10 +102,11 @@ Ran `npm run dev` locally and checked the actual rendered site in a browser
   `TODO(owner)` placeholders visible, and the corrected processing claim.
 - **Tool execution itself could not be fully verified locally**: running
   word-counter returned a 500 ("Network error"). The dev server log shows
-  this is the **same pre-existing `@napi-rs/canvas` native-binding failure**
-  noted under Build above — `route.ts` eagerly imports the whole tool
-  dispatch chain (including a PDF-to-image module that needs
-  `@napi-rs/canvas`), so *every* `/api/tools/[toolId]` request fails to
+  this is the **same pre-existing `@napi-rs/canvas` native-binding block**
+  noted under Build above (this machine's Windows security policy, not code)
+  — `route.ts` eagerly imports the whole tool dispatch chain (including a
+  PDF-to-image module that needs `@napi-rs/canvas`), so *every*
+  `/api/tools/[toolId]` request fails to
   even load the route in this local environment right now, regardless of
   which tool is called. Not caused by this branch; page rendering, ad
   placement, and copy accuracy were all still verifiable and confirmed
@@ -124,11 +133,14 @@ Ran `npm run dev` locally and checked the actual rendered site in a browser
    redirects, auto-reload, cron jobs, or seed scripts touch that page. It's
    worth confirming this isn't invalid/bot traffic before requesting
    review.
-6. **Resolve the local build issue** (see Verification above) and confirm
-   `npm run build` succeeds in your actual deploy environment. This also
-   currently blocks testing any server-processed tool locally (see Live
-   verification above) — worth fixing before merging so tool execution can
-   actually be smoke-tested, not just page rendering.
+6. **This machine's Windows security policy is blocking `@napi-rs/canvas`'s
+   native binary** (see Verification above) — not a code issue, and won't
+   affect the Linux production server, but it currently blocks building or
+   running any server-processed tool locally on this dev machine. If you
+   want to smoke-test tool execution here before merging, you (or your IT/
+   security admin) would need to allow that specific `.node` file in the
+   Application Control policy; otherwise this can be safely ignored and
+   verified on the Hostinger server instead.
 7. **Manually check the live ad creative itself** — it's admin-managed
    HTML stored in the database (`AdSlot`/`AdFrame`), not visible to static
    code review. Confirm nothing rendered there visually mimics a download
