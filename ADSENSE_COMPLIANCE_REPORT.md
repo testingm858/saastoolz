@@ -1,6 +1,6 @@
 # AdSense Policy Compliance — Fix Report
 
-Branch: `fix/adsense-compliance` (10 commits, based on `master` @ `93123c1`)
+Branch: `fix/adsense-compliance` (11 commits, based on `master` @ `93123c1`)
 
 ## Summary
 
@@ -29,6 +29,7 @@ this branch.
 | 8 | `e7183c7` | `src/lib/bot-detect.ts` (new), `src/app/tools/[toolId]/page.tsx`, `src/components/ToolCard.tsx` | The tool-page visits counter no longer increments for bot/crawler or Next.js-prefetch requests (just reads the current count instead). Visit/use counts under 10 are hidden instead of shown as a hollow "0" or single digit. | Item H — engagement counters |
 | 9 | `a8627ae` | `src/components/Disclaimer.tsx` (new), `src/app/tools/[toolId]/page.tsx` | Added a reusable medical/financial/legal disclaimer, rendered on Pregnancy, BMI, Calorie, BMR, Loan/EMI, Mortgage, ROI, GST/VAT, Currency, and Contract Builder tool pages. | Item I — YMYL disclaimers |
 | 10 | `ef59255` | `src/app/about/page.tsx` | Added a "Who runs SaaSToolz" operator-identity section (placeholders, no invented facts) and fixed the same false "processes instantly, client-side" claim found elsewhere. | Item J — trust/transparency |
+| 11 | `daaa47e` | `src/components/AdSenseLoader.tsx` (new), `src/app/layout.tsx` | **Found during live verification, not the original static audit.** The `adsbygoogle.js` loader script in the root layout was loading unconditionally on every page in every environment. Live testing in the dev server showed a real ad request/iframe from `googleads.g.doubleclick.net` rendering on `/tools` — Google Auto Ads can activate from the script's mere presence (valid client ID) with no `<ins>` tag or `push()` call needed, so items B and C's fixes (which only gated our own `AdSlot`/`getAdCodes` path) didn't stop it. The script now loads via a client component that checks both `NODE_ENV === "production"` and `canShowAds(pathname)` before mounting. | Items B & C — ad placement / dev gating (gap in the original fix) |
 
 Items K (affiliate/product content) and L (other red flags — adult content,
 media downloaders, AI-detection-bypass tools, hacking tools, fake download
@@ -70,6 +71,38 @@ available to reuse.
   environment, or resolving the native-binding issue locally, before
   merging.
 
+## Live verification
+
+Ran `npm run dev` locally and checked the actual rendered site in a browser
+(not just the code):
+
+- **Homepage & `/tools` index**: no `adsbygoogle` script, no ad `<iframe>`,
+  and no network request to any Google ad domain — confirmed both before
+  fixing item 11 (where a live ad *was* loading) and after (clean).
+- **Privacy Policy**: renders the new Advertising section, updated third
+  parties list, and September 15, 2026 "Last updated" date correctly.
+- **Homepage badges**: "GDPR compliant" and "processes in your browser"
+  claims are gone, replaced with the accurate copy.
+- **`/tools/pdf-unlock`**: password field renders as required (visible
+  `*`), no "leave blank" hint, no ad slot on the page.
+- **`/tools/word-counter`**: renders the new custom how-to/FAQ content,
+  including the accurate "sent to our servers" answer; confirmed the tool
+  genuinely POSTs to `/api/tools/word-counter` when run (proving the
+  `processing: 'server'` classification is correct, not just copy that
+  happens to say so).
+- **About page**: renders the new "Who runs SaaSToolz" section with the
+  `TODO(owner)` placeholders visible, and the corrected processing claim.
+- **Tool execution itself could not be fully verified locally**: running
+  word-counter returned a 500 ("Network error"). The dev server log shows
+  this is the **same pre-existing `@napi-rs/canvas` native-binding failure**
+  noted under Build above — `route.ts` eagerly imports the whole tool
+  dispatch chain (including a PDF-to-image module that needs
+  `@napi-rs/canvas`), so *every* `/api/tools/[toolId]` request fails to
+  even load the route in this local environment right now, regardless of
+  which tool is called. Not caused by this branch; page rendering, ad
+  placement, and copy accuracy were all still verifiable and confirmed
+  correct despite this.
+
 ## Manual steps (do these in order)
 
 1. **Enable Google's certified consent message** — AdSense → Privacy &
@@ -92,7 +125,10 @@ available to reuse.
    worth confirming this isn't invalid/bot traffic before requesting
    review.
 6. **Resolve the local build issue** (see Verification above) and confirm
-   `npm run build` succeeds in your actual deploy environment.
+   `npm run build` succeeds in your actual deploy environment. This also
+   currently blocks testing any server-processed tool locally (see Live
+   verification above) — worth fixing before merging so tool execution can
+   actually be smoke-tested, not just page rendering.
 7. **Manually check the live ad creative itself** — it's admin-managed
    HTML stored in the database (`AdSlot`/`AdFrame`), not visible to static
    code review. Confirm nothing rendered there visually mimics a download
