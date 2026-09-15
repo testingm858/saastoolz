@@ -53,22 +53,27 @@ function valueToAngle(value: number) {
   return 180 - frac * 180;
 }
 
-function BmiGauge({ bmi, category, color }: { bmi: number; category: string; color: string }) {
+const BAND_SEGMENTS = BANDS.map((b, i) => {
+  const from = i === 0 ? GAUGE_MIN : Math.min(BANDS[i - 1].to, GAUGE_MAX);
+  return { ...b, from, to: Math.min(b.to, GAUGE_MAX) };
+}).filter((b) => b.to > b.from);
+
+// Visible before any result too (bmi=null → needle rests at the gauge's
+// start/left position) — animates to the real value via a CSS transform
+// transition on the needle group, not a JS animation loop, so it also
+// smoothly re-animates between recalculations.
+function BmiGauge({ bmi, category, color }: { bmi: number | null; category: string | null; color: string }) {
   const cx = 130;
   const cy = 118;
   const r = 96;
   const strokeWidth = 22;
   const needleLen = r - strokeWidth / 2 - 4;
-  const needleTip = polarPoint(cx, cy, needleLen, valueToAngle(bmi));
-
-  const bands = BANDS.map((b, i) => {
-    const from = i === 0 ? GAUGE_MIN : Math.min(BANDS[i - 1].to, GAUGE_MAX);
-    return { ...b, from, to: Math.min(b.to, GAUGE_MAX) };
-  }).filter((b) => b.to > b.from);
+  const angle = valueToAngle(bmi ?? GAUGE_MIN);
+  const needleRotation = 90 - angle; // CSS rotate() from the needle's "straight up" base pose
 
   return (
     <svg viewBox="0 0 260 150" className="w-full max-w-[280px] mx-auto">
-      {bands.map((b) => (
+      {BAND_SEGMENTS.map((b) => (
         <path
           key={b.label}
           d={arcPath(cx, cy, r, valueToAngle(b.from), valueToAngle(b.to))}
@@ -81,27 +86,47 @@ function BmiGauge({ bmi, category, color }: { bmi: number; category: string; col
       {[18.5, 25, 30].map((v) => {
         const inner = polarPoint(cx, cy, r - strokeWidth / 2 - 3, valueToAngle(v));
         const outer = polarPoint(cx, cy, r + strokeWidth / 2 + 3, valueToAngle(v));
-        const labelPt = polarPoint(cx, cy, r + strokeWidth / 2 + 14, valueToAngle(v));
-        return (
-          <g key={v}>
-            <line x1={inner.x} y1={inner.y} x2={outer.x} y2={outer.y} stroke="#ffffff" strokeWidth={2} />
-            <text x={labelPt.x} y={labelPt.y} textAnchor="middle" dominantBaseline="middle" style={{ fontSize: 9, fill: "#9ca3af" }}>
-              {v}
-            </text>
-          </g>
-        );
+        return <line key={v} x1={inner.x} y1={inner.y} x2={outer.x} y2={outer.y} stroke="#ffffff" strokeWidth={2} />;
       })}
-      {/* needle */}
-      <line x1={cx} y1={cy} x2={needleTip.x} y2={needleTip.y} stroke="#1f2937" strokeWidth={3} strokeLinecap="round" />
+      {/* needle — rotates around the pivot; transition animates every value change */}
+      <g
+        style={{
+          transformOrigin: `${cx}px ${cy}px`,
+          transform: `rotate(${needleRotation}deg)`,
+          transition: "transform 1s cubic-bezier(0.34, 1.56, 0.64, 1)",
+        }}
+      >
+        <line x1={cx} y1={cy} x2={cx} y2={cy - needleLen} stroke="#1f2937" strokeWidth={3} strokeLinecap="round" />
+      </g>
       <circle cx={cx} cy={cy} r={6} fill="#1f2937" />
       {/* readout */}
-      <text x={cx} y={cy - 22} textAnchor="middle" style={{ fontSize: 30, fontWeight: 700, fill: "#111827" }}>
-        {bmi.toFixed(1)}
+      <text x={cx} y={cy - 22} textAnchor="middle" style={{ fontSize: 30, fontWeight: 700, fill: bmi !== null ? "#111827" : "#d1d5db" }}>
+        {bmi !== null ? bmi.toFixed(1) : "—"}
       </text>
-      <text x={cx} y={cy - 4} textAnchor="middle" style={{ fontSize: 11, fontWeight: 600, fill: color, letterSpacing: 0.5 }}>
-        {category.toUpperCase()}
+      <text
+        x={cx}
+        y={cy - 4}
+        textAnchor="middle"
+        style={{ fontSize: 11, fontWeight: 600, fill: bmi !== null ? color : "#9ca3af", letterSpacing: 0.5 }}
+      >
+        {bmi !== null && category ? category.toUpperCase() : "AWAITING INPUT"}
       </text>
     </svg>
+  );
+}
+
+// A labeled legend under the gauge — the colored bands alone don't tell a
+// visitor which color means what, so spell it out plainly.
+function BmiLegend() {
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 mt-2">
+      {BANDS.map((b) => (
+        <span key={b.label} className="flex items-center gap-1.5 text-xs text-gray-500">
+          <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: b.color }} />
+          {b.label}
+        </span>
+      ))}
+    </div>
   );
 }
 
@@ -274,46 +299,46 @@ export default function BmiCalculatorClient() {
         </div>
       </div>
 
-      {/* ── Result ───────────────────────────────────────────────────── */}
-      <div className="min-w-0">
-        {loading && <ProcessingPanel progress={progress} phaseLabel="Calculating..." success={success} />}
+      {/* ── Result — gauge is visible from the start, needle animates in ── */}
+      <div className="min-w-0 bg-white border border-gray-200 rounded-2xl overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50">
+          <span className="text-sm font-medium text-gray-600">Result</span>
+          {result && (
+            <span className={cn("text-xs font-semibold px-2.5 py-1 rounded-full border", CATEGORY_BADGE[result.category] ?? "bg-gray-50 text-gray-600 border-gray-100")}>
+              {result.category}
+            </span>
+          )}
+        </div>
+        <div className="p-5">
+          <BmiGauge bmi={result?.bmi ?? null} category={result?.category ?? null} color={result?.color ?? "#9ca3af"} />
+          <BmiLegend />
 
-        {!loading && result && (
-          <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50">
-              <span className="text-sm font-medium text-gray-600">Result</span>
-              <span className={cn("text-xs font-semibold px-2.5 py-1 rounded-full border", CATEGORY_BADGE[result.category] ?? "bg-gray-50 text-gray-600 border-gray-100")}>
-                {result.category}
-              </span>
-            </div>
-            <div className="p-5">
-              <BmiGauge bmi={result.bmi} category={result.category} color={result.color} />
-              <ul className="mt-4 space-y-1.5 text-sm text-gray-600">
-                <li>
-                  Healthy BMI range: <span className="font-medium text-gray-900">18.5 – 24.9 kg/m²</span>
-                </li>
-                <li>
-                  Healthy weight for your height:{" "}
-                  <span className="font-medium text-gray-900">
-                    {result.healthyWeightRange.min} – {result.healthyWeightRange.max} {weightUnitLabel}
-                  </span>
-                </li>
-                {bmiPrime !== null && (
-                  <li>BMI Prime: <span className="font-medium text-gray-900">{bmiPrime}</span></li>
-                )}
-                {ponderalIndex !== null && (
-                  <li>Ponderal Index: <span className="font-medium text-gray-900">{ponderalIndex} kg/m³</span></li>
-                )}
-              </ul>
-            </div>
-          </div>
-        )}
+          {loading && <div className="mt-4"><ProcessingPanel progress={progress} phaseLabel="Calculating..." success={success} /></div>}
 
-        {!loading && !result && (
-          <div className="h-full min-h-[260px] flex items-center justify-center bg-gray-50/60 border border-dashed border-gray-200 rounded-2xl p-8 text-center">
-            <p className="text-sm text-gray-400">Enter your height and weight, then calculate to see your result here.</p>
-          </div>
-        )}
+          {!loading && result && (
+            <ul className="mt-4 space-y-1.5 text-sm text-gray-600">
+              <li>
+                Healthy BMI range: <span className="font-medium text-gray-900">18.5 – 24.9 kg/m²</span>
+              </li>
+              <li>
+                Healthy weight for your height:{" "}
+                <span className="font-medium text-gray-900">
+                  {result.healthyWeightRange.min} – {result.healthyWeightRange.max} {weightUnitLabel}
+                </span>
+              </li>
+              {bmiPrime !== null && (
+                <li>BMI Prime: <span className="font-medium text-gray-900">{bmiPrime}</span></li>
+              )}
+              {ponderalIndex !== null && (
+                <li>Ponderal Index: <span className="font-medium text-gray-900">{ponderalIndex} kg/m³</span></li>
+              )}
+            </ul>
+          )}
+
+          {!loading && !result && (
+            <p className="mt-4 text-xs text-gray-400 text-center">Enter your height and weight, then calculate to see the full breakdown.</p>
+          )}
+        </div>
       </div>
     </div>
   );
