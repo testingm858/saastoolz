@@ -217,7 +217,7 @@ function StatTile({ label, value, icon: Icon, swatchColor }: { label: string; va
   );
 }
 
-export default function AgeCalculatorClient() {
+export default function AgeCalculatorClient({ steps, toolName }: { steps: string[]; toolName: string }) {
   const [birthDate, setBirthDate] = useState("");
   const [asOf, setAsOf] = useState("");
 
@@ -400,38 +400,61 @@ export default function AgeCalculatorClient() {
       </div>
 
       {/* ── Result — ring is visible from the start, fills on every press ── */}
-      <div className="min-w-0 bg-white border border-gray-200 rounded-2xl overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50">
-          <span className="text-sm font-medium text-gray-600">Result</span>
-          {result && <span className="text-xs font-medium text-gray-400">{ringProgress.toFixed(0)}% to next birthday</span>}
-        </div>
-        <div className="p-5">
-          <div className="flex justify-center">
-            <AgeRing years={ringYears} progressPct={ringProgress} />
+      <div className="min-w-0 space-y-4">
+        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50">
+            <span className="text-sm font-medium text-gray-600">Result</span>
+            {result && <span className="text-xs font-medium text-gray-400">{ringProgress.toFixed(0)}% to next birthday</span>}
           </div>
+          <div className="p-5">
+            <div className="flex justify-center">
+              <AgeRing years={ringYears} progressPct={ringProgress} />
+            </div>
 
-          {loading && <div className="mt-4"><ProcessingPanel progress={progress} phaseLabel="Calculating..." success={success} /></div>}
+            {loading && <div className="mt-4"><ProcessingPanel progress={progress} phaseLabel="Calculating..." success={success} /></div>}
 
-          {!loading && result && facts && (
-            <>
-              <p className="mt-4 text-center text-sm text-gray-600">
-                You are <span className="font-semibold text-gray-900">{result.years} years, {result.months} months, {result.days} days</span> old.
-              </p>
-              <div className="mt-4 grid grid-cols-2 gap-2.5">
-                <StatTile label="Total days lived" value={result.totalDays.toLocaleString()} />
-                <StatTile label="Total weeks" value={facts.totalWeeks.toLocaleString()} />
-                <StatTile label="Total hours (~)" value={facts.totalHours.toLocaleString()} />
-                <StatTile label="Next birthday" value={facts.nextBirthdayLabel} />
-                <StatTile label="Born on a" value={facts.weekday} />
-                <StatTile label="Zodiac sign" value={`${facts.zodiac.symbol} ${facts.zodiac.name}`} />
-              </div>
-            </>
-          )}
+            {!loading && result && facts && (
+              <>
+                <p className="mt-4 text-center text-sm text-gray-600">
+                  You are <span className="font-semibold text-gray-900">{result.years} years, {result.months} months, {result.days} days</span> old.
+                </p>
+                <div className="mt-4 grid grid-cols-2 gap-2.5">
+                  <StatTile label="Total days lived" value={result.totalDays.toLocaleString()} />
+                  <StatTile label="Total weeks" value={facts.totalWeeks.toLocaleString()} />
+                  <StatTile label="Total hours (~)" value={facts.totalHours.toLocaleString()} />
+                  <StatTile label="Next birthday" value={facts.nextBirthdayLabel} />
+                  <StatTile label="Born on a" value={facts.weekday} />
+                  <StatTile label="Zodiac sign" value={`${facts.zodiac.symbol} ${facts.zodiac.name}`} />
+                </div>
+              </>
+            )}
 
-          {!loading && !result && (
-            <p className="mt-4 text-xs text-gray-400 text-center">Enter your date of birth, then calculate to see the full breakdown.</p>
-          )}
+            {!loading && !result && (
+              <p className="mt-4 text-xs text-gray-400 text-center">Enter your date of birth, then calculate to see the full breakdown.</p>
+            )}
+          </div>
         </div>
+
+        {/* ── "How to use" — moved here from below the whole tool section,
+            so it sits directly under the Result card instead of under
+            whichever column ends up taller. ── */}
+        {steps.length > 0 && (
+          <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+            <div className="px-4 py-3 border-b border-gray-100 bg-gray-50">
+              <span className="text-sm font-medium text-gray-600">How to use {toolName}</span>
+            </div>
+            <ol className="p-5 space-y-4">
+              {steps.map((step, i) => (
+                <li key={i} className="flex items-start gap-4">
+                  <span className="flex-shrink-0 w-7 h-7 rounded-full bg-violet-100 text-violet-700 text-sm font-bold flex items-center justify-center">
+                    {i + 1}
+                  </span>
+                  <p className="text-gray-600 text-sm leading-relaxed pt-0.5">{step}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
       </div>
     </div>
   );

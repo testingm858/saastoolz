@@ -220,7 +220,7 @@ export default async function ToolPage({ params }: Props) {
       ) : tool.id === "bmi-calculator" ? (
         <BmiCalculatorClient />
       ) : tool.id === "age-calculator" ? (
-        <AgeCalculatorClient />
+        <AgeCalculatorClient steps={steps} toolName={tool.name} />
       ) : isFileTool(tool.id) ? (
         <FileToolInterface tool={tool} />
       ) : (
@@ -230,8 +230,9 @@ export default async function ToolPage({ params }: Props) {
 
       {DISCLAIMER_TOOLS[tool.id] && <Disclaimer type={DISCLAIMER_TOOLS[tool.id]} />}
 
-      {/* Step-by-step usage instructions */}
-      {steps.length > 0 && (
+      {/* Step-by-step usage instructions — age-calculator renders this
+          itself, stacked under its Result card, instead of here. */}
+      {steps.length > 0 && tool.id !== "age-calculator" && (
         <div className="mt-14 border-t border-gray-100 pt-10">
           <h2 className="text-lg font-bold text-gray-900 mb-6">How to use {tool.name}</h2>
           <ol className="space-y-4">
