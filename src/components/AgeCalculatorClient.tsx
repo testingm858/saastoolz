@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
-import { Loader2, RotateCcw } from "lucide-react";
+import { Loader2, RotateCcw, Flame, Droplet, Mountain, Wind, Orbit, Repeat, Palette, Hash, Heart, Sparkles, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useProgressSimulation, ProcessingPanel } from "@/components/ProgressIndicator";
 
@@ -120,6 +120,24 @@ const ZODIAC_DETAILS: Record<string, ZodiacDetail> = {
   },
 };
 
+// Per-element icon + gradient so each sign's card carries its own visual
+// identity instead of one fixed color — Fire runs warm, Water runs cool,
+// etc., matching the classical element it belongs to.
+const ELEMENT_STYLE: Record<string, { icon: LucideIcon; gradient: string; chipBg: string; chipText: string }> = {
+  Fire: { icon: Flame, gradient: "from-orange-500 to-red-500", chipBg: "bg-orange-50 border-orange-100", chipText: "text-orange-600" },
+  Earth: { icon: Mountain, gradient: "from-emerald-500 to-green-600", chipBg: "bg-emerald-50 border-emerald-100", chipText: "text-emerald-600" },
+  Air: { icon: Wind, gradient: "from-sky-400 to-indigo-500", chipBg: "bg-sky-50 border-sky-100", chipText: "text-sky-600" },
+  Water: { icon: Droplet, gradient: "from-blue-500 to-cyan-500", chipBg: "bg-blue-50 border-blue-100", chipText: "text-blue-600" },
+};
+
+// Real hex swatches for the "lucky color" stat so it reads as an actual
+// color, not just a word.
+const LUCKY_COLOR_HEX: Record<string, string> = {
+  Red: "#ef4444", Green: "#22c55e", Yellow: "#eab308", Silver: "#94a3b8", Gold: "#f59e0b",
+  Brown: "#92400e", Blue: "#3b82f6", "Deep Red": "#991b1b", Purple: "#a855f7", Black: "#27272a",
+  "Sea Green": "#0d9488",
+};
+
 // Days lived since the last birthday, out of the days in that birthday
 // year — drives the progress ring. Always relative to the real current
 // date (not the optional "as of" override below), since "next birthday"
@@ -181,11 +199,20 @@ function AgeRing({ years, progressPct }: { years: number | null; progressPct: nu
   );
 }
 
-function StatTile({ label, value }: { label: string; value: string }) {
+// `icon` and `swatchColor` are optional so existing callers (the plain
+// age-facts grid) render exactly as before — only new callers that pass
+// them pick up the extra visuals.
+function StatTile({ label, value, icon: Icon, swatchColor }: { label: string; value: string; icon?: LucideIcon; swatchColor?: string }) {
   return (
     <div className="bg-gray-50 border border-gray-100 rounded-xl p-3">
-      <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide mb-0.5">{label}</p>
-      <p className="text-sm font-semibold text-gray-900">{value}</p>
+      <p className="flex items-center gap-1 text-[10px] font-medium text-gray-400 uppercase tracking-wide mb-0.5">
+        {Icon && <Icon className="w-3 h-3 shrink-0" />}
+        {label}
+      </p>
+      <p className="flex items-center gap-1.5 text-sm font-semibold text-gray-900">
+        {swatchColor && <span className="w-2.5 h-2.5 rounded-full shrink-0 border border-black/10" style={{ backgroundColor: swatchColor }} />}
+        {value}
+      </p>
     </div>
   );
 }
@@ -315,20 +342,35 @@ export default function AgeCalculatorClient() {
         {!loading && result && facts && (() => {
           const detail = ZODIAC_DETAILS[facts.zodiac.name];
           if (!detail) return null;
+          const elementStyle = ELEMENT_STYLE[detail.element];
+          const ElementIcon = elementStyle?.icon;
+          const swatch = LUCKY_COLOR_HEX[detail.luckyColor];
           return (
             <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
               <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50">
-                <span className="text-sm font-medium text-gray-600">Astrological Sign</span>
+                <span className="flex items-center gap-1.5 text-sm font-medium text-gray-600">
+                  <Sparkles className="w-3.5 h-3.5 text-violet-400" /> Astrological Sign
+                </span>
                 <span className="text-xs font-medium text-gray-400">{detail.dateRange}</span>
               </div>
               <div className="p-5">
                 <div className="flex items-start gap-4">
-                  <div className="shrink-0 w-14 h-14 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-2xl text-white">
+                  <div
+                    className={cn(
+                      "shrink-0 w-16 h-16 rounded-full bg-gradient-to-br flex items-center justify-center text-3xl text-white shadow-md ring-4 ring-white",
+                      elementStyle?.gradient ?? "from-violet-500 to-fuchsia-500"
+                    )}
+                  >
                     {facts.zodiac.symbol}
                   </div>
                   <div className="min-w-0 flex-1">
                     <h3 className="text-lg font-bold text-gray-900">{facts.zodiac.name}</h3>
-                    <p className="text-xs text-gray-400">{detail.symbolName} · {detail.element} · {detail.modality}</p>
+                    <p className="text-xs text-gray-400 italic mb-1.5">{detail.symbolName}</p>
+                    {ElementIcon && (
+                      <span className={cn("inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full border", elementStyle.chipBg, elementStyle.chipText)}>
+                        <ElementIcon className="w-3 h-3" /> {detail.element} · {detail.modality}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -343,12 +385,12 @@ export default function AgeCalculatorClient() {
                 </div>
 
                 <div className="mt-4 grid grid-cols-2 gap-2.5">
-                  <StatTile label="Ruling planet" value={detail.planet} />
-                  <StatTile label="Modality" value={detail.modality} />
-                  <StatTile label="Lucky color" value={detail.luckyColor} />
-                  <StatTile label="Lucky number" value={String(detail.luckyNumber)} />
-                  <StatTile label="Compatible with" value={detail.compatibleWith.join(", ")} />
-                  <StatTile label="Symbol" value={detail.symbolName} />
+                  <StatTile label="Ruling planet" value={detail.planet} icon={Orbit} />
+                  <StatTile label="Modality" value={detail.modality} icon={Repeat} />
+                  <StatTile label="Lucky color" value={detail.luckyColor} icon={Palette} swatchColor={swatch} />
+                  <StatTile label="Lucky number" value={String(detail.luckyNumber)} icon={Hash} />
+                  <StatTile label="Compatible with" value={detail.compatibleWith.join(", ")} icon={Heart} />
+                  <StatTile label="Symbol" value={detail.symbolName} icon={Sparkles} />
                 </div>
               </div>
               <p className="px-5 pb-4 text-xs text-gray-400">★ Just for fun — astrology isn&apos;t scientific fact.</p>
