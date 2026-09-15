@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
 import type { Metadata } from "next";
 import { Eye, Wrench } from "lucide-react";
 import { getToolById, FREE_TOOLS, CATEGORY_META } from "@/lib/tools";
@@ -22,6 +23,7 @@ import AdSlot from "@/components/AdSlot";
 import { getAdCodes } from "@/lib/ads";
 import { adSlotKey } from "@/lib/adPlacements";
 import { canShowAds } from "@/lib/ads/policy";
+import { isBotOrPrefetchRequest } from "@/lib/bot-detect";
 import LikeButton from "@/components/LikeButton";
 import ToolTimeTracker from "@/components/analytics/ToolTimeTracker";
 import Link from "next/link";
@@ -71,15 +73,23 @@ export default async function ToolPage({ params }: Props) {
     : FREE_TOOLS.filter((t) => t.category === tool.category && t.id !== tool.id).slice(0, 6);
   const toolUrl = `${BASE_URL}/tools/${tool.id}`;
 
-  const [stats, usedCount, visitorId] = await Promise.all([
-    prisma.toolStats.upsert({
-      where: { toolId: tool.id },
-      create: { toolId: tool.id, views: 1 },
-      update: { views: { increment: 1 } },
-    }),
+  // Don't count bot/crawler requests (including AdSense's own crawler) or
+  // Next.js route prefetches as real visits — just read the current count
+  // for those instead of incrementing it.
+  const requestIsBot = isBotOrPrefetchRequest(await headers());
+  const [statsRaw, usedCount, visitorId] = await Promise.all([
+    requestIsBot
+      ? prisma.toolStats.findUnique({ where: { toolId: tool.id }, select: { views: true, likes: true } })
+      : prisma.toolStats.upsert({
+          where: { toolId: tool.id },
+          create: { toolId: tool.id, views: 1 },
+          update: { views: { increment: 1 } },
+          select: { views: true, likes: true },
+        }),
     prisma.toolUsage.count({ where: { toolId: tool.id } }),
     getVisitorId(),
   ]);
+  const stats = statsRaw ?? { views: 0, likes: 0 };
   const alreadyLiked = visitorId
     ? (await prisma.like.findUnique({
         where: { targetType_targetId_visitorId: { targetType: "tool", targetId: tool.id, visitorId } },
@@ -161,12 +171,16 @@ export default async function ToolPage({ params }: Props) {
           </div>
         </div>
         <div className="flex items-center flex-wrap gap-4">
-          <span className="flex items-center gap-1.5 text-sm text-gray-400">
-            <Eye className="w-4 h-4" /> {stats.views.toLocaleString()} visits
-          </span>
-          <span className="flex items-center gap-1.5 text-sm text-gray-400">
-            <Wrench className="w-4 h-4" /> {usedCount.toLocaleString()} uses
-          </span>
+          {stats.views >= 10 && (
+            <span className="flex items-center gap-1.5 text-sm text-gray-400">
+              <Eye className="w-4 h-4" /> {stats.views.toLocaleString()} visits
+            </span>
+          )}
+          {usedCount >= 10 && (
+            <span className="flex items-center gap-1.5 text-sm text-gray-400">
+              <Wrench className="w-4 h-4" /> {usedCount.toLocaleString()} uses
+            </span>
+          )}
           <LikeButton targetType="tool" targetId={tool.id} initialLiked={alreadyLiked} initialLikes={stats.likes} />
         </div>
       </div>

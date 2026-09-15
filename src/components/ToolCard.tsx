@@ -53,10 +53,12 @@ export default function ToolCard({ tool, visits, likes }: Props) {
         </span>
       )}
 
-      {/* Engagement stats */}
-      {(visits !== undefined || likes !== undefined) && (
+      {/* Engagement stats — visits below a small threshold are hidden rather
+          than shown as a hollow "0" or "3 visits", which reads as fake
+          engagement on a freshly-added or low-traffic tool. */}
+      {((visits !== undefined && visits >= 10) || likes !== undefined) && (
         <div className={cn("flex items-center gap-3 text-xs text-gray-400", !tool.creditsPerUse && "mt-auto pt-0.5")}>
-          {visits !== undefined && (
+          {visits !== undefined && visits >= 10 && (
             <span className="flex items-center gap-1"><Eye className="w-3 h-3" /> {visits.toLocaleString()}</span>
           )}
           {likes !== undefined && (
