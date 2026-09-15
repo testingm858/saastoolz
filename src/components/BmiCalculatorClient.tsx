@@ -87,24 +87,27 @@ function BmiGauge({ needleBmi }: { needleBmi: number | null }) {
           strokeWidth={GAUGE_STROKE}
         />
       ))}
-      {/* category boundary dividers — thin cut lines across the band */}
-      {[18.5, 25, 30].map((v) => {
-        const inner = polarPoint(GAUGE_CX, GAUGE_CY, GAUGE_R - GAUGE_STROKE / 2 - 3, valueToAngle(v));
-        const outer = polarPoint(GAUGE_CX, GAUGE_CY, GAUGE_R + GAUGE_STROKE / 2 + 3, valueToAngle(v));
-        return <line key={v} x1={inner.x} y1={inner.y} x2={outer.x} y2={outer.y} stroke="#ffffff" strokeWidth={2} />;
-      })}
-      {/* numbered scale — a tick + the BMI value every 5 points, like a speedometer */}
+      {/* the one boundary not already marked by a round scale number below */}
+      {(() => {
+        const inner = polarPoint(GAUGE_CX, GAUGE_CY, GAUGE_R - GAUGE_STROKE / 2 - 3, valueToAngle(18.5));
+        const outer = polarPoint(GAUGE_CX, GAUGE_CY, GAUGE_R + GAUGE_STROKE / 2 + 3, valueToAngle(18.5));
+        return <line x1={inner.x} y1={inner.y} x2={outer.x} y2={outer.y} stroke="#ffffff" strokeWidth={2} />;
+      })()}
+      {/* numbered scale, printed directly on the color strip — every 5 BMI
+          points, like the numbers on a speedometer's dial face. */}
       {SCALE_NUMBERS.map((v) => {
-        const tickStart = polarPoint(GAUGE_CX, GAUGE_CY, GAUGE_R + GAUGE_STROKE / 2 + 2, valueToAngle(v));
-        const tickEnd = polarPoint(GAUGE_CX, GAUGE_CY, GAUGE_R + GAUGE_STROKE / 2 + 8, valueToAngle(v));
-        const labelPt = polarPoint(GAUGE_CX, GAUGE_CY, GAUGE_R + GAUGE_STROKE / 2 + 21, valueToAngle(v));
+        const labelPt = polarPoint(GAUGE_CX, GAUGE_CY, GAUGE_R, valueToAngle(v));
         return (
-          <g key={v}>
-            <line x1={tickStart.x} y1={tickStart.y} x2={tickEnd.x} y2={tickEnd.y} stroke="#9ca3af" strokeWidth={1.5} />
-            <text x={labelPt.x} y={labelPt.y} textAnchor="middle" dominantBaseline="middle" style={{ fontSize: 10, fontWeight: 600, fill: "#6b7280" }}>
-              {v}
-            </text>
-          </g>
+          <text
+            key={v}
+            x={labelPt.x}
+            y={labelPt.y}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            style={{ fontSize: 11, fontWeight: 700, fill: "#ffffff", paintOrder: "stroke", stroke: "rgba(0,0,0,0.25)", strokeWidth: 2 }}
+          >
+            {v}
+          </text>
         );
       })}
       {/* needle — rotates around the pivot; transition animates every value change */}
