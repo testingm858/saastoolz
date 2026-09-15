@@ -58,10 +58,14 @@ const BAND_SEGMENTS = BANDS.map((b, i) => {
   return { ...b, from, to: Math.min(b.to, GAUGE_MAX) };
 }).filter((b) => b.to > b.from);
 
-const GAUGE_CX = 130;
+const GAUGE_CX = 140;
 const GAUGE_CY = 118;
-const GAUGE_R = 96;
+const GAUGE_R = 92;
 const GAUGE_STROKE = 22;
+
+// Numbered scale around the dial, like a real speedometer — every 5 BMI
+// points from the gauge's start to its end.
+const SCALE_NUMBERS = [15, 20, 25, 30, 35, 40];
 
 // Needle-only concern: `needleBmi` drives rotation and nothing else, so the
 // parent can reset it to null (start position) and then to the real value
@@ -73,7 +77,7 @@ function BmiGauge({ needleBmi }: { needleBmi: number | null }) {
   const needleRotation = 90 - angle; // CSS rotate() from the needle's "straight up" base pose
 
   return (
-    <svg viewBox="0 0 260 150" className="w-full max-w-[280px] mx-auto block">
+    <svg viewBox="0 -10 280 165" className="w-full max-w-[300px] mx-auto block">
       {BAND_SEGMENTS.map((b) => (
         <path
           key={b.label}
@@ -83,11 +87,25 @@ function BmiGauge({ needleBmi }: { needleBmi: number | null }) {
           strokeWidth={GAUGE_STROKE}
         />
       ))}
-      {/* boundary ticks */}
+      {/* category boundary dividers — thin cut lines across the band */}
       {[18.5, 25, 30].map((v) => {
         const inner = polarPoint(GAUGE_CX, GAUGE_CY, GAUGE_R - GAUGE_STROKE / 2 - 3, valueToAngle(v));
         const outer = polarPoint(GAUGE_CX, GAUGE_CY, GAUGE_R + GAUGE_STROKE / 2 + 3, valueToAngle(v));
         return <line key={v} x1={inner.x} y1={inner.y} x2={outer.x} y2={outer.y} stroke="#ffffff" strokeWidth={2} />;
+      })}
+      {/* numbered scale — a tick + the BMI value every 5 points, like a speedometer */}
+      {SCALE_NUMBERS.map((v) => {
+        const tickStart = polarPoint(GAUGE_CX, GAUGE_CY, GAUGE_R + GAUGE_STROKE / 2 + 2, valueToAngle(v));
+        const tickEnd = polarPoint(GAUGE_CX, GAUGE_CY, GAUGE_R + GAUGE_STROKE / 2 + 8, valueToAngle(v));
+        const labelPt = polarPoint(GAUGE_CX, GAUGE_CY, GAUGE_R + GAUGE_STROKE / 2 + 21, valueToAngle(v));
+        return (
+          <g key={v}>
+            <line x1={tickStart.x} y1={tickStart.y} x2={tickEnd.x} y2={tickEnd.y} stroke="#9ca3af" strokeWidth={1.5} />
+            <text x={labelPt.x} y={labelPt.y} textAnchor="middle" dominantBaseline="middle" style={{ fontSize: 10, fontWeight: 600, fill: "#6b7280" }}>
+              {v}
+            </text>
+          </g>
+        );
       })}
       {/* needle — rotates around the pivot; transition animates every value change */}
       <g
@@ -335,7 +353,7 @@ export default function BmiCalculatorClient() {
           )}
         </div>
         <div className="p-5">
-          <div className="relative w-full max-w-[280px] mx-auto">
+          <div className="relative w-full max-w-[300px] mx-auto">
             <BmiGauge needleBmi={needleBmi} />
             <DigitalReadout bmi={result?.bmi ?? null} category={result?.category ?? null} color={result?.color ?? "#9ca3af"} />
           </div>
