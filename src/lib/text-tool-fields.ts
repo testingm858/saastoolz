@@ -44,10 +44,6 @@ export const TOOL_FIELDS: Record<string, ToolField[]> = {
     { name: "rate", label: "Annual interest rate (%)", type: "number", required: true, min: 0, step: 0.1 },
     { name: "years", label: "Term (years)", type: "number", defaultValue: 30, min: 1 },
   ],
-  "age-calculator": [
-    { name: "birthDate", label: "Date of birth", type: "date", required: true },
-    { name: "asOf", label: "As of date (optional)", type: "date" },
-  ],
   "gst-calculator": [
     { name: "amount", label: "Amount", type: "number", required: true, min: 0 },
     { name: "rate", label: "Tax rate (%)", type: "number", required: true, min: 0, step: 0.1 },

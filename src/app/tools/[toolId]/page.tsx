@@ -20,6 +20,7 @@ import { TOOL_GUIDES } from "@/lib/toolGuides";
 import MetaTagGeneratorClient from "@/components/MetaTagGeneratorClient";
 import RobotsTxtGeneratorClient from "@/components/RobotsTxtGeneratorClient";
 import BmiCalculatorClient from "@/components/BmiCalculatorClient";
+import AgeCalculatorClient from "@/components/AgeCalculatorClient";
 import AdSlot from "@/components/AdSlot";
 import { getAdCodes } from "@/lib/ads";
 import { adSlotKey } from "@/lib/adPlacements";
@@ -218,6 +219,8 @@ export default async function ToolPage({ params }: Props) {
         <RobotsTxtGeneratorClient />
       ) : tool.id === "bmi-calculator" ? (
         <BmiCalculatorClient />
+      ) : tool.id === "age-calculator" ? (
+        <AgeCalculatorClient />
       ) : isFileTool(tool.id) ? (
         <FileToolInterface tool={tool} />
       ) : (
