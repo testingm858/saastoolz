@@ -695,7 +695,7 @@ export const TOOL_GUIDES: Partial<Record<string, ToolGuide>> = {
       {
         title: "What does \"unlocking\" a PDF actually mean?",
         paragraphs: [
-          "PDFs can carry two different kinds of protection: an **open password** (required just to view the file at all) and **restrictions** (the file opens freely, but printing, copying, or editing is disabled). Unlocking removes whichever of these you have the right to remove — typically your own document that you've simply forgotten the friction of re-entering a password for, or a restricted file where you have permission to lift the limits.",
+          "PDFs can carry two different kinds of protection: an **open password** (required just to view the file at all) and **restrictions** (the file opens freely, but printing, copying, or editing is disabled — set with a separate owner password). This tool is for documents you own and whose password you know — enter it and we remove whichever protection it unlocks. We don't remove protection from a file without its correct password.",
         ],
       },
       {
@@ -703,7 +703,7 @@ export const TOOL_GUIDES: Partial<Record<string, ToolGuide>> = {
         list: {
           items: [
             "**Removing a password you no longer need** on your own document, for easier day-to-day access.",
-            "**Lifting print/copy restrictions** on a file you have the rights to use freely.",
+            "**Lifting print/copy restrictions** you set yourself on a file you have the rights to use freely.",
           ],
         },
       },

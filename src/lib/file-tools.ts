@@ -242,7 +242,7 @@ export const FILE_TOOLS: Record<string, FileToolConfig> = {
   "pdf-unlock": {
     multiple: false, accept: "application/pdf", acceptLabel: "a password-protected or restricted PDF file", outputIsFile: true,
     fields: [
-      { name: "password", label: "Password (if the PDF requires one to open)", type: "password", placeholder: "Leave blank if it only restricts printing/editing", helpText: "Some restricted PDFs open without a password — leave this blank for those" },
+      { name: "password", label: "Password", type: "password", placeholder: "Enter the PDF's password", required: true },
     ],
   },
   "pdf-ocr": {

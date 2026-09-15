@@ -34,12 +34,10 @@ function escapeOptionValue(value: string): string {
 
 // A PDF can be encrypted with only an owner password — no password is
 // needed to open/read it (needsPassword() is false), but edit/print/copy
-// permissions are restricted. This is what most "protect a PDF" tools
-// produce when the user isn't prompted for an open password, and it's very
-// often what people mean by "unlock this PDF": strip those restrictions,
-// not necessarily remove an open-password prompt that was never there.
-// Since we already have full read access to such a document with no
-// authentication at all, we can re-save with encrypt=none directly.
+// permissions are restricted. unlockPdf() below still requires and
+// authenticates the owner password in this case rather than stripping
+// restrictions for free: read access alone isn't the file owner's
+// permission to remove their own protections.
 function isEncrypted(doc: mupdf.PDFDocument): boolean {
   return !doc.getTrailer().get("Encrypt").isNull();
 }
@@ -73,13 +71,14 @@ export async function unlockPdf(buffer: ArrayBuffer, password?: string): Promise
   const doc = openPdf(buffer);
   if (!isEncrypted(doc)) throw new Error("This PDF isn't password-protected or restricted");
 
-  if (doc.needsPassword()) {
-    if (!password) throw new Error("This PDF requires a password to unlock");
-    const result = doc.authenticatePassword(password);
-    if (result === 0) throw new Error("Incorrect password");
-  }
-  // else: owner-password-only (permission-restricted but freely readable) —
-  // already have full access, no authentication needed to strip it.
+  // Always require and verify a password before stripping any protection —
+  // including the owner-password-only case, where the document is freely
+  // readable but its print/copy/edit permissions still belong to whoever
+  // holds that password. Silently stripping those without proof of
+  // ownership would make this a permission-circumvention tool.
+  if (!password) throw new Error("This PDF is protected — enter its password to remove the restrictions");
+  const result = doc.authenticatePassword(password);
+  if (result === 0) throw new Error("Incorrect password");
 
   const out = doc.saveToBuffer("encrypt=none");
   return out.asUint8Array();
