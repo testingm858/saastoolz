@@ -47,7 +47,7 @@ type ToolDef = Omit<Tool, "processing">;
 // Every other tool round-trips through /api/tools/[toolId] or a file
 // dispatch route server-side, including ones whose old copy claimed
 // otherwise.
-const CLIENT_SIDE_TOOL_IDS = new Set(["invoice-generator", "json-viewer"]);
+const CLIENT_SIDE_TOOL_IDS = new Set(["invoice-generator", "json-viewer", "unit-converter"]);
 
 function withProcessing(defs: ToolDef[]): Tool[] {
   return defs.map((t) => ({ ...t, processing: CLIENT_SIDE_TOOL_IDS.has(t.id) ? "client" : "server" }));
@@ -176,6 +176,8 @@ const FREE_TOOL_DEFS: ToolDef[] = [
   { id: "roi-calculator",      name: "ROI Calculator",         description: "Calculate Return on Investment for any project or campaign", category: "calculator", isPremium: false, icon: "📊", tags: ["roi","calculator","investment","business"] },
   { id: "mrr-calculator",      name: "SaaS MRR Calculator",    description: "Calculate Monthly Recurring Revenue, ARR and growth metrics", category: "calculator", isPremium: false, icon: "📈", tags: ["mrr","arr","saas","calculator"] },
   { id: "meeting-cost",        name: "Meeting Cost Calculator", description: "Calculate the real cost of meetings based on attendees and salaries", category: "calculator", isPremium: false, icon: "💼", tags: ["meeting","cost","calculator","productivity"] },
+  { id: "zakat-calculator",    name: "Zakat Calculator",       description: "Calculate your annual Zakat from eligible wealth and the Nisab threshold", category: "calculator", isPremium: false, icon: "🕌", tags: ["zakat","islamic","charity","calculator"] },
+  { id: "unit-converter",      name: "Unit Converter",         description: "Convert between length, weight, temperature and volume units instantly", category: "calculator", isPremium: false, icon: "📐", tags: ["unit","converter","length","weight","temperature","volume"] },
 
   // Design & CSS Tools
   { id: "color-palette",       name: "Color Palette Generator", description: "Generate beautiful color palettes from a base color",    category: "design",    isPremium: false, icon: "🎨", tags: ["color","palette","generator","design"] },

@@ -39,7 +39,7 @@ import { buildContract } from "@/tools/text/contract-builder";
 import {
   calculateAge, calculateGst, calculateProfitMargin, calculatePercentage,
   calculatePregnancy, calculateBmr, calculateCalories, calculateFuelCost,
-  calculateRoi, calculateMrr, calculateMeetingCost, convertTimezone,
+  calculateRoi, calculateMrr, calculateMeetingCost, convertTimezone, calculateZakat,
 } from "@/tools/calc/misc-calculators";
 import {
   generateButtonCss, generateKeyframeAnimation, generateGridCss,
@@ -227,6 +227,7 @@ const STRUCTURED_JSON_TOOLS = new Set([
   "htaccess-generator",
   "contract-builder",
   "age-calculator",
+  "zakat-calculator",
   "gst-calculator",
   "profit-calculator",
   "percentage-calculator",
@@ -547,6 +548,17 @@ async function dispatch(toolId: string, rawBody: Record<string, unknown>): Promi
 
     case "age-calculator":
       return calculateAge(body.birthDate as string, body.asOf as string | undefined);
+
+    case "zakat-calculator":
+      return calculateZakat({
+        cash: Number(body.cash) || 0,
+        goldSilverValue: Number(body.goldSilverValue) || 0,
+        investments: Number(body.investments) || 0,
+        businessAssets: Number(body.businessAssets) || 0,
+        receivables: Number(body.receivables) || 0,
+        debts: Number(body.debts) || 0,
+        nisabThreshold: Number(body.nisabThreshold) || 0,
+      });
 
     case "gst-calculator":
       return calculateGst(body.amount as number, body.rate as number, (body.mode as "exclusive" | "inclusive") ?? "exclusive");

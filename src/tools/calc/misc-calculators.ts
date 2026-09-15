@@ -173,3 +173,32 @@ export function convertTimezone(dateTimeIso: string, fromZone: string, toZone: s
   };
   return { input: dateTimeIso, fromZone, toZone, fromLocal: format(fromZone), toLocal: format(toZone) };
 }
+
+// ─── Zakat ────────────────────────────────────────────────────────────────────
+// Standard asset-based method: sum zakatable assets, subtract debts due now,
+// and — if what's left meets or exceeds the Nisab threshold — 2.5% of it is
+// due. We don't fetch a live gold/silver price (no such feed exists in this
+// codebase), so nisabThreshold is a value the user supplies themselves in
+// their own currency, based on today's local gold/silver price — asking for
+// a number we can't verify is far more honest than guessing one.
+export interface ZakatInput {
+  cash: number;
+  goldSilverValue: number;
+  investments: number;
+  businessAssets: number;
+  receivables: number;
+  debts: number;
+  nisabThreshold: number;
+}
+
+export function calculateZakat(input: ZakatInput) {
+  const nonNegativeFields: (keyof ZakatInput)[] = ["cash", "goldSilverValue", "investments", "businessAssets", "receivables", "debts", "nisabThreshold"];
+  for (const field of nonNegativeFields) assertNonNegative(field, input[field]);
+
+  const totalAssets = input.cash + input.goldSilverValue + input.investments + input.businessAssets + input.receivables;
+  const netWealth = Math.max(0, Math.round((totalAssets - input.debts) * 100) / 100);
+  const eligible = input.nisabThreshold > 0 && netWealth >= input.nisabThreshold;
+  const zakatDue = eligible ? Math.round(netWealth * 0.025 * 100) / 100 : 0;
+
+  return { totalAssets: Math.round(totalAssets * 100) / 100, netWealth, nisabThreshold: input.nisabThreshold, eligible, ratePct: 2.5, zakatDue };
+}

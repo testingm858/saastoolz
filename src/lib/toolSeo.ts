@@ -278,6 +278,47 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "Can I use this for any type of loan?", a: "Yes — personal loans, auto loans, student loans, or any fixed-rate installment loan, not just mortgages." },
     ],
   },
+  "zakat-calculator": {
+    title: "Zakat Calculator — Free, Nisab-Based, No Signup | SaaSToolz",
+    metaDescription:
+      "Calculate your annual Zakat from cash, gold, investments and business assets against the Nisab threshold. Free, instant, no signup.",
+    intro:
+      "Zakat Calculator totals your eligible wealth — cash, gold and silver, investments, business assets, and money owed to you — subtracts debts due now, and checks the result against the Nisab threshold you provide to work out whether Zakat is due and how much (2.5% of net zakatable wealth).",
+    steps: [
+      "Enter your cash, gold/silver value, investments, business assets, and any money owed to you.",
+      "Enter debts and short-term liabilities due now, and your local Nisab threshold.",
+      "Click \"Calculate Zakat\" to see your net zakatable wealth and whether it meets the Nisab.",
+      "If eligible, the Zakat due (2.5% of net wealth) is shown along with the full breakdown.",
+    ],
+    faqs: [
+      { q: "What is the Nisab, and why do I have to enter it myself?", a: "Nisab is the minimum wealth threshold (traditionally 87.48g of gold or 612.36g of silver) below which Zakat isn't due. We don't have a live gold/silver price feed, so rather than guess, this tool asks for your Nisab value in your own currency — look up today's gold or silver price to work it out, or ask your local Islamic center." },
+      { q: "Does this tool send my numbers to a server?", a: "Yes — your figures are sent to our servers to compute the result and the result is returned to you; we don't store the values." },
+      { q: "How is Zakat calculated?", a: "2.5% of your net zakatable wealth (eligible assets minus debts due now), but only if that net wealth meets or exceeds the Nisab threshold." },
+      { q: "What counts as a zakatable asset?", a: "Commonly: cash and bank balances, gold and silver, business inventory and investments, and money others owe you. Assets for personal use (your home, car, furniture) typically don't count — but rulings vary by school of thought, so check with a scholar for your specific situation." },
+      { q: "Is this a religious ruling?", a: "No — it's a standard arithmetic calculation based on the figures you enter. For rulings specific to your madhhab (school of thought) or unusual assets, consult a qualified scholar." },
+      { q: "Is my data safe when using this tool?", a: "Yes — your figures are used only to compute the result and aren't stored." },
+    ],
+  },
+  "unit-converter": {
+    title: "Unit Converter — Length, Weight, Temperature, Volume | SaaSToolz",
+    metaDescription:
+      "Convert instantly between length, weight, temperature and volume units, right in your browser. Free, no signup, no ads on results.",
+    intro:
+      "Unit Converter switches a value between units in the same category — length, weight, temperature, or volume — updating instantly as you type, entirely in your browser.",
+    steps: [
+      "Choose a category: Length, Weight, Temperature, or Volume.",
+      "Pick the unit you're converting from and the unit you're converting to.",
+      "Type the value you want to convert.",
+      "The converted result updates instantly — use the swap button to reverse direction.",
+    ],
+    faqs: [
+      { q: "Does this tool send my numbers to a server?", a: "No — conversion happens entirely in your browser; nothing you enter is transmitted or stored." },
+      { q: "How accurate are the conversions?", a: "Standard, widely-used conversion factors are used throughout (e.g. 1 inch = 2.54 cm exactly), so results are precise to the decimal places shown." },
+      { q: "Which unit categories are supported?", a: "Length, weight/mass, temperature, and volume — the categories covering the vast majority of everyday and professional conversions." },
+      { q: "Why does temperature work differently from the others?", a: "Celsius, Fahrenheit and Kelvin aren't simple multiples of each other (0°C isn't 0°F), so temperature uses proper conversion formulas instead of a single multiplier like the other categories." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
   "invoice-generator": {
     title: "Free Invoice Generator Online — No Signup, Instant PDF | SaaSToolz",
     metaDescription:

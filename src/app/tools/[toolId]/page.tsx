@@ -21,6 +21,8 @@ import MetaTagGeneratorClient from "@/components/MetaTagGeneratorClient";
 import RobotsTxtGeneratorClient from "@/components/RobotsTxtGeneratorClient";
 import BmiCalculatorClient from "@/components/BmiCalculatorClient";
 import AgeCalculatorClient from "@/components/AgeCalculatorClient";
+import ZakatCalculatorClient from "@/components/ZakatCalculatorClient";
+import UnitConverterClient from "@/components/UnitConverterClient";
 import AdSlot from "@/components/AdSlot";
 import { getAdCodes } from "@/lib/ads";
 import { adSlotKey } from "@/lib/adPlacements";
@@ -221,6 +223,10 @@ export default async function ToolPage({ params }: Props) {
         <BmiCalculatorClient />
       ) : tool.id === "age-calculator" ? (
         <AgeCalculatorClient steps={steps} toolName={tool.name} />
+      ) : tool.id === "zakat-calculator" ? (
+        <ZakatCalculatorClient />
+      ) : tool.id === "unit-converter" ? (
+        <UnitConverterClient />
       ) : isFileTool(tool.id) ? (
         <FileToolInterface tool={tool} />
       ) : (
