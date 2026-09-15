@@ -44,19 +44,80 @@ function getZodiac(month: number, day: number) {
 // Extra detail shown in the astrological sign card below — keyed by name
 // rather than folded into ZODIAC_SIGNS since Capricorn appears twice there
 // (wraps across the year boundary) and would otherwise duplicate this data.
-const ZODIAC_DETAILS: Record<string, { element: string; planet: string; dateRange: string; traits: string[] }> = {
-  Aries: { element: "Fire", planet: "Mars", dateRange: "Mar 21 – Apr 19", traits: ["Bold", "Ambitious", "Energetic", "Competitive"] },
-  Taurus: { element: "Earth", planet: "Venus", dateRange: "Apr 20 – May 20", traits: ["Reliable", "Patient", "Practical", "Devoted"] },
-  Gemini: { element: "Air", planet: "Mercury", dateRange: "May 21 – Jun 20", traits: ["Curious", "Adaptable", "Witty", "Communicative"] },
-  Cancer: { element: "Water", planet: "Moon", dateRange: "Jun 21 – Jul 22", traits: ["Nurturing", "Intuitive", "Protective", "Emotional"] },
-  Leo: { element: "Fire", planet: "Sun", dateRange: "Jul 23 – Aug 22", traits: ["Confident", "Generous", "Charismatic", "Creative"] },
-  Virgo: { element: "Earth", planet: "Mercury", dateRange: "Aug 23 – Sep 22", traits: ["Analytical", "Meticulous", "Practical", "Modest"] },
-  Libra: { element: "Air", planet: "Venus", dateRange: "Sep 23 – Oct 22", traits: ["Diplomatic", "Fair-minded", "Social", "Gracious"] },
-  Scorpio: { element: "Water", planet: "Pluto", dateRange: "Oct 23 – Nov 21", traits: ["Passionate", "Resourceful", "Determined", "Intense"] },
-  Sagittarius: { element: "Fire", planet: "Jupiter", dateRange: "Nov 22 – Dec 21", traits: ["Adventurous", "Optimistic", "Independent", "Honest"] },
-  Capricorn: { element: "Earth", planet: "Saturn", dateRange: "Dec 22 – Jan 19", traits: ["Disciplined", "Ambitious", "Patient", "Responsible"] },
-  Aquarius: { element: "Air", planet: "Uranus", dateRange: "Jan 20 – Feb 18", traits: ["Original", "Independent", "Humanitarian", "Inventive"] },
-  Pisces: { element: "Water", planet: "Neptune", dateRange: "Feb 19 – Mar 20", traits: ["Compassionate", "Artistic", "Intuitive", "Gentle"] },
+interface ZodiacDetail {
+  element: string;
+  planet: string;
+  dateRange: string;
+  symbolName: string;
+  modality: string;
+  traits: string[];
+  luckyColor: string;
+  luckyNumber: number;
+  compatibleWith: string[];
+  description: string;
+}
+
+const ZODIAC_DETAILS: Record<string, ZodiacDetail> = {
+  Aries: {
+    element: "Fire", planet: "Mars", dateRange: "Mar 21 – Apr 19", symbolName: "The Ram", modality: "Cardinal",
+    traits: ["Bold", "Ambitious", "Energetic", "Competitive"], luckyColor: "Red", luckyNumber: 9, compatibleWith: ["Leo", "Sagittarius"],
+    description: "As the first sign of the zodiac, Aries natives are natural trailblazers who lead with courage and instinct.",
+  },
+  Taurus: {
+    element: "Earth", planet: "Venus", dateRange: "Apr 20 – May 20", symbolName: "The Bull", modality: "Fixed",
+    traits: ["Reliable", "Patient", "Practical", "Devoted"], luckyColor: "Green", luckyNumber: 6, compatibleWith: ["Virgo", "Capricorn"],
+    description: "Grounded and steady, Taurus values comfort, loyalty, and the finer things in life.",
+  },
+  Gemini: {
+    element: "Air", planet: "Mercury", dateRange: "May 21 – Jun 20", symbolName: "The Twins", modality: "Mutable",
+    traits: ["Curious", "Adaptable", "Witty", "Communicative"], luckyColor: "Yellow", luckyNumber: 5, compatibleWith: ["Libra", "Aquarius"],
+    description: "Quick-witted and endlessly curious, Gemini thrives on variety, conversation, and new ideas.",
+  },
+  Cancer: {
+    element: "Water", planet: "Moon", dateRange: "Jun 21 – Jul 22", symbolName: "The Crab", modality: "Cardinal",
+    traits: ["Nurturing", "Intuitive", "Protective", "Emotional"], luckyColor: "Silver", luckyNumber: 2, compatibleWith: ["Scorpio", "Pisces"],
+    description: "Deeply intuitive and caring, Cancer builds a warm, protective world around the people it loves.",
+  },
+  Leo: {
+    element: "Fire", planet: "Sun", dateRange: "Jul 23 – Aug 22", symbolName: "The Lion", modality: "Fixed",
+    traits: ["Confident", "Generous", "Charismatic", "Creative"], luckyColor: "Gold", luckyNumber: 1, compatibleWith: ["Aries", "Sagittarius"],
+    description: "Warm, dramatic, and generous, Leo shines brightest when creating and leading with heart.",
+  },
+  Virgo: {
+    element: "Earth", planet: "Mercury", dateRange: "Aug 23 – Sep 22", symbolName: "The Maiden", modality: "Mutable",
+    traits: ["Analytical", "Meticulous", "Practical", "Modest"], luckyColor: "Brown", luckyNumber: 5, compatibleWith: ["Taurus", "Capricorn"],
+    description: "Detail-oriented and dependable, Virgo finds purpose in improving the world one careful step at a time.",
+  },
+  Libra: {
+    element: "Air", planet: "Venus", dateRange: "Sep 23 – Oct 22", symbolName: "The Scales", modality: "Cardinal",
+    traits: ["Diplomatic", "Fair-minded", "Social", "Gracious"], luckyColor: "Blue", luckyNumber: 6, compatibleWith: ["Gemini", "Aquarius"],
+    description: "Charming and fair-minded, Libra seeks harmony, balance, and beauty in relationships and surroundings.",
+  },
+  Scorpio: {
+    element: "Water", planet: "Pluto", dateRange: "Oct 23 – Nov 21", symbolName: "The Scorpion", modality: "Fixed",
+    traits: ["Passionate", "Resourceful", "Determined", "Intense"], luckyColor: "Deep Red", luckyNumber: 8, compatibleWith: ["Cancer", "Pisces"],
+    description: "Intense and perceptive, Scorpio dives beneath the surface, drawn to truth, transformation, and depth.",
+  },
+  Sagittarius: {
+    element: "Fire", planet: "Jupiter", dateRange: "Nov 22 – Dec 21", symbolName: "The Archer", modality: "Mutable",
+    traits: ["Adventurous", "Optimistic", "Independent", "Honest"], luckyColor: "Purple", luckyNumber: 3, compatibleWith: ["Aries", "Leo"],
+    description: "Free-spirited and philosophical, Sagittarius is always chasing the next horizon and a bigger truth.",
+  },
+  Capricorn: {
+    element: "Earth", planet: "Saturn", dateRange: "Dec 22 – Jan 19", symbolName: "The Sea-Goat", modality: "Cardinal",
+    traits: ["Disciplined", "Ambitious", "Patient", "Responsible"], luckyColor: "Black", luckyNumber: 8, compatibleWith: ["Taurus", "Virgo"],
+    description: "Disciplined and patient, Capricorn climbs steadily toward long-term goals with quiet determination.",
+  },
+  Aquarius: {
+    element: "Air", planet: "Uranus", dateRange: "Jan 20 – Feb 18", symbolName: "The Water-Bearer", modality: "Fixed",
+    traits: ["Original", "Independent", "Humanitarian", "Inventive"], luckyColor: "Blue", luckyNumber: 4, compatibleWith: ["Gemini", "Libra"],
+    description: "Independent and inventive, Aquarius marches to its own beat while championing big-picture ideas.",
+  },
+  Pisces: {
+    element: "Water", planet: "Neptune", dateRange: "Feb 19 – Mar 20", symbolName: "The Fish", modality: "Mutable",
+    traits: ["Compassionate", "Artistic", "Intuitive", "Gentle"], luckyColor: "Sea Green", luckyNumber: 7, compatibleWith: ["Cancer", "Scorpio"],
+    description: "Compassionate and dreamy, Pisces feels the world deeply and often expresses it through art or empathy.",
+  },
 };
 
 // Days lived since the last birthday, out of the days in that birthday
@@ -204,49 +265,96 @@ export default function AgeCalculatorClient() {
   })();
 
   return (
-    <>
     <div className="grid md:grid-cols-2 gap-4 items-start">
-      {/* ── Form ─────────────────────────────────────────────────────── */}
-      <div className="min-w-0 bg-white border border-gray-200 rounded-2xl overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50">
-          <span className="text-sm font-medium text-gray-600">Enter your details</span>
-          <button onClick={handleClear} className="text-gray-400 hover:text-gray-600 transition-colors" title="Reset">
-            <RotateCcw className="w-4 h-4" />
-          </button>
-        </div>
-
-        <div className="p-5 space-y-5">
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Date of birth</label>
-            <input
-              type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)}
-              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100 transition-shadow"
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Calculate age as of (optional)</label>
-            <input
-              type="date" value={asOf} onChange={(e) => setAsOf(e.target.value)}
-              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100 transition-shadow"
-            />
-            <p className="text-xs text-gray-400 mt-1.5">Leave blank to calculate as of today.</p>
+      {/* ── Left column: form, then the astrological detail card fills the
+          space left over next to the taller Result column ── */}
+      <div className="min-w-0 space-y-4">
+        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50">
+            <span className="text-sm font-medium text-gray-600">Enter your details</span>
+            <button onClick={handleClear} className="text-gray-400 hover:text-gray-600 transition-colors" title="Reset">
+              <RotateCcw className="w-4 h-4" />
+            </button>
           </div>
 
-          <button
-            onClick={handleCalculate}
-            disabled={loading}
-            className={cn(
-              "w-full py-3 px-6 rounded-xl font-semibold text-white transition-all",
-              "bg-violet-600 hover:bg-violet-700 active:scale-[.99]",
-              "disabled:opacity-60 disabled:cursor-not-allowed",
-              "flex items-center justify-center gap-2"
-            )}
-          >
-            {loading ? (<><Loader2 className="w-4 h-4 animate-spin" /> Calculating...</>) : "Calculate Age"}
-          </button>
+          <div className="p-5 space-y-5">
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1.5">Date of birth</label>
+              <input
+                type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)}
+                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100 transition-shadow"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1.5">Calculate age as of (optional)</label>
+              <input
+                type="date" value={asOf} onChange={(e) => setAsOf(e.target.value)}
+                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100 transition-shadow"
+              />
+              <p className="text-xs text-gray-400 mt-1.5">Leave blank to calculate as of today.</p>
+            </div>
 
-          {error && <div className="bg-red-50 border border-red-100 rounded-xl p-3 text-sm text-red-700">{error}</div>}
+            <button
+              onClick={handleCalculate}
+              disabled={loading}
+              className={cn(
+                "w-full py-3 px-6 rounded-xl font-semibold text-white transition-all",
+                "bg-violet-600 hover:bg-violet-700 active:scale-[.99]",
+                "disabled:opacity-60 disabled:cursor-not-allowed",
+                "flex items-center justify-center gap-2"
+              )}
+            >
+              {loading ? (<><Loader2 className="w-4 h-4 animate-spin" /> Calculating...</>) : "Calculate Age"}
+            </button>
+
+            {error && <div className="bg-red-50 border border-red-100 rounded-xl p-3 text-sm text-red-700">{error}</div>}
+          </div>
         </div>
+
+        {/* ── Astrological sign detail ── */}
+        {!loading && result && facts && (() => {
+          const detail = ZODIAC_DETAILS[facts.zodiac.name];
+          if (!detail) return null;
+          return (
+            <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50">
+                <span className="text-sm font-medium text-gray-600">Astrological Sign</span>
+                <span className="text-xs font-medium text-gray-400">{detail.dateRange}</span>
+              </div>
+              <div className="p-5">
+                <div className="flex items-start gap-4">
+                  <div className="shrink-0 w-14 h-14 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-2xl text-white">
+                    {facts.zodiac.symbol}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-lg font-bold text-gray-900">{facts.zodiac.name}</h3>
+                    <p className="text-xs text-gray-400">{detail.symbolName} · {detail.element} · {detail.modality}</p>
+                  </div>
+                </div>
+
+                <p className="mt-3 text-sm text-gray-600 leading-relaxed">{detail.description}</p>
+
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {detail.traits.map((t) => (
+                    <span key={t} className="text-xs font-medium bg-violet-50 text-violet-700 border border-violet-100 px-2.5 py-1 rounded-full">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="mt-4 grid grid-cols-2 gap-2.5">
+                  <StatTile label="Ruling planet" value={detail.planet} />
+                  <StatTile label="Modality" value={detail.modality} />
+                  <StatTile label="Lucky color" value={detail.luckyColor} />
+                  <StatTile label="Lucky number" value={String(detail.luckyNumber)} />
+                  <StatTile label="Compatible with" value={detail.compatibleWith.join(", ")} />
+                  <StatTile label="Symbol" value={detail.symbolName} />
+                </div>
+              </div>
+              <p className="px-5 pb-4 text-xs text-gray-400">★ Just for fun — astrology isn&apos;t scientific fact.</p>
+            </div>
+          );
+        })()}
       </div>
 
       {/* ── Result — ring is visible from the start, fills on every press ── */}
@@ -284,36 +392,5 @@ export default function AgeCalculatorClient() {
         </div>
       </div>
     </div>
-
-    {/* ── Astrological sign detail — new card below the grid above, that
-        grid is untouched ── */}
-    {!loading && result && facts && (
-      <div className="mt-4 bg-white border border-gray-200 rounded-2xl overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50">
-          <span className="text-sm font-medium text-gray-600">Astrological Sign</span>
-          <span className="text-xs font-medium text-gray-400">{ZODIAC_DETAILS[facts.zodiac.name]?.dateRange}</span>
-        </div>
-        <div className="p-5 flex items-start gap-4">
-          <div className="shrink-0 w-14 h-14 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-2xl text-white">
-            {facts.zodiac.symbol}
-          </div>
-          <div className="min-w-0 flex-1">
-            <h3 className="text-lg font-bold text-gray-900">{facts.zodiac.name}</h3>
-            <p className="text-xs text-gray-400 mb-2.5">
-              {ZODIAC_DETAILS[facts.zodiac.name]?.element} sign · Ruled by {ZODIAC_DETAILS[facts.zodiac.name]?.planet}
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {ZODIAC_DETAILS[facts.zodiac.name]?.traits.map((t) => (
-                <span key={t} className="text-xs font-medium bg-violet-50 text-violet-700 border border-violet-100 px-2.5 py-1 rounded-full">
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-        <p className="px-5 pb-4 text-xs text-gray-400">★ Just for fun — astrology isn&apos;t scientific fact.</p>
-      </div>
-    )}
-    </>
   );
 }
