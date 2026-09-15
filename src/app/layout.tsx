@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import SessionProvider from "@/components/SessionProvider";
 import PageViewTracker from "@/components/analytics/PageViewTracker";
 import { Suspense } from "react";
-import Script from "next/script";
+import AdSenseLoader from "@/components/AdSenseLoader";
 import { FREE_TOOLS } from "@/lib/tools";
 import { BASE_URL } from "@/lib/site";
 
@@ -83,13 +83,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             nothing left for it to conflict with. AdSense's own verification
             crawler executes JavaScript, so it finds the script here fine;
             the <meta> tag above is the primary, hydration-safe verification
-            signal either way. */}
-        <Script
-          async
-          strategy="afterInteractive"
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7420276461237909"
-          crossOrigin="anonymous"
-        />
+            signal either way.
+            AdSenseLoader itself decides WHETHER to mount the script at all —
+            production only, and only on pages canShowAds() allows — since
+            the script's mere presence can trigger Google Auto Ads with no
+            <ins> tag or push() call needed. */}
+        <AdSenseLoader />
         <Suspense fallback={null}>
           <PageViewTracker />
         </Suspense>
