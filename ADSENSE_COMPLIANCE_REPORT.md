@@ -36,18 +36,16 @@ media downloaders, AI-detection-bypass tools, hacking tools, fake download
 buttons, forced redirects, pop-unders, autoplay) had **no findings** during
 the audit — nothing to fix.
 
-## `TODO(owner):` items — you need to fill these in
+## `TODO(owner):` items — resolved
 
-All in `src/app/about/page.tsx`, "Who runs SaaSToolz" section:
-
-- `[TODO(owner): operator or company name]` — the legal name of the person
-  or entity operating SaaSToolz.
-- `[TODO(owner): country]` — the country you (or the entity) operate from.
-
-No other facts were invented anywhere in this change set. The About page's
-operator email intentionally links to the existing `/contact` page rather
-than a new email address, since no verified general-purpose inbox was
-available to reuse.
+The "Who runs SaaSToolz" section (`src/app/about/page.tsx`) originally had
+`TODO(owner):` placeholders for a specific operator/company name and
+country. Rather than invent those, it now describes the site as an
+independent project run by a solo freelance developer — framing you
+provided directly, not a fabricated legal name or location. No facts were
+invented anywhere in this change set. The section's contact link points to
+the existing `/contact` page rather than a new email address, since no
+verified general-purpose inbox was available to reuse.
 
 ## Verification
 

@@ -47,10 +47,11 @@ export default function AboutPage() {
       <div className="border border-gray-100 rounded-2xl p-6 mb-12">
         <h2 className="text-lg font-bold text-gray-900 mb-2">Who runs SaaSToolz</h2>
         <p className="text-gray-600 text-sm leading-relaxed">
-          SaaSToolz is operated by{" "}
-          <span className="text-amber-600">[TODO(owner): operator or company name]</span>, based in{" "}
-          <span className="text-amber-600">[TODO(owner): country]</span>. For
-          questions, reach us via the{" "}
+          SaaSToolz is an independent project, built and run by a solo
+          freelance developer to solve the everyday problems people run into
+          with digital tools online — too many logins, paywalls, and bloated
+          software for tasks that should take thirty seconds. For questions,
+          reach us via the{" "}
           <Link href="/contact" className="text-violet-600 hover:underline">Contact</Link> page.
         </p>
       </div>
