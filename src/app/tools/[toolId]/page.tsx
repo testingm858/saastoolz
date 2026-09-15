@@ -24,6 +24,7 @@ import { getAdCodes } from "@/lib/ads";
 import { adSlotKey } from "@/lib/adPlacements";
 import { canShowAds } from "@/lib/ads/policy";
 import { isBotOrPrefetchRequest } from "@/lib/bot-detect";
+import Disclaimer from "@/components/Disclaimer";
 import LikeButton from "@/components/LikeButton";
 import ToolTimeTracker from "@/components/analytics/ToolTimeTracker";
 import Link from "next/link";
@@ -31,6 +32,22 @@ import Link from "next/link";
 interface Props {
   params: Promise<{ toolId: string }>;
 }
+
+// YMYL ("Your Money or Your Life") tools — health, finance, or legal
+// calculators/templates — get a disclaimer so a bare number or template
+// doesn't read as professional advice.
+const DISCLAIMER_TOOLS: Record<string, "medical" | "financial" | "legal"> = {
+  "pregnancy-calculator": "medical",
+  "bmi-calculator": "medical",
+  "calorie-calculator": "medical",
+  "bmr-calculator": "medical",
+  "loan-calculator": "financial",
+  "mortgage-calculator": "financial",
+  "roi-calculator": "financial",
+  "gst-calculator": "financial",
+  "currency-converter": "financial",
+  "contract-builder": "legal",
+};
 
 // PRO tools are hidden site-wide — only free tools get a page at all
 // (isPremium is still checked below as a hard gate for any tool reached by
@@ -204,6 +221,8 @@ export default async function ToolPage({ params }: Props) {
         /* Tool interface */
         <ToolInterface tool={tool} />
       )}
+
+      {DISCLAIMER_TOOLS[tool.id] && <Disclaimer type={DISCLAIMER_TOOLS[tool.id]} />}
 
       {/* Step-by-step usage instructions */}
       {steps.length > 0 && (
