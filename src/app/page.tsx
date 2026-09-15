@@ -5,10 +5,7 @@ import { FREE_TOOLS, CATEGORY_META } from "@/lib/tools";
 import prisma from "@/lib/prisma";
 import ToolCard from "@/components/ToolCard";
 import HeroSearch from "@/components/HeroSearch";
-import AdSlot from "@/components/AdSlot";
 import AnnouncementBanner from "@/components/AnnouncementBanner";
-import { getAdCodes } from "@/lib/ads";
-import { adSlotKey } from "@/lib/adPlacements";
 import { getActiveAnnouncement } from "@/lib/announcements";
 
 const HOME_TITLE = "Free Online Tools for PDF, Images, SEO, Coding & More | SaaSToolz";
@@ -44,7 +41,6 @@ export default async function HomePage() {
   });
   const statsById = new Map(stats.map((s) => [s.toolId, s]));
 
-  const adCodes = await getAdCodes("home", ["bottom", "middle"]);
   const announcement = await getActiveAnnouncement();
 
   return (
@@ -92,11 +88,6 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* Ad placement — bottom of Hero */}
-      <div className="max-w-7xl mx-auto px-4">
-        <AdSlot code={adCodes[adSlotKey("home", "bottom")] ?? null} position="bottom" />
-      </div>
 
       {/* Free Tool Categories */}
       <section className="max-w-7xl mx-auto px-4 py-16">
@@ -163,11 +154,6 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
-
-      {/* Ad placement — after Why SaaSToolz? */}
-      <div className="max-w-7xl mx-auto px-4">
-        <AdSlot code={adCodes[adSlotKey("home", "middle")] ?? null} position="middle" />
-      </div>
 
       {/* CTA Banner */}
       <section className="relative overflow-hidden bg-gray-900 text-white py-8">

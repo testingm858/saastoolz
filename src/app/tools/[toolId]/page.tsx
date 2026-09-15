@@ -21,6 +21,7 @@ import RobotsTxtGeneratorClient from "@/components/RobotsTxtGeneratorClient";
 import AdSlot from "@/components/AdSlot";
 import { getAdCodes } from "@/lib/ads";
 import { adSlotKey } from "@/lib/adPlacements";
+import { canShowAds } from "@/lib/ads/policy";
 import LikeButton from "@/components/LikeButton";
 import ToolTimeTracker from "@/components/analytics/ToolTimeTracker";
 import Link from "next/link";
@@ -91,7 +92,8 @@ export default async function ToolPage({ params }: Props) {
   });
   const relatedStatsById = new Map(relatedStats.map((s) => [s.toolId, s]));
 
-  const adCodes = await getAdCodes("tool-action", ["middle", "bottom"]);
+  const showAds = canShowAds(`/tools/${tool.id}`);
+  const adCodes = showAds ? await getAdCodes("tool-action", ["middle", "bottom"]) : {};
 
   const seo = getToolSeo(tool);
   const { faqs, steps, intro } = seo;

@@ -7,20 +7,17 @@ import { cn } from "@/lib/utils";
 // snippet doesn't need a redeploy. Sizing follows orientation: left/right
 // placements are narrow verticals (skyscraper-style), everything else is a
 // wide horizontal banner.
+//
+// Renders nothing when no code is configured — an empty "Advertisement"
+// placeholder box that never fills is itself a poor ad-policy signal
+// (reserved space with no content), so we just don't reserve the space.
 export default function AdSlot({ code, position }: { code: string | null; position: AdPosition }) {
   const isVertical = orientationFor(position) === "vertical";
   const containerClass = isVertical ? "w-full max-w-[300px] mx-auto my-6" : "w-full max-w-3xl mx-auto my-6";
   const height = isVertical ? 600 : 100;
 
   if (!code) {
-    return (
-      <div
-        className={cn(containerClass, "rounded-xl border border-dashed border-gray-200 bg-gray-50 flex items-center justify-center")}
-        style={{ height }}
-      >
-        <span className="text-xs text-gray-300 uppercase tracking-wide">Advertisement</span>
-      </div>
-    );
+    return null;
   }
 
   return (
