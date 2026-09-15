@@ -33,13 +33,6 @@ export interface ToolField {
 }
 
 export const TOOL_FIELDS: Record<string, ToolField[]> = {
-  "bmi-calculator": [
-    { name: "weight", label: "Weight", type: "number", required: true, min: 1 },
-    { name: "height", label: "Height", type: "number", required: true, min: 1 },
-    { name: "unit", label: "Unit", type: "select", defaultValue: "metric", options: [
-      { label: "Metric (kg / cm)", value: "metric" }, { label: "Imperial (lb / in)", value: "imperial" },
-    ] },
-  ],
   "loan-calculator": [
     { name: "principal", label: "Loan amount", type: "number", required: true, min: 1 },
     { name: "rate", label: "Annual interest rate (%)", type: "number", required: true, min: 0, step: 0.1 },

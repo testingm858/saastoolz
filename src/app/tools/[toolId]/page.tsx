@@ -19,6 +19,7 @@ import ToolGuideContent from "@/components/tools/ToolGuideContent";
 import { TOOL_GUIDES } from "@/lib/toolGuides";
 import MetaTagGeneratorClient from "@/components/MetaTagGeneratorClient";
 import RobotsTxtGeneratorClient from "@/components/RobotsTxtGeneratorClient";
+import BmiCalculatorClient from "@/components/BmiCalculatorClient";
 import AdSlot from "@/components/AdSlot";
 import { getAdCodes } from "@/lib/ads";
 import { adSlotKey } from "@/lib/adPlacements";
@@ -215,6 +216,8 @@ export default async function ToolPage({ params }: Props) {
         <MetaTagGeneratorClient />
       ) : tool.id === "robots-txt" ? (
         <RobotsTxtGeneratorClient />
+      ) : tool.id === "bmi-calculator" ? (
+        <BmiCalculatorClient />
       ) : isFileTool(tool.id) ? (
         <FileToolInterface tool={tool} />
       ) : (
