@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   openGraph: { title: "Privacy Policy | SaaSToolz", description: "How SaaSToolz collects, uses and protects your data." },
 };
 
-const LAST_UPDATED = "July 15, 2026";
+const LAST_UPDATED = "September 15, 2026";
 
 export default function PrivacyPage() {
   return (
@@ -48,15 +48,59 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-lg font-semibold text-gray-900 mb-2">3. Third parties</h2>
           <p>
-            We use Stripe for billing, Google for optional sign-in, and — for
-            Pro/Enterprise AI tools — third-party AI providers (e.g. OpenAI,
-            ElevenLabs) to process the specific request you submit to that tool.
-            Each is bound by its own privacy terms.
+            We use Stripe for billing, Google for optional sign-in, third-party
+            advertising vendors (including Google AdSense) to show ads that help
+            keep our tools free, and — for Pro/Enterprise AI tools — third-party
+            AI providers (e.g. OpenAI, ElevenLabs) to process the specific
+            request you submit to that tool. Each is bound by its own privacy
+            terms.
           </p>
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">4. Your rights</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">4. Advertising</h2>
+          <p>
+            SaaSToolz displays ads served by Google and other third-party ad
+            vendors and networks to help keep our tools free to use. These
+            vendors, including Google, use cookies to serve ads based on your
+            prior visits to this and other websites. Google&apos;s use of
+            advertising cookies enables it and its partners to serve ads to you
+            based on your visits to this site and/or other sites on the
+            Internet.
+          </p>
+          <p className="mt-2">
+            You can opt out of personalized advertising by visiting{" "}
+            <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-violet-600 hover:underline">
+              Google Ads Settings
+            </a>. You can also opt out of a participating third-party
+            vendor&apos;s use of cookies for personalized advertising by
+            visiting{" "}
+            <a href="https://www.aboutads.info" target="_blank" rel="noopener noreferrer" className="text-violet-600 hover:underline">
+              www.aboutads.info
+            </a>.
+          </p>
+          <p className="mt-2">
+            Our ad vendors and networks may collect information through
+            cookies, web beacons, IP addresses, and device identifiers about
+            your visits to this and other websites in order to serve ads about
+            goods and services that may interest you. For more information
+            about how Google collects and uses this data, see{" "}
+            <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer" className="text-violet-600 hover:underline">
+              How Google uses information from sites or apps that use our
+              services
+            </a>.
+          </p>
+          <p className="mt-2">
+            If you are located in the European Economic Area, the United
+            Kingdom, or Switzerland, you will be shown a consent message when
+            you first visit this site that lets you choose whether to allow
+            personalized advertising and third-party advertising cookies. You
+            can change your choice at any time from that message.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">5. Your rights</h2>
           <p>
             You can request a copy of your data or ask us to delete your account
             and associated data at any time by contacting us — see the{" "}
@@ -67,16 +111,18 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">5. Cookies</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">6. Cookies</h2>
           <p>
-            We use a session cookie to keep you signed in and, if you use a paid
-            plan, a Stripe cookie during checkout. We don&apos;t use third-party
-            advertising trackers.
+            We use a session cookie to keep you signed in, a first-party
+            visitor cookie to measure anonymized tool usage, and, if you use a
+            paid plan, a Stripe cookie during checkout. Third-party ad vendors,
+            including Google, also set advertising cookies on this site — see
+            the Advertising section above for details and opt-out options.
           </p>
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">6. Contact</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">7. Contact</h2>
           <p>
             Questions about this policy? Reach us at{" "}
             <a href="mailto:privacy@saastoolz.com" className="text-violet-600 hover:underline">

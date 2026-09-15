@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   openGraph: { title: "Terms of Service | SaaSToolz", description: "The terms that govern your use of SaaSToolz." },
 };
 
-const LAST_UPDATED = "July 15, 2026";
+const LAST_UPDATED = "September 15, 2026";
 
 export default function TermsPage() {
   return (
@@ -60,7 +60,18 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">5. Availability</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">5. Advertising and third-party content</h2>
+          <p>
+            SaaSToolz is supported in part by advertising served by Google and
+            other third-party ad vendors on our tool and blog pages. Ads are
+            served by those third parties and we don&apos;t control their
+            content; see our <a href="/privacy" className="text-violet-600 hover:underline">Privacy Policy</a> for
+            details on advertising cookies and your opt-out options.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">6. Availability</h2>
           <p>
             We aim for high availability but don&apos;t guarantee the service will
             be uninterrupted or error-free. Tools are provided &quot;as is&quot;
@@ -69,7 +80,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">6. Termination</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">7. Termination</h2>
           <p>
             We may suspend or terminate accounts that violate these terms. You
             may stop using the service and delete your account at any time.
@@ -77,7 +88,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">7. Contact</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">8. Contact</h2>
           <p>
             Questions about these terms? Reach us at{" "}
             <a href="mailto:legal@saastoolz.com" className="text-violet-600 hover:underline">

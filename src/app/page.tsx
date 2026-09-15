@@ -151,8 +151,8 @@ export default async function HomePage() {
         <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Why SaaSToolz?</h2>
         <div className="grid md:grid-cols-3 gap-6">
           {[
-            { icon: <Zap className="w-6 h-6 text-white" />, gradient: "from-violet-500 to-purple-500", title: "Lightning Fast", desc: "Most tools process in your browser instantly - no waiting, no server round trips." },
-            { icon: <Shield className="w-6 h-6 text-white" />, gradient: "from-emerald-500 to-teal-500", title: "Privacy First", desc: "Files processed locally where possible. We never store your data. GDPR compliant." },
+            { icon: <Zap className="w-6 h-6 text-white" />, gradient: "from-violet-500 to-purple-500", title: "Lightning Fast", desc: "Get results in seconds - no signup and no waiting in a queue." },
+            { icon: <Shield className="w-6 h-6 text-white" />, gradient: "from-emerald-500 to-teal-500", title: "Privacy First", desc: "Client-side tools never leave your device. Server-side tools are processed securely and deleted within 1 hour." },
             { icon: <Star className="w-6 h-6 text-white" />, gradient: "from-amber-500 to-orange-500", title: "Free Forever", desc: `${FREE_TOOLS.length} tools are completely free with no account required. The free tier is genuinely useful.` },
           ].map((f) => (
             <div key={f.title} className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all">
