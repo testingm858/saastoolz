@@ -17,16 +17,30 @@ import { cn } from "@/lib/utils";
 // every breakpoint instead of being squeezed into a fixed box — the
 // config that actually matters for fill rate/revenue with responsive units.
 //
-// Renders nothing when no code is configured — an empty "Advertisement"
-// placeholder box that never fills is itself a poor ad-policy signal
-// (reserved space with no content), so we just don't reserve the space.
+// When no code is configured (nothing pasted in /admin/ads yet, or ads are
+// gated off in this environment — see lib/ads.ts), shows a dashed, clearly-
+// labeled placeholder instead of reserving invisible space — lets the site
+// owner see every slot's position/size while designing, without pretending
+// to be an actual ad (labeled, honest, not deceptive — that's the line
+// AdSense policy actually cares about, not whether a box is visible).
 export default function AdSlot({ code, position }: { code: string | null; position: AdPosition }) {
   const isVertical = orientationFor(position) === "vertical";
   const maxWidth = isVertical ? "max-w-[300px]" : "max-w-3xl";
   const height = isVertical ? 600 : 100;
 
   if (!code) {
-    return null;
+    return (
+      <div className={cn("w-full mx-auto my-8", maxWidth)}>
+        <div
+          className="w-full flex items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/60"
+          style={{ height }}
+        >
+          <span className="text-xs font-semibold text-gray-300 uppercase tracking-[0.2em] select-none">
+            Advertisement
+          </span>
+        </div>
+      </div>
+    );
   }
 
   return (
