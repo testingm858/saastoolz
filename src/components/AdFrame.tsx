@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 // Ad network snippets (Adsterra's invoke.js in particular) commonly call
 // document.write() internally. That works fine when a script is parsed
 // inline in the original document, but silently no-ops (or gets blocked
@@ -10,6 +12,7 @@
 // the iframe gets its own fresh document, so document.write() works exactly
 // as the ad network expects, for every network (Adsterra, AdSense, etc).
 export default function AdFrame({ html, height }: { html: string; height: number }) {
+  const [loaded, setLoaded] = useState(false);
   const srcDoc = `<!DOCTYPE html><html><head><style>html,body{margin:0;padding:0;display:flex;align-items:center;justify-content:center;overflow:hidden;}</style></head><body>${html}</body></html>`;
 
   return (
@@ -18,6 +21,11 @@ export default function AdFrame({ html, height }: { html: string; height: number
       title="Advertisement"
       style={{ width: "100%", height, border: "none", overflow: "hidden" }}
       scrolling="no"
+      onLoad={() => setLoaded(true)}
+      // A quick fade once the creative has actually loaded reads as
+      // intentional design rather than a layout pop-in — small touch, no
+      // effect on the ad content itself.
+      className={`transition-opacity duration-500 ${loaded ? "opacity-100" : "opacity-0"}`}
     />
   );
 }
