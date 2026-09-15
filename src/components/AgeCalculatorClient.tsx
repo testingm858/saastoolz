@@ -41,6 +41,24 @@ function getZodiac(month: number, day: number) {
   return result;
 }
 
+// Extra detail shown in the astrological sign card below — keyed by name
+// rather than folded into ZODIAC_SIGNS since Capricorn appears twice there
+// (wraps across the year boundary) and would otherwise duplicate this data.
+const ZODIAC_DETAILS: Record<string, { element: string; planet: string; dateRange: string; traits: string[] }> = {
+  Aries: { element: "Fire", planet: "Mars", dateRange: "Mar 21 – Apr 19", traits: ["Bold", "Ambitious", "Energetic", "Competitive"] },
+  Taurus: { element: "Earth", planet: "Venus", dateRange: "Apr 20 – May 20", traits: ["Reliable", "Patient", "Practical", "Devoted"] },
+  Gemini: { element: "Air", planet: "Mercury", dateRange: "May 21 – Jun 20", traits: ["Curious", "Adaptable", "Witty", "Communicative"] },
+  Cancer: { element: "Water", planet: "Moon", dateRange: "Jun 21 – Jul 22", traits: ["Nurturing", "Intuitive", "Protective", "Emotional"] },
+  Leo: { element: "Fire", planet: "Sun", dateRange: "Jul 23 – Aug 22", traits: ["Confident", "Generous", "Charismatic", "Creative"] },
+  Virgo: { element: "Earth", planet: "Mercury", dateRange: "Aug 23 – Sep 22", traits: ["Analytical", "Meticulous", "Practical", "Modest"] },
+  Libra: { element: "Air", planet: "Venus", dateRange: "Sep 23 – Oct 22", traits: ["Diplomatic", "Fair-minded", "Social", "Gracious"] },
+  Scorpio: { element: "Water", planet: "Pluto", dateRange: "Oct 23 – Nov 21", traits: ["Passionate", "Resourceful", "Determined", "Intense"] },
+  Sagittarius: { element: "Fire", planet: "Jupiter", dateRange: "Nov 22 – Dec 21", traits: ["Adventurous", "Optimistic", "Independent", "Honest"] },
+  Capricorn: { element: "Earth", planet: "Saturn", dateRange: "Dec 22 – Jan 19", traits: ["Disciplined", "Ambitious", "Patient", "Responsible"] },
+  Aquarius: { element: "Air", planet: "Uranus", dateRange: "Jan 20 – Feb 18", traits: ["Original", "Independent", "Humanitarian", "Inventive"] },
+  Pisces: { element: "Water", planet: "Neptune", dateRange: "Feb 19 – Mar 20", traits: ["Compassionate", "Artistic", "Intuitive", "Gentle"] },
+};
+
 // Days lived since the last birthday, out of the days in that birthday
 // year — drives the progress ring. Always relative to the real current
 // date (not the optional "as of" override below), since "next birthday"
@@ -186,6 +204,7 @@ export default function AgeCalculatorClient() {
   })();
 
   return (
+    <>
     <div className="grid md:grid-cols-2 gap-4 items-start">
       {/* ── Form ─────────────────────────────────────────────────────── */}
       <div className="min-w-0 bg-white border border-gray-200 rounded-2xl overflow-hidden">
@@ -265,5 +284,36 @@ export default function AgeCalculatorClient() {
         </div>
       </div>
     </div>
+
+    {/* ── Astrological sign detail — new card below the grid above, that
+        grid is untouched ── */}
+    {!loading && result && facts && (
+      <div className="mt-4 bg-white border border-gray-200 rounded-2xl overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50">
+          <span className="text-sm font-medium text-gray-600">Astrological Sign</span>
+          <span className="text-xs font-medium text-gray-400">{ZODIAC_DETAILS[facts.zodiac.name]?.dateRange}</span>
+        </div>
+        <div className="p-5 flex items-start gap-4">
+          <div className="shrink-0 w-14 h-14 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-2xl text-white">
+            {facts.zodiac.symbol}
+          </div>
+          <div className="min-w-0 flex-1">
+            <h3 className="text-lg font-bold text-gray-900">{facts.zodiac.name}</h3>
+            <p className="text-xs text-gray-400 mb-2.5">
+              {ZODIAC_DETAILS[facts.zodiac.name]?.element} sign · Ruled by {ZODIAC_DETAILS[facts.zodiac.name]?.planet}
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {ZODIAC_DETAILS[facts.zodiac.name]?.traits.map((t) => (
+                <span key={t} className="text-xs font-medium bg-violet-50 text-violet-700 border border-violet-100 px-2.5 py-1 rounded-full">
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+        <p className="px-5 pb-4 text-xs text-gray-400">★ Just for fun — astrology isn&apos;t scientific fact.</p>
+      </div>
+    )}
+    </>
   );
 }
