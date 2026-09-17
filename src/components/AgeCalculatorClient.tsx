@@ -348,9 +348,9 @@ export default function AgeCalculatorClient({ steps, toolName }: { steps: string
           return (
             <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
               <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50">
-                <span className="flex items-center gap-1.5 text-sm font-medium text-gray-600">
+                <h2 className="flex items-center gap-1.5 text-sm font-medium text-gray-600">
                   <Sparkles className="w-3.5 h-3.5 text-violet-400" /> Astrological Sign
-                </span>
+                </h2>
                 <span className="text-xs font-medium text-gray-400">{detail.dateRange}</span>
               </div>
               <div className="p-5">

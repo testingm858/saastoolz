@@ -30,6 +30,7 @@ export default function AboutPage() {
         <Link href="/privacy" className="text-violet-600 hover:underline">Privacy Policy</Link> for the full picture.
       </p>
 
+      <h2 className="text-lg font-bold text-gray-900 mb-4">Why SaaSToolz</h2>
       <div className="grid md:grid-cols-3 gap-6 mb-12">
         {[
           { icon: <Zap className="w-5 h-5 text-violet-600" />, title: "Fast", desc: "Get a result in seconds — no queues, no waiting." },

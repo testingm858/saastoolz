@@ -48,7 +48,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     ],
   },
   "pdf-compress": {
-    title: "Compress PDF Online Free — Reduce File Size, No Signup | SaaSToolz",
+    title: "Compress PDF Online Free — Reduce File Size | SaaSToolz",
     metaDescription:
       "Shrink large PDF files for email or upload limits without losing readability. Choose a compression level, download instantly — free, no signup.",
     intro:
@@ -111,7 +111,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     ],
   },
   "pdf-ocr": {
-    title: "PDF OCR Online Free — Make Scanned PDFs Searchable | SaaSToolz",
+    title: "PDF OCR Online Free — Scanned PDFs Searchable | SaaSToolz",
     metaDescription:
       "Extract text from scanned PDFs and images in 14 languages. Make old documents searchable and copyable — free, no signup, no installs.",
     intro:
@@ -132,7 +132,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     ],
   },
   "image-compress": {
-    title: "Compress Images Online Free — No Quality Loss, No Signup | SaaSToolz",
+    title: "Compress Images Online Free — No Quality Loss | SaaSToolz",
     metaDescription:
       "Shrink JPG, PNG and WebP file sizes for faster websites and easier sharing, without visible quality loss. Free, instant, no signup.",
     intro:
@@ -153,7 +153,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     ],
   },
   "image-convert": {
-    title: "Convert Image Format Online Free — JPG, PNG, WebP, AVIF | SaaSToolz",
+    title: "Convert Images Free — JPG, PNG, WebP, AVIF | SaaSToolz",
     metaDescription:
       "Convert images between JPG, PNG, WebP, AVIF and SVG in one click. Free, fast, no signup, no software to install.",
     intro:
@@ -174,7 +174,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     ],
   },
   "qr-generator": {
-    title: "QR Code Generator — Free, No Signup, Instant Download | SaaSToolz",
+    title: "QR Code Generator — Free, Instant Download | SaaSToolz",
     metaDescription:
       "Create QR codes for URLs, text, WiFi credentials, and vCard contacts in seconds. Free, downloadable as PNG/SVG, no signup or watermark.",
     intro:
@@ -195,7 +195,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     ],
   },
   "json-formatter": {
-    title: "JSON Formatter & Validator Online Free, No Signup | SaaSToolz",
+    title: "JSON Formatter & Validator Online Free | SaaSToolz",
     metaDescription:
       "Format, validate and beautify JSON instantly with syntax highlighting and clear error messages. Free, browser-based, no signup.",
     intro:
@@ -216,7 +216,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     ],
   },
   "password-generator": {
-    title: "Strong Password Generator — Free, Secure, No Signup | SaaSToolz",
+    title: "Strong Password Generator — Free & Secure | SaaSToolz",
     metaDescription:
       "Generate strong, random passwords with custom length and character rules. Free, no signup, and never stored on our servers.",
     intro:
@@ -237,7 +237,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     ],
   },
   "word-counter": {
-    title: "Word Counter Online Free — Words, Characters & Reading Time | SaaSToolz",
+    title: "Word Counter Online Free — Words & Reading Time | SaaSToolz",
     metaDescription:
       "Count words, characters, sentences and estimated reading time as you type or paste. Free, instant, no signup.",
     intro:
@@ -258,7 +258,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     ],
   },
   "loan-calculator": {
-    title: "Loan / EMI Calculator — Free, Instant Amortization | SaaSToolz",
+    title: "Loan / EMI Calculator — Free, Instant | SaaSToolz",
     metaDescription:
       "Calculate your monthly EMI, total interest and full amortization schedule for any loan amount, rate and term. Free, instant, no signup.",
     intro:
@@ -300,7 +300,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     ],
   },
   "unit-converter": {
-    title: "Unit Converter — Length, Weight, Temperature, Volume | SaaSToolz",
+    title: "Unit Converter — Length, Weight, Temp, Volume | SaaSToolz",
     metaDescription:
       "Convert instantly between length, weight, temperature and volume units, right in your browser. Free, no signup, no ads on results.",
     intro:
@@ -320,7 +320,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     ],
   },
   "invoice-generator": {
-    title: "Free Invoice Generator Online — No Signup, Instant PDF | SaaSToolz",
+    title: "Free Invoice Generator Online — Instant PDF | SaaSToolz",
     metaDescription:
       "Create a professional invoice in your browser and export it as PDF or PNG in seconds. Free, no signup, no watermark, no account required.",
     intro:
@@ -525,17 +525,22 @@ const GENERIC_GENERATE_FAQS = (tool: Tool): ToolFaq[] => [
 ];
 
 function fallbackTitle(tool: Tool): string {
-  return `${tool.name} Online — Free, No Signup | SaaSToolz`;
+  // Google truncates titles past ~60 characters — longer tool names (e.g.
+  // "Cron Expression Generator") push the full "Online — Free, No Signup"
+  // suffix over that limit, so drop "Online" for those rather than let the
+  // title get cut off mid-word in search results.
+  const full = `${tool.name} Online — Free, No Signup | SaaSToolz`;
+  return full.length <= 60 ? full : `${tool.name} — Free, No Signup | SaaSToolz`;
 }
 
 function fallbackDescription(tool: Tool): string {
   const fileBased = isFileTool(tool.id);
   const suffix =
     tool.processing === "client"
-      ? "100% free, no signup, and works instantly in your browser."
+      ? "100% free, no signup required — everything runs instantly in your browser and nothing you enter is ever uploaded."
       : fileBased
-        ? "Free, no signup — files are uploaded securely and removed from our servers within 1 hour."
-        : "Free, no signup — processed on our servers and never stored.";
+        ? "Free, no signup, no watermark — files are uploaded securely and permanently removed from our servers within 1 hour."
+        : "Free, no signup, no usage limits — processed securely and never stored on our servers.";
   return `${tool.description}. ${suffix}`;
 }
 
