@@ -92,7 +92,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
   "pdf-to-word": {
     title: "Convert PDF to Word Online Free, No Signup | SaaSToolz",
     metaDescription:
-      "Turn a PDF into an editable Word (.docx) file while keeping the original layout, fonts and images intact. Free, fast, no signup required.",
+      "Turn a PDF into an editable Word (.docx) file while keeping the original layout, fonts and images intact. Free, fast, no signup, no watermark on the download.",
     intro:
       "PDF to Word converts a static PDF into an editable .docx file, preserving paragraphs, headings, tables and images as closely as possible so you can pick up editing in Word or Google Docs instead of retyping the whole document.",
     steps: [
@@ -403,6 +403,174 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "Do I need to regenerate it every time I add a page?", a: "Yes, ideally — or use a dynamically-generated sitemap on your site so it always reflects your current pages automatically." },
       { q: "Do changefreq and priority actually matter to Google?", a: "Google has said it mostly ignores both today — lastmod is the field it actually uses as a freshness signal, so keep that one accurate rather than fabricated." },
       { q: "How does a sitemap relate to robots.txt?", a: "They're complementary: robots.txt controls what crawlers are allowed to crawl, while a sitemap tells them what exists and where to find it. Reference your sitemap's URL directly inside robots.txt so both work together." },
+    ],
+  },
+  "html-formatter": {
+    title: "HTML Formatter & Beautifier Online Free | SaaSToolz",
+    metaDescription:
+      "Beautify minified or messy HTML with proper indentation in one click. Free, browser-based HTML formatter with no signup and no size limit for typical pages.",
+    intro:
+      "HTML Formatter takes minified, compressed, or inconsistently indented HTML and reformats it with clean, readable indentation — useful for debugging a page's structure, reviewing someone else's markup, or making a minified file editable again.",
+    steps: [
+      "Paste your HTML into the input box.",
+      "The formatter reformats it instantly with consistent indentation.",
+      "Review the beautified output.",
+      "Copy the formatted HTML to your clipboard.",
+    ],
+    faqs: [
+      { q: "Will formatting change how my HTML renders?", a: "No — only whitespace and indentation change. Tags, attributes and content stay exactly as they were, so rendered output is identical." },
+      { q: "Can I use this to shrink HTML for production instead?", a: "That's the opposite operation — use HTML Minifier to strip whitespace and comments for a smaller production file." },
+      { q: "Does this tool send my HTML anywhere?", a: "Yes — the HTML you paste is sent to our servers to be formatted and the result is returned to you; we don't store the content itself." },
+      { q: "Is there a size limit?", a: "No hard limit for typical pages — very large HTML documents may take a moment longer to render." },
+      { q: "Does it fix broken or invalid HTML?", a: "It reformats whatever you paste, but doesn't validate or repair malformed markup — check unclosed tags separately if the source looks broken." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "css-minifier": {
+    title: "CSS Minifier Online — Free, Instant, No Signup | SaaSToolz",
+    metaDescription:
+      "Shrink CSS files for production by stripping whitespace, comments and redundant semicolons. Free CSS minifier, instant results, no signup required.",
+    intro:
+      "CSS Minifier strips whitespace, comments, and redundant characters from a stylesheet to produce the smallest possible file for production — the same rules, just packed tighter, with no change in how the page renders.",
+    steps: [
+      "Paste your CSS into the input box.",
+      "The minifier compresses it instantly, removing whitespace and comments.",
+      "Compare the before/after size shown on screen.",
+      "Copy the minified CSS to your clipboard.",
+    ],
+    faqs: [
+      { q: "Will minifying change how my page looks?", a: "No — minifying only removes whitespace, comments and redundant characters. Every rule and selector still applies exactly as before." },
+      { q: "How much smaller will my CSS get?", a: "It varies with how much whitespace and repetition the original has, but stylesheets with a lot of utility classes often shrink 20–30% from minification alone." },
+      { q: "Do I need this if I already use a build tool?", a: "No — Vite, webpack and similar bundlers already minify CSS in production builds. This tool is for a standalone stylesheet served without a build step." },
+      { q: "Can I reverse it and get readable CSS back?", a: "Yes — use CSS Formatter to re-indent a minified stylesheet for editing." },
+      { q: "Does this tool send my CSS anywhere?", a: "Yes — the CSS you paste is sent to our servers to be minified and the result is returned to you; we don't store the content itself." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "js-minifier": {
+    title: "JS Minifier Online — Free JavaScript Minifier | SaaSToolz",
+    metaDescription:
+      "Minify JavaScript for production: strip whitespace and comments, shorten variable names, and remove unreachable code. Free, instant, no signup.",
+    intro:
+      "JS Minifier compresses a JavaScript file by removing whitespace and comments, shortening local variable names, and stripping code the parser can prove is unreachable — useful for a standalone script or vendored file that isn't already running through a build pipeline.",
+    steps: [
+      "Paste your JavaScript into the input box.",
+      "The minifier compresses it instantly.",
+      "Compare the before/after size shown on screen.",
+      "Copy the minified code to your clipboard.",
+    ],
+    faqs: [
+      { q: "Will minifying break my JavaScript?", a: "No — the minifier only performs transformations that preserve behavior exactly: renaming local variables, stripping whitespace/comments, and removing genuinely unreachable code." },
+      { q: "Do I need this if I use Next.js, Vite or webpack?", a: "No — production builds from those tools already minify JavaScript automatically. This tool is for a standalone script outside a build pipeline." },
+      { q: "Does minifying bundle multiple files together?", a: "No — that's a separate job (bundling) handled by build tools like webpack or esbuild. This minifies one file at a time." },
+      { q: "Can I get readable code back from a minified file?", a: "Only partially — a beautifier can re-indent it, but original variable names are gone for good once minified. Use JS Beautifier for readable formatting of what remains." },
+      { q: "Does this tool send my code anywhere?", a: "Yes — the JavaScript you paste is sent to our servers to be minified and the result is returned to you; we don't store the content itself." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "csv-to-json": {
+    title: "CSV to JSON Converter — Free, Instant, No Signup | SaaSToolz",
+    metaDescription:
+      "Convert CSV rows to a JSON array in one click — headers become keys automatically. Free CSV to JSON converter, no signup, works with pasted data or files.",
+    intro:
+      "CSV to JSON converts spreadsheet-style CSV data into a JSON array of objects, using the header row as each object's keys — handy for feeding a spreadsheet export into an API, a script, or a NoSQL database.",
+    steps: [
+      "Paste your CSV data, or upload a .csv file.",
+      "The converter uses the first row as keys and builds a JSON array automatically.",
+      "Review the generated JSON output.",
+      "Copy the result or download it as a .json file.",
+    ],
+    faqs: [
+      { q: "What if my CSV doesn't have a header row?", a: "The converter expects the first row to be column headers, which become each object's keys — add a header row first if your data doesn't have one." },
+      { q: "Does it handle commas inside quoted fields?", a: "Yes — standard CSV quoting (commas or line breaks inside double-quoted fields) is parsed correctly, not just naive comma-splitting." },
+      { q: "Can I convert the other direction too?", a: "Yes — use JSON to CSV to flatten a JSON array of objects back into spreadsheet rows." },
+      { q: "Is there a row limit?", a: "No hard limit for typical exports; very large CSV files may take a little longer to process." },
+      { q: "Does this tool send my data anywhere?", a: "Yes — the CSV you provide is sent to our servers to be converted and the result is returned to you; we don't store the content itself." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "barcode-generator": {
+    title: "Barcode Generator — EAN-13, Code 128, UPC | SaaSToolz",
+    metaDescription:
+      "Generate scannable barcodes in EAN-13, Code 128, UPC and other common formats. Free barcode generator, downloadable as PNG or SVG, no signup or watermark.",
+    intro:
+      "Barcode Generator creates a scannable barcode from a number or text value in the format you choose — EAN-13, Code 128, UPC and others — ready to download and use on packaging, inventory labels, or internal tracking.",
+    steps: [
+      "Choose the barcode format you need — EAN-13, Code 128, UPC or another supported type.",
+      "Enter the value you want encoded.",
+      "Preview the generated barcode.",
+      "Download it as a PNG or SVG file.",
+    ],
+    faqs: [
+      { q: "Which barcode format should I use?", a: "EAN-13 and UPC are standard for retail products; Code 128 is more flexible and commonly used for internal inventory or shipping labels. Check what your scanner or retailer requires before picking one." },
+      { q: "Do EAN-13 and UPC codes need to be officially registered?", a: "For retail sale, yes — EAN/UPC prefixes are issued by GS1. This tool generates a valid barcode image from any number you provide, but doesn't register or issue new product codes." },
+      { q: "What's the difference between the PNG and SVG download?", a: "PNG is a fixed-resolution image suitable for screens and most printing; SVG is a vector file that scales to any size — useful for large-format labels — with no quality loss." },
+      { q: "Will the barcode still scan if printed small?", a: "Scannability depends on print resolution and the scanner used — test a sample print at your intended size before running a full batch." },
+      { q: "What's the difference between a barcode and a QR code?", a: "A barcode encodes data in a single line and holds relatively little, usually just a product number. A QR code encodes data in two dimensions and can hold dramatically more, like a full URL or contact card." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no watermark on the output." },
+    ],
+  },
+  "jpg-to-pdf": {
+    title: "JPG to PDF Converter — Free, No Watermark | SaaSToolz",
+    metaDescription:
+      "Convert one or more JPG images into a single PDF, in the order you choose. Free JPG to PDF converter, no signup, no watermark, files deleted within an hour.",
+    intro:
+      "JPG to PDF combines one or more JPG images into a single PDF document — upload photos, scanned pages, or screenshots, arrange them in order, and download one PDF instead of separate image files.",
+    steps: [
+      "Upload one or more JPG images using the file picker or by dragging them in.",
+      "Drag the thumbnails to set the page order for the final PDF.",
+      "Click \"Convert to PDF\" to combine them.",
+      "Download the resulting PDF — ready to send or print immediately.",
+    ],
+    faqs: [
+      { q: "Can I convert multiple images into one PDF?", a: "Yes — upload as many JPGs as you need and they're combined into a single multi-page PDF in the order you arrange them." },
+      { q: "Will converting reduce image quality?", a: "No — images are embedded in the PDF as-is, with no re-compression, so they look exactly as sharp as the originals." },
+      { q: "The resulting PDF is too large to email — what now?", a: "Run it through Compress PDF afterward. Photos, especially from a phone camera, add up quickly across multiple pages." },
+      { q: "Can I make a scanned document searchable after converting?", a: "Yes — a JPG-to-PDF conversion is still just an image. Run the result through PDF OCR afterward to make the text searchable and copyable." },
+      { q: "How do I go the other direction?", a: "Use PDF to JPG to extract individual images from an existing PDF." },
+      { q: "Is my data safe when using this tool?", a: "Yes. Files are processed securely and deleted from our servers within 1 hour." },
+    ],
+  },
+  "pdf-to-jpg": {
+    title: "PDF to JPG Converter — Free, High-Quality | SaaSToolz",
+    metaDescription:
+      "Convert PDF pages into high-quality JPG images, one file per page. Free PDF to JPG converter, no signup, no watermark, downloaded instantly as a .zip.",
+    intro:
+      "PDF to JPG converts every page of a PDF into a separate high-quality JPG image — useful for dropping a page into a slide deck, a design tool, or anywhere else that needs an image instead of a PDF.",
+    steps: [
+      "Upload the PDF you want to convert.",
+      "Choose the pages to convert — all pages, or a specific range.",
+      "Click \"Convert to JPG\" and let it process.",
+      "Download the images individually or as a .zip file.",
+    ],
+    faqs: [
+      { q: "Do I get one image per page?", a: "Yes — each PDF page is converted into its own separate JPG image, packaged as a .zip when there's more than one." },
+      { q: "Can I convert just specific pages?", a: "Yes — choose a specific page range instead of converting the whole document." },
+      { q: "How is image quality determined?", a: "Pages are rendered at a resolution suited for screen use and standard printing; very high-DPI print work may benefit from working with the original PDF directly." },
+      { q: "Can I go the other direction, from images to PDF?", a: "Yes — use JPG to PDF to combine images back into a single PDF document." },
+      { q: "Will this work on a password-protected PDF?", a: "Unlock it first with the Unlock PDF tool, then convert — encrypted files can't be processed directly." },
+      { q: "Is my data safe when using this tool?", a: "Yes. Files are processed securely and deleted from our servers within 1 hour." },
+    ],
+  },
+  "pdf-rotate": {
+    title: "Rotate PDF Online Free — 90, 180, 270 Degrees | SaaSToolz",
+    metaDescription:
+      "Fix sideways or upside-down PDF pages by rotating them 90, 180 or 270 degrees. Free PDF rotator, no signup, rotate all pages or just the ones you choose.",
+    intro:
+      "Rotate PDF fixes pages that were scanned or saved sideways or upside-down — rotate the whole document or just specific pages by 90, 180, or 270 degrees, without re-uploading or re-scanning anything.",
+    steps: [
+      "Upload the PDF with pages that need rotating.",
+      "Select which pages to rotate — all of them, or specific ones.",
+      "Choose the rotation angle: 90, 180 or 270 degrees.",
+      "Download the corrected PDF.",
+    ],
+    faqs: [
+      { q: "Can I rotate just one page instead of the whole document?", a: "Yes — select specific pages to rotate while leaving the rest of the document untouched." },
+      { q: "Will rotating affect the PDF's text or image quality?", a: "No — pages are rotated as-is with no re-compression or re-rendering, so content looks exactly as it did before, just correctly oriented." },
+      { q: "Why do scanned PDFs end up sideways in the first place?", a: "Most often the original paper was fed into the scanner in landscape orientation, or a phone camera photo was taken sideways before being saved as a PDF." },
+      { q: "Can I rotate different pages by different amounts?", a: "Yes — select each page's rotation individually if different pages need different corrections." },
+      { q: "Is there a limit on how many pages I can rotate?", a: "Free use covers typical document lengths; very large PDFs may take a little longer to process." },
+      { q: "Is my data safe when using this tool?", a: "Yes. Files are processed securely and deleted from our servers within 1 hour." },
     ],
   },
 };
