@@ -5,12 +5,12 @@ import prisma from "@/lib/prisma";
 import ToolsListClient, { type ToolStatsMap } from "./ToolsListClient";
 
 export const metadata: Metadata = {
-  title: "All Tools",
-  description: `Browse all ${FREE_TOOLS.length} tools on SaaSToolz, searchable by name or category.`,
+  title: `Free Online Tools — ${FREE_TOOLS.length} Tools, No Signup`,
+  description: `Browse every free online tool on SaaSToolz — ${FREE_TOOLS.length} PDF, image, developer, calculator, design and writing tools, searchable by name. No signup, no cost.`,
   alternates: { canonical: "/tools" },
   openGraph: {
-    title: "All Tools | SaaSToolz",
-    description: `Browse all ${FREE_TOOLS.length} tools on SaaSToolz, searchable by name or category.`,
+    title: `Free Online Tools — ${FREE_TOOLS.length} Tools, No Signup | SaaSToolz`,
+    description: `Browse every free online tool on SaaSToolz — ${FREE_TOOLS.length} PDF, image, developer, calculator, design and writing tools, searchable by name. No signup, no cost.`,
   },
 };
 
