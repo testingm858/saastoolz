@@ -17,11 +17,15 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function BlogPage() {
-  const posts = await prisma.blogPost.findMany({
-    where: { published: true },
-    orderBy: { publishedAt: "desc" },
-    select: { slug: true, title: true, excerpt: true, coverImage: true, publishedAt: true, content: true, views: true, likes: true },
-  });
+  // Falls back to the empty state below on a DB hiccup rather than crashing
+  // the whole page.
+  const posts = await prisma.blogPost
+    .findMany({
+      where: { published: true },
+      orderBy: { publishedAt: "desc" },
+      select: { slug: true, title: true, excerpt: true, coverImage: true, publishedAt: true, content: true, views: true, likes: true },
+    })
+    .catch(() => []);
 
   if (posts.length === 0) {
     return (

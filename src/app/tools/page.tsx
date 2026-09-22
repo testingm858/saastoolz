@@ -19,10 +19,14 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function AllToolsPage() {
-  const stats = await prisma.toolStats.findMany({
-    where: { toolId: { in: FREE_TOOLS.map((t) => t.id) } },
-    select: { toolId: true, views: true, likes: true },
-  });
+  // Stats are cosmetic (view/like counts on cards) — don't let a DB hiccup
+  // take down the whole tools list.
+  const stats = await prisma.toolStats
+    .findMany({
+      where: { toolId: { in: FREE_TOOLS.map((t) => t.id) } },
+      select: { toolId: true, views: true, likes: true },
+    })
+    .catch(() => []);
   const statsMap: ToolStatsMap = Object.fromEntries(
     stats.map((s) => [s.toolId, { views: s.views, likes: s.likes }])
   );

@@ -35,10 +35,14 @@ export default async function HomePage() {
   const featuredFree = FREE_TOOLS.filter((t) => FEATURED_FREE.includes(t.id));
   const categories   = Object.entries(CATEGORY_META).filter(([k]) => !k.startsWith("ai-"));
 
-  const stats = await prisma.toolStats.findMany({
-    where: { toolId: { in: featuredFree.map((t) => t.id) } },
-    select: { toolId: true, views: true, likes: true },
-  });
+  // Stats are cosmetic (view/like counts on cards) — don't let a DB hiccup
+  // take down the whole homepage.
+  const stats = await prisma.toolStats
+    .findMany({
+      where: { toolId: { in: featuredFree.map((t) => t.id) } },
+      select: { toolId: true, views: true, likes: true },
+    })
+    .catch(() => []);
   const statsById = new Map(stats.map((s) => [s.toolId, s]));
 
   const announcement = await getActiveAnnouncement();

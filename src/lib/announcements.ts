@@ -13,10 +13,13 @@ export interface ActiveAnnouncement {
 // can keep older announcements around (disabled) as a lightweight history
 // instead of deleting them.
 export async function getActiveAnnouncement(): Promise<ActiveAnnouncement | null> {
-  const row = await prisma.announcement.findFirst({
-    where: { enabled: true },
-    orderBy: { createdAt: "desc" },
-    select: { id: true, badge: true, title: true, message: true, linkUrl: true, linkText: true },
-  });
+  // A DB hiccup shouldn't take down every page that renders the banner.
+  const row = await prisma.announcement
+    .findFirst({
+      where: { enabled: true },
+      orderBy: { createdAt: "desc" },
+      select: { id: true, badge: true, title: true, message: true, linkUrl: true, linkText: true },
+    })
+    .catch(() => null);
   return row;
 }

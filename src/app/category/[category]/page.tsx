@@ -48,16 +48,22 @@ export default async function CategoryPage({ params }: Props) {
   const content = CATEGORY_CONTENT[category as ToolCategory];
   const blogSlugs = CATEGORY_BLOG_SLUGS[category as ToolCategory] ?? [];
 
+  // Stats and related-guide links are cosmetic additions — don't let a DB
+  // hiccup take down the whole category page.
   const [stats, relatedPosts] = await Promise.all([
-    prisma.toolStats.findMany({
-      where: { toolId: { in: tools.map((t) => t.id) } },
-      select: { toolId: true, views: true, likes: true },
-    }),
+    prisma.toolStats
+      .findMany({
+        where: { toolId: { in: tools.map((t) => t.id) } },
+        select: { toolId: true, views: true, likes: true },
+      })
+      .catch(() => []),
     blogSlugs.length > 0
-      ? prisma.blogPost.findMany({
-          where: { slug: { in: blogSlugs }, published: true },
-          select: { title: true, slug: true, excerpt: true },
-        })
+      ? prisma.blogPost
+          .findMany({
+            where: { slug: { in: blogSlugs }, published: true },
+            select: { title: true, slug: true, excerpt: true },
+          })
+          .catch(() => [])
       : Promise.resolve([]),
   ]);
   const statsById = new Map(stats.map((s) => [s.toolId, s]));

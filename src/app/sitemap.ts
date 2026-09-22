@@ -57,10 +57,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     };
   });
 
-  const publishedPosts = await prisma.blogPost.findMany({
-    where: { published: true },
-    select: { slug: true, updatedAt: true },
-  });
+  // A DB hiccup should drop blog posts from the sitemap, not the whole thing.
+  const publishedPosts = await prisma.blogPost
+    .findMany({
+      where: { published: true },
+      select: { slug: true, updatedAt: true },
+    })
+    .catch(() => []);
   const blogPages: MetadataRoute.Sitemap = publishedPosts.map((post) => ({
     url: `${BASE_URL}/blog/${post.slug}`,
     lastModified: post.updatedAt,

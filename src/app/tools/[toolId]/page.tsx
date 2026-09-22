@@ -97,30 +97,37 @@ export default async function ToolPage({ params }: Props) {
   // Don't count bot/crawler requests (including AdSense's own crawler) or
   // Next.js route prefetches as real visits — just read the current count
   // for those instead of incrementing it.
+  // Stats, usage count and like state are cosmetic (view counts, a filled
+  // heart) — don't let a DB hiccup take down the whole tool page.
   const requestIsBot = isBotOrPrefetchRequest(await headers());
   const [statsRaw, usedCount, visitorId] = await Promise.all([
-    requestIsBot
+    (requestIsBot
       ? prisma.toolStats.findUnique({ where: { toolId: tool.id }, select: { views: true, likes: true } })
       : prisma.toolStats.upsert({
           where: { toolId: tool.id },
           create: { toolId: tool.id, views: 1 },
           update: { views: { increment: 1 } },
           select: { views: true, likes: true },
-        }),
-    prisma.toolUsage.count({ where: { toolId: tool.id } }),
+        })
+    ).catch(() => null),
+    prisma.toolUsage.count({ where: { toolId: tool.id } }).catch(() => 0),
     getVisitorId(),
   ]);
   const stats = statsRaw ?? { views: 0, likes: 0 };
   const alreadyLiked = visitorId
-    ? (await prisma.like.findUnique({
-        where: { targetType_targetId_visitorId: { targetType: "tool", targetId: tool.id, visitorId } },
-      })) !== null
+    ? (await prisma.like
+        .findUnique({
+          where: { targetType_targetId_visitorId: { targetType: "tool", targetId: tool.id, visitorId } },
+        })
+        .catch(() => null)) !== null
     : false;
 
-  const relatedStats = await prisma.toolStats.findMany({
-    where: { toolId: { in: relatedTools.map((t) => t.id) } },
-    select: { toolId: true, views: true, likes: true },
-  });
+  const relatedStats = await prisma.toolStats
+    .findMany({
+      where: { toolId: { in: relatedTools.map((t) => t.id) } },
+      select: { toolId: true, views: true, likes: true },
+    })
+    .catch(() => []);
   const relatedStatsById = new Map(relatedStats.map((s) => [s.toolId, s]));
 
   const showAds = canShowAds(`/tools/${tool.id}`);
