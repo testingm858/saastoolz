@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
 import { FREE_TOOLS, CATEGORY_META, type ToolCategory } from "@/lib/tools";
@@ -18,10 +18,15 @@ export type ToolStatsMap = Record<string, { views: number; likes: number }>;
 
 // The grid is 2, 3, 4 or 5 columns wide depending on the screen. A banner goes
 // after every ROWS_PER_AD full rows, so its position in the card list differs
-// per breakpoint (after card 10 on 2 columns, 15 on 3, 20 on 4, 25 on 5). We
-// emit a candidate after every ROWS_PER_AD-th card and show only the ones that
-// land on a full-row multiple at the current width, using Tailwind's
-// breakpoint display classes (written out literally so Tailwind keeps them).
+// per breakpoint (after card 10 on 2 columns, 15 on 3, 20 on 4, 25 on 5).
+//
+// Once the page has mounted we know the real column count and render only the
+// banners that belong at that width. That matters when real ad code is set:
+// a CSS-hidden banner would still load its ad, which counts as an invalid
+// impression. Before mount (server render) there is no width to read, so empty
+// placeholders alone are emitted for every candidate and hidden per breakpoint
+// with display classes (written out literally so Tailwind keeps them); with real
+// ad code nothing is emitted until the width is known.
 const ROWS_PER_AD = 5;
 const COLUMNS_BY_BREAKPOINT = { base: 2, sm: 3, md: 4, lg: 5 } as const;
 
@@ -33,6 +38,27 @@ function adVisibilityClass(afterCard: number): string {
     on(COLUMNS_BY_BREAKPOINT.md) ? "md:block" : "md:hidden",
     on(COLUMNS_BY_BREAKPOINT.lg) ? "lg:block" : "lg:hidden"
   );
+}
+
+// Mirrors the grid's breakpoints (sm 640, md 768, lg 1024) with media-query
+// listeners, so it stays in sync with the CSS columns exactly.
+function useGridColumns(): number | null {
+  const [cols, setCols] = useState<number | null>(null);
+  useEffect(() => {
+    const queries = [
+      window.matchMedia("(min-width: 640px)"),
+      window.matchMedia("(min-width: 768px)"),
+      window.matchMedia("(min-width: 1024px)"),
+    ];
+    const compute = () => {
+      const [sm, md, lg] = queries.map((q) => q.matches);
+      setCols(lg ? COLUMNS_BY_BREAKPOINT.lg : md ? COLUMNS_BY_BREAKPOINT.md : sm ? COLUMNS_BY_BREAKPOINT.sm : COLUMNS_BY_BREAKPOINT.base);
+    };
+    compute();
+    queries.forEach((q) => q.addEventListener("change", compute));
+    return () => queries.forEach((q) => q.removeEventListener("change", compute));
+  }, []);
+  return cols;
 }
 
 export default function ToolsListClient({ statsMap, adCode }: { statsMap: ToolStatsMap; adCode: string | null }) {
@@ -53,6 +79,7 @@ export default function ToolsListClient({ statsMap, adCode }: { statsMap: ToolSt
     });
   }, [query, category]);
 
+  const gridColumns = useGridColumns();
   const gridClass = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3";
 
   return (
@@ -108,7 +135,10 @@ export default function ToolsListClient({ statsMap, adCode }: { statsMap: ToolSt
           {filtered.map((tool, i) => {
             const position = i + 1;
             // Never trail an ad after the very last card.
-            const adAfter = adSlotVisible(adCode) && position % ROWS_PER_AD === 0 && position < filtered.length;
+            const isCandidate = adSlotVisible(adCode) && position % ROWS_PER_AD === 0 && position < filtered.length;
+            // Mounted: exactly the banners for this width. Not mounted yet: CSS-hidden
+            // placeholders only (never real ad code).
+            const adAfter = isCandidate && (gridColumns === null ? adCode === null : position % (ROWS_PER_AD * gridColumns) === 0);
             return (
               <Fragment key={tool.id}>
                 <ToolCard
@@ -117,7 +147,7 @@ export default function ToolsListClient({ statsMap, adCode }: { statsMap: ToolSt
                   likes={statsMap[tool.id]?.likes ?? 0}
                 />
                 {adAfter && (
-                  <div className={cn("col-span-full", adVisibilityClass(position))}>
+                  <div className={cn("col-span-full", gridColumns === null && adVisibilityClass(position))}>
                     <AdSlot code={adCode} position="middle" />
                   </div>
                 )}
