@@ -93,9 +93,9 @@ export const TOOL_GUIDES: Partial<Record<string, ToolGuide>> = {
         table: {
           headers: ["Level", "Best for"],
           rows: [
-            ["Low", "Documents that must stay perfectly text-selectable and sharp"],
+            ["Lossless", "Documents where nothing visible may change: contracts, forms, anything going to print"],
             ["Recommended", "Most cases — strong size reduction with high visual quality"],
-            ["Extreme", "When file size matters more than visual fidelity (e.g. a hard 5MB upload cap)"],
+            ["Smallest", "When file size matters most (e.g. a hard 5MB upload cap): images are reduced further, text stays sharp"],
           ],
         },
       },

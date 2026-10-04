@@ -9,10 +9,10 @@
 // encryption support at all), and pdf-ocr in pdf-ocr.ts (pdf-to-image.ts's
 // rasterizer + tesseract.js).
 
-import { PDFDocument, StandardFonts, rgb, degrees } from "pdf-lib";
-import sharp from "sharp";
+import { PDFDocument, PDFName, PDFNumber, PDFArray, PDFBool, PDFDict, PDFRawStream, decodePDFRawStream, StandardFonts, rgb, degrees } from "pdf-lib";
+import * as mupdf from "mupdf";
+import sharp, { type Sharp } from "sharp";
 import { sanitizeForFont } from "./pdf-font-utils";
-import { renderPdfPagesToJpg } from "./pdf-to-image";
 
 function assertPageNumbers(nums: number[], total: number, label = "page") {
   if (!Array.isArray(nums) || nums.length === 0) throw new Error(`Provide at least one ${label} number`);
@@ -192,88 +192,196 @@ export async function writeMetadata(
   return doc.save();
 }
 
-// Rasterizes every page to a recompressed JPEG and rebuilds the PDF from
-// those images — the same technique iLovePDF's compression levels use. This
-// squeezes far more out of image-heavy PDFs than structural compaction
-// alone (which can't touch embedded image data), at the cost of the page
-// becoming a flat image: text is no longer selectable/searchable. `scale`
-// controls render DPI (pdf.js base is 72 DPI, so scale 2 = ~144 DPI) and
-// `quality` is the JPEG re-encode quality — together they set where a given
-// compression level lands on the size/fidelity tradeoff.
-async function rasterizeAndRecompress(buffer: ArrayBuffer, scale: number, quality: number): Promise<Uint8Array> {
-  const srcDoc = await PDFDocument.load(buffer);
-  const pageSizes = srcDoc.getPages().map((p) => p.getSize());
-  const { images } = await renderPdfPagesToJpg(buffer, { scale });
-
-  const outDoc = await PDFDocument.create();
-  for (let i = 0; i < images.length; i++) {
-    const recompressed = await sharp(images[i]).jpeg({ quality, mozjpeg: true }).toBuffer();
-    const img = await outDoc.embedJpg(recompressed);
-    const size = pageSizes[i] ?? { width: img.width, height: img.height };
-    const page = outDoc.addPage([size.width, size.height]);
-    page.drawImage(img, { x: 0, y: 0, width: size.width, height: size.height });
-  }
-  return outDoc.save({ useObjectStreams: true });
-}
-
 export type PdfCompressionLevel = "low" | "recommended" | "extreme";
 
-// "recommended" renders at pdf.js's normal ~144 DPI and a high JPEG quality —
-// a strong size reduction on image-heavy PDFs with no visible quality loss
-// for on-screen reading. "extreme" trades down to 72 DPI / quality 25 for
-// the smallest possible file, at a real, visible cost. Both still fall back
-// to structural-only compaction below if that happens to come out smaller.
-const RASTER_PRESETS: Record<Exclude<PdfCompressionLevel, "low">, { scale: number; quality: number }> = {
-  recommended: { scale: 2, quality: 78 },
-  extreme: { scale: 1, quality: 25 },
+// Compression never rasterizes pages: text, fonts and vector artwork are left
+// exactly as they are, so text stays selectable and sharp at any zoom. Only
+// the embedded images are re-encoded (that is where nearly all the weight in
+// a large PDF lives), and a lossless structural pass (dedupe, garbage-collect,
+// Flate-compress streams) runs on top.
+//   low          - lossless only: no pixel of any image changes.
+//   recommended  - photos re-encoded at JPEG q82 (visually identical at normal
+//                  viewing); only images wider than 3200px are scaled down
+//                  (over 350 DPI on a full A4 page, beyond what print shows).
+//   extreme      - q65 and a 1800px cap (about 215 DPI on A4): smaller, with
+//                  some softening on close inspection, still fully legible.
+const IMAGE_PRESETS: Record<Exclude<PdfCompressionLevel, "low">, { quality: number; maxDim: number; flateQuality: number }> = {
+  recommended: { quality: 82, maxDim: 3200, flateQuality: 88 },
+  extreme: { quality: 65, maxDim: 1800, flateQuality: 72 },
 };
+
+// An image has to shrink by at least this much to be worth replacing; this
+// stops pointless re-encodes of already-optimized JPEGs (generation loss for
+// no gain).
+const MIN_JPEG_SAVING = 0.9;
+const MIN_FLATE_SAVING = 0.6;
+const MIN_FLATE_BYTES = 100 * 1024;
+
+function nameOf(obj: unknown): string | null {
+  return obj instanceof PDFName ? obj.toString() : null;
+}
+
+function singleFilter(dict: PDFDict): string | null {
+  const f = dict.get(PDFName.of("Filter"));
+  if (f instanceof PDFName) return f.toString();
+  if (f instanceof PDFArray && f.size() === 1) return nameOf(f.get(0));
+  return null;
+}
+
+// Photographic images have many distinct colors; flat graphics, screenshots
+// and line art do not, and converting those to JPEG would smear their edges.
+function looksPhotographic(raw: Uint8Array, channels: number): boolean {
+  const seen = new Set<number>();
+  const pixelCount = raw.length / channels;
+  const step = Math.max(1, Math.floor(pixelCount / 20000));
+  for (let p = 0; p < pixelCount; p += step) {
+    const i = p * channels;
+    const key = channels === 3 ? ((raw[i] >> 3) << 10) | ((raw[i + 1] >> 3) << 5) | (raw[i + 2] >> 3) : raw[i] >> 2;
+    seen.add(key);
+    if (seen.size > 1500) return true;
+  }
+  return false;
+}
+
+async function recompressEmbeddedImages(
+  buffer: ArrayBuffer,
+  p: { quality: number; maxDim: number; flateQuality: number }
+): Promise<{ bytes: Uint8Array; replaced: number }> {
+  const doc = await PDFDocument.load(buffer, { updateMetadata: false });
+  const ctx = doc.context;
+  let replaced = 0;
+
+  for (const [ref, obj] of ctx.enumerateIndirectObjects()) {
+    if (!(obj instanceof PDFRawStream)) continue;
+    const dict = obj.dict;
+    if (nameOf(dict.get(PDFName.of("Subtype"))) !== "/Image") continue;
+
+    // Skip anything where re-encoding could change meaning: stencil masks,
+    // color-key masks, custom decode arrays, non-8-bit data.
+    const imageMask = dict.get(PDFName.of("ImageMask"));
+    if (imageMask instanceof PDFBool && imageMask.asBoolean()) continue;
+    if (dict.has(PDFName.of("Mask")) || dict.has(PDFName.of("Decode"))) continue;
+    const bpc = dict.get(PDFName.of("BitsPerComponent"));
+    if (!(bpc instanceof PDFNumber) || bpc.asNumber() !== 8) continue;
+    const w = dict.get(PDFName.of("Width"));
+    const h = dict.get(PDFName.of("Height"));
+    if (!(w instanceof PDFNumber) || !(h instanceof PDFNumber)) continue;
+    const width = w.asNumber();
+    const height = h.asNumber();
+
+    const cs = nameOf(dict.get(PDFName.of("ColorSpace")));
+    const channels = cs === "/DeviceRGB" ? 3 : cs === "/DeviceGray" ? 1 : 0;
+    const filter = singleFilter(dict);
+
+    try {
+      let pipeline: Sharp;
+      let originalBytes: number;
+      let minSaving: number;
+      let quality: number;
+
+      if (filter === "/DCTDecode") {
+        const raw = Buffer.from(obj.contents);
+        const meta = await sharp(raw).metadata();
+        // CMYK JPEGs, embedded ICC profiles and non-8-bit data are left
+        // alone: re-encoding them would shift colors.
+        if (!meta.channels || meta.channels === 4 || meta.channels === 2 || meta.icc || meta.depth !== "uchar") continue;
+        if (channels !== 0 && meta.channels !== channels) continue;
+        originalBytes = raw.length;
+        minSaving = MIN_JPEG_SAVING;
+        quality = p.quality;
+        pipeline = sharp(raw);
+      } else if (filter === "/FlateDecode" && channels > 0 && obj.contents.length >= MIN_FLATE_BYTES) {
+        const pixels = decodePDFRawStream(obj).decode();
+        if (pixels.length !== width * height * channels) continue;
+        if (!looksPhotographic(pixels, channels)) continue;
+        originalBytes = obj.contents.length;
+        minSaving = MIN_FLATE_SAVING;
+        quality = p.flateQuality;
+        pipeline = sharp(Buffer.from(pixels), { raw: { width, height, channels: channels as 1 | 3 } });
+      } else {
+        continue;
+      }
+
+      let outW = width;
+      let outH = height;
+      if (Math.max(width, height) > p.maxDim) {
+        const k = p.maxDim / Math.max(width, height);
+        outW = Math.max(1, Math.round(width * k));
+        outH = Math.max(1, Math.round(height * k));
+        pipeline = pipeline.resize(outW, outH, { kernel: "lanczos3", fit: "fill" });
+      }
+      const out = await pipeline.jpeg({ quality, mozjpeg: true }).toBuffer();
+      if (out.length >= originalBytes * minSaving) continue;
+
+      const newDict = dict.clone(ctx);
+      newDict.set(PDFName.of("Filter"), PDFName.of("DCTDecode"));
+      newDict.delete(PDFName.of("DecodeParms"));
+      newDict.set(PDFName.of("Width"), PDFNumber.of(outW));
+      newDict.set(PDFName.of("Height"), PDFNumber.of(outH));
+      ctx.assign(ref, PDFRawStream.of(newDict, out));
+      replaced++;
+    } catch {
+      // Any image we cannot confidently re-encode is left untouched.
+    }
+  }
+
+  return { bytes: await doc.save({ useObjectStreams: true }), replaced };
+}
+
+// Lossless structural pass: merges duplicate objects, drops unreferenced ones
+// and Flate-compresses any stream that was stored uncompressed.
+function structuralOptimize(bytes: Uint8Array): Uint8Array | null {
+  try {
+    const pdf = mupdf.Document.openDocument(Buffer.from(bytes), "application/pdf").asPDF();
+    if (!pdf || pdf.needsPassword()) return null;
+    return new Uint8Array(pdf.saveToBuffer("garbage=deduplicate,compress=yes,compress-fonts=yes").asUint8Array());
+  } catch {
+    return null;
+  }
+}
 
 export async function compressPdf(
   buffer: ArrayBuffer,
   level: PdfCompressionLevel = "recommended"
 ): Promise<{ bytes: Uint8Array; originalSize: number; newSize: number; note: string }> {
   const originalSize = buffer.byteLength;
+  const original = new Uint8Array(buffer);
 
-  const structDoc = await PDFDocument.load(buffer);
-  const structBytes = await structDoc.save({ useObjectStreams: true });
+  let working: Uint8Array;
+  let imagesReplaced = 0;
+  if (level !== "low") {
+    const r = await recompressEmbeddedImages(buffer, IMAGE_PRESETS[level]);
+    working = r.bytes;
+    imagesReplaced = r.replaced;
+  } else {
+    working = await (await PDFDocument.load(buffer, { updateMetadata: false })).save({ useObjectStreams: true });
+  }
 
-  if (level === "low") {
+  const candidates: Uint8Array[] = [working];
+  const structural = structuralOptimize(working);
+  if (structural) candidates.push(structural);
+  const originalStructural = structuralOptimize(original);
+  if (originalStructural && level === "low") candidates.push(originalStructural);
+  const best = candidates.reduce((a, b) => (b.byteLength < a.byteLength ? b : a));
+
+  // Never hand back something larger than what the user uploaded.
+  if (best.byteLength >= originalSize) {
     return {
-      bytes: structBytes,
+      bytes: original,
       originalSize,
-      newSize: structBytes.byteLength,
-      note: "Light compression applied: structural compaction only (shared object streams) — text stays fully selectable and searchable.",
+      newSize: originalSize,
+      note: "This PDF is already tightly compressed, so it was returned unchanged rather than risk a larger or lower-quality file.",
     };
   }
 
-  const preset = RASTER_PRESETS[level];
+  const note =
+    level === "low"
+      ? "Lossless compression: nothing visible was changed. Text, images and layout are identical; only the file structure was tidied."
+      : imagesReplaced > 0
+        ? `Compressed ${imagesReplaced} embedded image${imagesReplaced === 1 ? "" : "s"}. Text and vector graphics were not touched, so text stays selectable and sharp.`
+        : "No large images to re-encode. The file structure was optimized losslessly, and text and graphics are unchanged.";
 
-  // Rasterizing can fail for unusual PDFs (huge pages, exotic encodings) —
-  // fall back to the structural-only result rather than erroring the whole
-  // operation out over a "go as small as possible" best-effort step.
-  let rasterBytes: Uint8Array | null = null;
-  try {
-    rasterBytes = await rasterizeAndRecompress(buffer, preset.scale, preset.quality);
-  } catch {
-    rasterBytes = null;
-  }
-
-  // Never return something bigger than simple structural compaction (or
-  // than a PDF that was already efficiently encoded) — pick whichever
-  // candidate actually came out smaller.
-  const useRaster = rasterBytes !== null && rasterBytes.byteLength < structBytes.byteLength;
-  const bytes = useRaster ? rasterBytes! : structBytes;
-
-  return {
-    bytes,
-    originalSize,
-    newSize: bytes.byteLength,
-    note: useRaster
-      ? level === "extreme"
-        ? "Maximum compression applied: pages were rasterized and re-encoded at low quality for the smallest possible file size. Text is no longer selectable/searchable."
-        : "Compression applied: pages were rasterized and re-encoded at high quality for a strong size reduction with minimal visible loss. Text is no longer selectable/searchable."
-      : "This PDF was already tightly encoded, or rasterizing would have produced a larger file — structural compaction (shared object streams) was used instead.",
-  };
+  return { bytes: best, originalSize, newSize: best.byteLength, note };
 }
 
 export async function imagesToPdf(buffers: ArrayBuffer[]): Promise<Uint8Array> {

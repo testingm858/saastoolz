@@ -43,22 +43,49 @@ function maxCompressionOptions(format: ImageFormat, quality: number) {
   switch (format) {
     case "jpeg": return { quality, mozjpeg: true };
     case "webp": return { quality, effort: 6 };
-    case "png": return { quality, effort: 10, compressionLevel: 9, palette: true };
+    // PNG is lossless by default. Palette mode (256 colors) is what makes PNGs
+    // much smaller, but it visibly bands photos and gradients, so it only
+    // kicks in when the user deliberately drags quality down to 60 or below.
+    // Careful: in sharp, passing `effort` without `palette: false` silently
+    // switches on lossy quantization, so the lossless branch must not use it.
+    case "png": return quality <= 60
+      ? { quality, effort: 10, compressionLevel: 9, palette: true }
+      : { compressionLevel: 9, adaptiveFiltering: true, palette: false };
     default: return { quality };
   }
 }
 
-// 75 is the widely-cited JPEG/WebP "sweet spot" — visually indistinguishable
-// from the source for almost all photos while still cutting file size
-// substantially. The old default of 40 was tuned purely for minimum size and
-// contradicted this tool's own "without visible quality loss" description.
-export async function compressImage(buffer: ArrayBuffer, quality = 75): Promise<{ bytes: Buffer; format: ImageFormat; originalSize: number; newSize: number }> {
+// 82 with mozjpeg is visually indistinguishable from the source for photos at
+// normal viewing size while still cutting file size by well over half.
+//
+// Three things beyond the quality number protect the result:
+//  - .rotate() bakes the EXIF orientation into the pixels. Sharp drops EXIF on
+//    output, so without this a portrait phone photo (stored landscape with an
+//    orientation tag) would come back sideways.
+//  - .keepIccProfile() carries the embedded color profile through so colors do
+//    not shift.
+//  - If the result is not smaller than what was uploaded (an already-optimized
+//    file), the original is returned untouched instead of a bigger copy.
+export async function compressImage(buffer: ArrayBuffer, quality = 82): Promise<{ bytes: Buffer; format: ImageFormat; originalSize: number; newSize: number }> {
   if (!Number.isFinite(quality) || quality < 1 || quality > 100) throw new Error("quality must be between 1 and 100");
-  const img = sharp(Buffer.from(buffer));
-  const meta = await img.metadata();
-  const format: ImageFormat = meta.format === "png" ? "png" : meta.format === "webp" ? "webp" : "jpeg";
-  const bytes = await img.toFormat(format, maxCompressionOptions(format, quality)).toBuffer();
-  return { bytes, format, originalSize: buffer.byteLength, newSize: bytes.byteLength };
+  const input = Buffer.from(buffer);
+  const meta = await sharp(input).metadata();
+  const sameFormat = meta.format === "png" || meta.format === "webp" || meta.format === "jpeg";
+  // Animated images cannot be re-encoded frame-safely here: hand them back as-is.
+  if ((meta.pages ?? 1) > 1) {
+    const f: ImageFormat = meta.format === "webp" ? "webp" : "png";
+    return { bytes: input, format: f, originalSize: input.byteLength, newSize: input.byteLength };
+  }
+  const format: ImageFormat = meta.format === "png" ? "png" : meta.format === "webp" ? "webp" : meta.hasAlpha ? "png" : "jpeg";
+  const bytes = await sharp(input)
+    .rotate()
+    .keepIccProfile()
+    .toFormat(format, maxCompressionOptions(format, quality))
+    .toBuffer();
+  if (sameFormat && bytes.byteLength >= input.byteLength) {
+    return { bytes: input, format, originalSize: input.byteLength, newSize: input.byteLength };
+  }
+  return { bytes, format, originalSize: input.byteLength, newSize: bytes.byteLength };
 }
 
 function normalizeFormat(format?: string): ImageFormat {

@@ -37,7 +37,7 @@ export const CATEGORY_CONTENT: Partial<Record<ToolCategory, CategoryContent>> = 
     privacyNote:
       "Every PDF tool here runs the actual processing on our servers only for the moment it takes to complete the job — files are deleted within 1 hour, never reviewed by a human, and never used for anything beyond the single operation you requested. Nothing requires an account, so there's no persistent record tying a document to your identity.",
     faqs: [
-      { q: "Which PDF tool should I use to reduce file size for email?", a: "Compress PDF — set the compression level based on whether you need the text to stay perfectly selectable (low) or the smallest possible file (extreme)." },
+      { q: "Which PDF tool should I use to reduce file size for email?", a: "Compress PDF — text always stays selectable and sharp. Pick Lossless to change nothing visible, Recommended for the best balance, or Smallest when you are up against a hard size limit." },
       { q: "Can I edit a PDF's actual text directly?", a: "Not in-place — convert it to Word with PDF to Word, edit it there, then convert back to PDF with Word to PDF if you need to redistribute it as a PDF again." },
       { q: "My PDF is a scan — why can't I select the text?", a: "A scanned PDF is really just an image of a page, not real text. Run it through PDF OCR first to extract selectable, searchable text from it." },
       { q: "Is it safe to upload a contract or ID document?", a: "Files are processed securely and deleted from our servers within 1 hour — but for maximum caution with highly sensitive documents, redact anything you don't need processed before uploading." },

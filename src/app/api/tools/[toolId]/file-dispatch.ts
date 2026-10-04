@@ -258,7 +258,7 @@ export async function dispatchFile(toolId: string, formData: FormData): Promise<
     case "image-compress": {
       const file = formData.get("file");
       const buffer = await fileToBuffer(file);
-      const { bytes, format, originalSize, newSize } = await compressImage(buffer, (options.quality as number) ?? 40);
+      const { bytes, format, originalSize, newSize } = await compressImage(buffer, (options.quality as number) ?? 82);
       return {
         bytes, filename: buildDownloadName(fileName(file), "compressed", format), contentType: contentTypeForFormat(format),
         extraHeaders: sizeHeaders(originalSize, newSize),

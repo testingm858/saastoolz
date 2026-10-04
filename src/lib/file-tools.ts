@@ -127,10 +127,10 @@ export const FILE_TOOLS: Record<string, FileToolConfig> = {
     multiple: false, accept: "application/pdf", acceptLabel: "a PDF file", outputIsFile: true,
     fields: [
       { name: "level", label: "Compression level", type: "select", defaultValue: "recommended", options: [
-        { label: "Low — keep text selectable", value: "low" },
+        { label: "Lossless — no visible change", value: "low" },
         { label: "Recommended — high quality, strong compression", value: "recommended" },
-        { label: "Extreme — smallest possible file", value: "extreme" },
-      ], helpText: "Recommended balances a strong size reduction with high visual quality. Extreme rasterizes pages harder for the smallest file, at a visible quality cost." },
+        { label: "Smallest — maximum size reduction", value: "extreme" },
+      ], helpText: "Text and vector graphics are never touched, so text stays selectable and sharp at every level. Lossless only tidies the file structure. Recommended re-encodes embedded photos at high quality. Smallest also reduces image resolution further, with slight softening only visible when zoomed in." },
     ],
   },
   "pdf-sign": {
@@ -147,7 +147,7 @@ export const FILE_TOOLS: Record<string, FileToolConfig> = {
   "image-compress": {
     multiple: false, accept: "image/*", acceptLabel: "an image", outputIsFile: true,
     fields: [
-      { name: "quality", label: "Quality", type: "number", defaultValue: 75, min: 1, max: 100, helpText: "Defaults to a high-quality balance of size and clarity. Lower this for smaller files, or raise it if you need the result closer to the original." },
+      { name: "quality", label: "Quality", type: "number", defaultValue: 82, min: 1, max: 100, helpText: "Defaults to a high-quality balance of size and clarity. Lower this for smaller files, or raise it if you need the result closer to the original. PNG files stay lossless unless you set quality to 60 or below." },
     ],
   },
   "image-resize": {

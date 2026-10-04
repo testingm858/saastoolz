@@ -64,7 +64,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "Will compression make my PDF blurry?", a: "Text and vector content stay crisp regardless of the setting. Embedded photos are re-optimized — the higher compression levels trade a small amount of image detail for a much smaller file." },
       { q: "Can I compress a password-protected PDF?", a: "Unlock it first with the Unlock PDF tool, then compress it — encrypted files can't be re-processed directly." },
       { q: "What actually makes a PDF large in the first place?", a: "Embedded images almost always dominate — especially scanned pages saved at high resolution. Embedded fonts and page count matter too, but far less." },
-      { q: "Which compression level should I pick?", a: "Recommended for most cases. Use Low if the document must stay perfectly text-selectable and sharp; use Extreme only when you're up against a hard size limit, like a 5MB upload cap." },
+      { q: "Which compression level should I pick?", a: "Recommended for most cases. Text stays selectable and sharp at every level. Use Lossless if no image may change at all; use Smallest only when you're up against a hard size limit, like a 5MB upload cap." },
       { q: "Is my data safe when using this tool?", a: "Yes. Files are processed securely and deleted from our servers within 1 hour." },
     ],
   },
