@@ -24,7 +24,7 @@ export async function recordInvoice(input: RecordInvoiceInput): Promise<void> {
   try {
     const name = input.companyName?.trim() || "Unknown Company";
     // Prisma's compound-unique `where` can't take `null` for a field that's
-    // part of a `@@unique` (Postgres treats every NULL as distinct, so a
+    // part of a `@@unique` (SQL treats every NULL as distinct, so a
     // unique lookup on it is meaningless anyway) — normalize the dedupe key
     // to "" instead of null, and store that same "" so the upsert's `where`
     // keeps matching the row it just created.

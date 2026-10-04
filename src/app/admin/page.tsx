@@ -93,12 +93,12 @@ export default async function AdminPage() {
       _count: true,
     }),
     prisma.pageView.count(),
-    prisma.$queryRaw<{ count: bigint }[]>`SELECT COUNT(DISTINCT COALESCE("userId", "visitorId")) as count FROM page_views WHERE "userId" IS NOT NULL OR "visitorId" IS NOT NULL`,
+    prisma.$queryRaw<{ count: bigint }[]>`SELECT COUNT(DISTINCT COALESCE(userId, visitorId)) AS count FROM page_views WHERE userId IS NOT NULL OR visitorId IS NOT NULL`,
     prisma.pageView.groupBy({ by: ["path"], _count: true }),
     prisma.$queryRaw<{ day: Date; count: bigint }[]>`
-      SELECT date_trunc('day', "createdAt") as day, COUNT(*)::bigint as count
+      SELECT DATE(createdAt) AS day, CAST(COUNT(*) AS SIGNED) AS count
       FROM page_views
-      WHERE "createdAt" >= NOW() - (${PAGE_VIEW_HISTORY_DAYS} * INTERVAL '1 day')
+      WHERE createdAt >= DATE_SUB(UTC_TIMESTAMP(3), INTERVAL ${PAGE_VIEW_HISTORY_DAYS} DAY)
       GROUP BY day
       ORDER BY day ASC
     `,

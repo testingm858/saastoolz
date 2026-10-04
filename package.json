@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "db:backup": "node scripts/export-neon-backup.mjs",
+    "db:import-mysql": "node scripts/import-to-mysql.mjs"
   },
   "engines": {
     "node": ">=22.5.0"
@@ -52,6 +54,7 @@
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20",
+    "@types/pg": "^8.23.1",
     "@types/qrcode": "^1.5.6",
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -59,6 +62,7 @@
     "autoprefixer": "^10.4.21",
     "eslint": "^9",
     "eslint-config-next": "^16.2.10",
+    "pg": "^8.23.0",
     "postcss": "^8.5.4",
     "prisma": "^6.19.3",
     "tailwindcss": "^3.4.17",

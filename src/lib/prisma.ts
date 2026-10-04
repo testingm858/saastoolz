@@ -1,6 +1,6 @@
 // ─── Prisma client singleton ──────────────────────────────────────────────────
 // Standard Next.js pattern: reuse one client across hot-reloads in dev so each
-// edit doesn't open a fresh pool of Postgres connections.
+// edit doesn't open a fresh pool of database connections.
 
 import { PrismaClient } from "@prisma/client";
 

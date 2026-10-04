@@ -1,18 +1,16 @@
 // SaaSToolz — Prisma Schema
 //
-// Backed by Postgres (Neon, provisioned via the Vercel marketplace
-// integration). directUrl uses the unpooled connection string — Neon's
-// pooled endpoint (used for normal query traffic via `url`) doesn't
-// reliably support the prepared statements Prisma's migration engine needs.
+// Backed by MySQL/MariaDB (Hostinger, managed through phpMyAdmin). Long-form
+// text columns use @db.Text / @db.LongText because Prisma's default String
+// mapping on MySQL is VARCHAR(191), which would silently truncate or reject them.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DATABASE_URL_UNPOOLED")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 // ─── Auth ────────────────────────────────────────────────────────────────────
@@ -22,7 +20,7 @@ model User {
   name          String?
   email         String    @unique
   emailVerified DateTime?
-  image         String?
+  image         String?   @db.Text
   plan          String    @default("FREE")
   credits       Int       @default(0)
   createdAt     DateTime  @default(now())
@@ -44,12 +42,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String?
-  access_token      String?
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
-  scope             String?
-  id_token          String?
+  scope             String? @db.Text
+  id_token          String? @db.Text
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -110,7 +108,7 @@ model ToolUsage {
   latencyMs    Int?
   success      Boolean  @default(true)
   creditsUsed  Int      @default(0)
-  errorMessage String?
+  errorMessage String?  @db.Text
   // Populated from Vercel's edge geo headers (x-vercel-ip-*) — free, no
   // external lookup call needed. Absent in local dev, where those headers
   // don't exist.
@@ -134,8 +132,8 @@ model Job {
   toolId      String
   status      String    @default("QUEUED")
   priority    Int       @default(3)
-  resultUrl   String?
-  errorMsg    String?
+  resultUrl   String?   @db.Text
+  errorMsg    String?   @db.Text
   progress    Int       @default(0)
   createdAt   DateTime  @default(now())
   completedAt DateTime?
@@ -150,11 +148,11 @@ model Job {
 
 model BlogPost {
   id          String    @id @default(cuid())
-  title       String
+  title       String    @db.VarChar(255)
   slug        String    @unique
-  excerpt     String?
-  coverImage  String?   // data: URL, uploaded from /admin/blog (see MAX_COVER_IMAGE_BYTES)
-  content     String
+  excerpt     String?   @db.Text
+  coverImage  String?   @db.LongText // data: URL, uploaded from /admin/blog (see MAX_COVER_IMAGE_BYTES)
+  content     String    @db.LongText
   published   Boolean   @default(false)
   publishedAt DateTime?
   views       Int       @default(0)
@@ -206,7 +204,7 @@ model AdSlot {
   key       String   @unique
   page      String
   position  String
-  code      String?
+  code      String?  @db.LongText
   enabled   Boolean  @default(false)
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
@@ -221,9 +219,9 @@ model AdSlot {
 model Announcement {
   id        String   @id @default(cuid())
   badge     String   @default("UPDATE")
-  title     String
-  message   String?
-  linkUrl   String?
+  title     String   @db.VarChar(255)
+  message   String?  @db.Text
+  linkUrl   String?  @db.VarChar(500)
   linkText  String?
   enabled   Boolean  @default(true)
   updatedAt DateTime @updatedAt
@@ -244,8 +242,8 @@ model Announcement {
 
 model Company {
   id        String    @id @default(cuid())
-  name      String
-  email     String?
+  name      String    @db.VarChar(255)
+  email     String?   @db.VarChar(255)
   vatNumber String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -260,9 +258,9 @@ model Invoice {
   id              String   @id @default(cuid())
   invoiceNumber   String
   companyId       String
-  customerName    String?
-  customerCompany String?
-  customerEmail   String?
+  customerName    String?  @db.VarChar(255)
+  customerCompany String?  @db.VarChar(255)
+  customerEmail   String?  @db.VarChar(255)
   currency        String   @default("USD")
   total           Float?
   userId          String?
@@ -286,13 +284,13 @@ model Invoice {
 
 model PageView {
   id        String   @id @default(cuid())
-  path      String
+  path      String   @db.VarChar(500)
   visitorId String?
   userId    String?
-  referrer  String?
+  referrer  String?  @db.VarChar(500)
   createdAt DateTime @default(now())
 
-  @@index([path])
+  @@index([path(length: 191)])
   @@index([createdAt])
   @@index([visitorId])
   @@map("page_views")
@@ -320,7 +318,7 @@ model Tool {
   category    String
   isPremium   Boolean  @default(false)
   isActive    Boolean  @default(true)
-  description String?
+  description String?  @db.Text
   icon        String?
   apiProvider String?
   createdAt   DateTime @default(now())
