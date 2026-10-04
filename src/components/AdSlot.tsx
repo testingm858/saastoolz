@@ -1,6 +1,7 @@
 import AdFrame from "./AdFrame";
 import { orientationFor, type AdPosition } from "@/lib/adPlacements";
 import { cn } from "@/lib/utils";
+import { adSlotVisible } from "@/lib/ads/policy";
 
 // A single ad placement. The actual embed code is admin-managed (see
 // /admin/ads) rather than hardcoded, so switching ad networks or updating a
@@ -23,9 +24,9 @@ import { cn } from "@/lib/utils";
 //               overlap lives on this component's own root, so when there is
 //               nothing to show the page layout is unaffected.
 //
-// When no code is configured, development and preview show a clearly labeled
-// placeholder so slot positions and sizes are visible while designing; in
-// production an empty slot renders nothing at all.
+// When no code is configured, a clearly labeled placeholder card shows so slot
+// positions and sizes are visible. Whether that placeholder also appears on the
+// live site is controlled by SHOW_EMPTY_AD_PLACEHOLDERS in lib/ads/policy.ts.
 export default function AdSlot({
   code,
   position,
@@ -47,7 +48,7 @@ export default function AdSlot({
   const cardShadow = floating ? "shadow-xl shadow-violet-900/5" : "shadow-sm";
 
   if (!code) {
-    if (process.env.NODE_ENV === "production") return null;
+    if (!adSlotVisible(code)) return null;
     return (
       <div className={rootClass}>
         <div className={cn("mx-auto", maxWidth)}>

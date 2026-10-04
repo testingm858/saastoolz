@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { FREE_TOOLS } from "@/lib/tools";
 import prisma from "@/lib/prisma";
+import { getAdCodes } from "@/lib/ads";
+import { canShowAds } from "@/lib/ads/policy";
+import { adSlotKey } from "@/lib/adPlacements";
 import ToolsListClient, { type ToolStatsMap } from "./ToolsListClient";
 
 export const metadata: Metadata = {
@@ -20,6 +23,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function AllToolsPage() {
+  const adCodes = canShowAds("/tools") ? await getAdCodes("tools", ["middle"]) : {};
   // Stats are cosmetic (view/like counts on cards) — don't let a DB hiccup
   // take down the whole tools list.
   const stats = await prisma.toolStats
@@ -34,7 +38,7 @@ export default async function AllToolsPage() {
 
   return (
     <Suspense fallback={null}>
-      <ToolsListClient statsMap={statsMap} />
+      <ToolsListClient statsMap={statsMap} adCode={adCodes[adSlotKey("tools", "middle")] ?? null} />
     </Suspense>
   );
 }

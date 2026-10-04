@@ -56,6 +56,7 @@ export function positionLabel(position: string): string {
 // but nothing renders it. Index/listing pages are the riskiest place for ads,
 // so keep placements there few.
 export const WIRED_PLACEMENTS: { key: string; description: string }[] = [
+  { key: adSlotKey("tools", "middle"), description: "All Tools page — a banner after every 5 rows of tools (one ad code, repeated)" },
   { key: adSlotKey("home", "top"), description: "Home page — floating banner between the hero and the Free Tools section" },
   { key: adSlotKey("home", "bottom"), description: "Home page — directly below the \"View all free tools\" link" },
   { key: adSlotKey("tool-action", "top"), description: "Tool page — after \"How to use\" steps, before the guide" },

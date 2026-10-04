@@ -1,10 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
 import { FREE_TOOLS, CATEGORY_META, type ToolCategory } from "@/lib/tools";
 import ToolCard from "@/components/ToolCard";
+import AdSlot from "@/components/AdSlot";
+import { adSlotVisible } from "@/lib/ads/policy";
 import { cn } from "@/lib/utils";
 
 // PRO tools are hidden site-wide — this page only ever lists FREE_TOOLS, and
@@ -14,7 +16,26 @@ const VISIBLE_CATEGORIES = Object.entries(CATEGORY_META).filter(([key]) => !key.
 
 export type ToolStatsMap = Record<string, { views: number; likes: number }>;
 
-export default function ToolsListClient({ statsMap }: { statsMap: ToolStatsMap }) {
+// The grid is 2, 3, 4 or 5 columns wide depending on the screen. A banner goes
+// after every ROWS_PER_AD full rows, so its position in the card list differs
+// per breakpoint (after card 10 on 2 columns, 15 on 3, 20 on 4, 25 on 5). We
+// emit a candidate after every ROWS_PER_AD-th card and show only the ones that
+// land on a full-row multiple at the current width, using Tailwind's
+// breakpoint display classes (written out literally so Tailwind keeps them).
+const ROWS_PER_AD = 5;
+const COLUMNS_BY_BREAKPOINT = { base: 2, sm: 3, md: 4, lg: 5 } as const;
+
+function adVisibilityClass(afterCard: number): string {
+  const on = (cols: number) => afterCard % (ROWS_PER_AD * cols) === 0;
+  return cn(
+    on(COLUMNS_BY_BREAKPOINT.base) ? "block" : "hidden",
+    on(COLUMNS_BY_BREAKPOINT.sm) ? "sm:block" : "sm:hidden",
+    on(COLUMNS_BY_BREAKPOINT.md) ? "md:block" : "md:hidden",
+    on(COLUMNS_BY_BREAKPOINT.lg) ? "lg:block" : "lg:hidden"
+  );
+}
+
+export default function ToolsListClient({ statsMap, adCode }: { statsMap: ToolStatsMap; adCode: string | null }) {
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
   const [category, setCategory] = useState<ToolCategory | "all">("all");
@@ -84,14 +105,25 @@ export default function ToolsListClient({ statsMap }: { statsMap: ToolStatsMap }
         <p className="text-center text-gray-400 py-16">No tools match your search.</p>
       ) : (
         <div className={gridClass}>
-          {filtered.map((tool) => (
-            <ToolCard
-              key={tool.id}
-              tool={tool}
-              visits={statsMap[tool.id]?.views ?? 0}
-              likes={statsMap[tool.id]?.likes ?? 0}
-            />
-          ))}
+          {filtered.map((tool, i) => {
+            const position = i + 1;
+            // Never trail an ad after the very last card.
+            const adAfter = adSlotVisible(adCode) && position % ROWS_PER_AD === 0 && position < filtered.length;
+            return (
+              <Fragment key={tool.id}>
+                <ToolCard
+                  tool={tool}
+                  visits={statsMap[tool.id]?.views ?? 0}
+                  likes={statsMap[tool.id]?.likes ?? 0}
+                />
+                {adAfter && (
+                  <div className={cn("col-span-full", adVisibilityClass(position))}>
+                    <AdSlot code={adCode} position="middle" />
+                  </div>
+                )}
+              </Fragment>
+            );
+          })}
         </div>
       )}
     </div>
