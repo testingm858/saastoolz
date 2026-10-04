@@ -52,7 +52,7 @@ import {
 import { checkHttpHeaders, checkRedirectChain, isPrivateIPv4, isPrivateIPv6 } from "@/tools/seo/network-tools";
 import { escapeAttr } from "@/tools/seo/seo-tools";
 import { isFileTool } from "@/lib/file-tools";
-import { MAX_UPLOAD_BYTES, MAX_UPLOAD_MB } from "@/lib/file-limits";
+import { uploadLimitMB, uploadLimitHint } from "@/lib/file-limits";
 import { dispatchFile } from "./file-dispatch";
 import { binaryOutput, isBinaryOutput } from "@/lib/binary-output";
 import { generateQrCode } from "@/tools/image/qr-tools";
@@ -94,11 +94,25 @@ export async function POST(
     let fileResult: Awaited<ReturnType<typeof dispatchFile>> | undefined;
 
     try {
+      const limitMB = uploadLimitMB(ctx.userId ? ctx.plan : null);
+      const limitBytes = limitMB * 1024 * 1024;
+      // Reject on the declared size first so an oversized body is never
+      // buffered into memory at all.
+      const declared = Number(req.headers.get("content-length"));
+      if (Number.isFinite(declared) && declared > limitBytes + 1024 * 1024) {
+        throw new Error(`This upload exceeds the ${limitMB}MB limit.${uploadLimitHint(limitMB)}`);
+      }
       const formData = await req.formData();
+      let total = 0;
       for (const value of formData.getAll("file").concat(formData.getAll("files"))) {
-        if (value instanceof File && value.size > MAX_UPLOAD_BYTES) {
-          throw new Error(`File "${value.name}" exceeds the ${MAX_UPLOAD_MB}MB upload limit`);
+        if (!(value instanceof File)) continue;
+        total += value.size;
+        if (value.size > limitBytes) {
+          throw new Error(`File "${value.name}" exceeds the ${limitMB}MB upload limit.${uploadLimitHint(limitMB)}`);
         }
+      }
+      if (total > limitBytes) {
+        throw new Error(`These files add up to more than ${limitMB}MB combined.${uploadLimitHint(limitMB)}`);
       }
       fileResult = await dispatchFile(toolId, formData);
     } catch (err) {

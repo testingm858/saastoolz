@@ -9,6 +9,28 @@
 export const MAX_UPLOAD_BYTES = 100 * 1024 * 1024; // 100MB
 export const MAX_UPLOAD_MB = 100;
 
+// Per-request memory use grows several times over the upload size (a PDF is
+// parsed, re-encoded and re-saved in memory), so what a visitor may upload
+// depends on who they are. Only paying plans get the full 100MB ceiling;
+// anonymous and free visitors stay well inside what the server can take
+// concurrently without running out of memory.
+export const ANON_UPLOAD_MB = 20;
+export const FREE_UPLOAD_MB = 30;
+
+export function uploadLimitMB(plan: "FREE" | "PRO" | "ENTERPRISE" | null): number {
+  if (plan === "PRO" || plan === "ENTERPRISE") return MAX_UPLOAD_MB;
+  if (plan === "FREE") return FREE_UPLOAD_MB;
+  return ANON_UPLOAD_MB;
+}
+
+// Wording shared by the server error and the browser pre-check.
+export function uploadLimitHint(limitMB: number): string {
+  if (limitMB >= MAX_UPLOAD_MB) return "";
+  return limitMB < FREE_UPLOAD_MB
+    ? ` Sign in free for ${FREE_UPLOAD_MB}MB, or go Pro for ${MAX_UPLOAD_MB}MB.`
+    : ` Upgrade to Pro for up to ${MAX_UPLOAD_MB}MB.`;
+}
+
 // Blog cover images are stored inline as base64 data: URLs (no external
 // storage is wired up), which travel through the same Vercel body-limit
 // admin API routes and inflate ~33% when base64-encoded — kept well under

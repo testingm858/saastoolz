@@ -6,7 +6,8 @@ import { FILE_TOOLS, type FileToolField } from "@/lib/file-tools";
 import { Upload, Download, Loader2, FileText, X, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useProgressSimulation, ProcessingPanel, SizeComparison } from "@/components/ProgressIndicator";
-import { MAX_UPLOAD_BYTES, MAX_UPLOAD_MB, formatMB } from "@/lib/file-limits";
+import { useSession } from "next-auth/react";
+import { uploadLimitMB, uploadLimitHint, formatMB } from "@/lib/file-limits";
 
 // Segmented-control button used by the pdf-split mode selector below.
 function ModeButton({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
@@ -94,6 +95,13 @@ function fileSig(list: File[]): string {
 }
 
 export default function FileToolInterface({ tool }: FileToolInterfaceProps) {
+  const { data: session } = useSession();
+  const sessionPlan = (session?.user as { plan?: string } | undefined)?.plan;
+  const MAX_UPLOAD_MB = uploadLimitMB(
+    session?.user ? (sessionPlan === "PRO" || sessionPlan === "ENTERPRISE" ? (sessionPlan as "PRO" | "ENTERPRISE") : "FREE") : null
+  );
+  const MAX_UPLOAD_BYTES = MAX_UPLOAD_MB * 1024 * 1024;
+  const limitHint = uploadLimitHint(MAX_UPLOAD_MB);
   const config = FILE_TOOLS[tool.id];
   const isSplitTool = tool.id === "pdf-split";
   const [files, setFiles] = useState<File[]>([]);
@@ -160,7 +168,7 @@ export default function FileToolInterface({ tool }: FileToolInterfaceProps) {
     // a clear message than let the browser send a request doomed to fail.
     const oversized = incoming.find((f) => f.size > MAX_UPLOAD_BYTES);
     if (oversized) {
-      setError(`"${oversized.name}" is ${formatMB(oversized.size)}MB — the free upload limit is ${MAX_UPLOAD_MB}MB per file.`);
+      setError(`"${oversized.name}" is ${formatMB(oversized.size)}MB — the upload limit is ${MAX_UPLOAD_MB}MB per file.${limitHint}`);
       return;
     }
 
@@ -168,7 +176,7 @@ export default function FileToolInterface({ tool }: FileToolInterfaceProps) {
       const existingTotal = files.reduce((sum, f) => sum + f.size, 0);
       const incomingTotal = incoming.reduce((sum, f) => sum + f.size, 0);
       if (existingTotal + incomingTotal > MAX_UPLOAD_BYTES) {
-        setError(`These files add up to more than ${MAX_UPLOAD_MB}MB combined — the free upload limit is ${MAX_UPLOAD_MB}MB per request.`);
+        setError(`These files add up to more than ${MAX_UPLOAD_MB}MB combined.${limitHint}`);
         return;
       }
       setFiles((prev) => [...prev, ...incoming]);
@@ -223,7 +231,7 @@ export default function FileToolInterface({ tool }: FileToolInterfaceProps) {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > MAX_UPLOAD_BYTES) {
-        setError(`"${file.name}" is ${formatMB(file.size)}MB — the free upload limit is ${MAX_UPLOAD_MB}MB per file.`);
+        setError(`"${file.name}" is ${formatMB(file.size)}MB — the upload limit is ${MAX_UPLOAD_MB}MB per file.${limitHint}`);
       } else {
         setSecondFile(file);
         resetResults();
@@ -257,7 +265,7 @@ export default function FileToolInterface({ tool }: FileToolInterfaceProps) {
     const file = e.dataTransfer.files?.[0];
     if (file) {
       if (file.size > MAX_UPLOAD_BYTES) {
-        setError(`"${file.name}" is ${formatMB(file.size)}MB — the free upload limit is ${MAX_UPLOAD_MB}MB per file.`);
+        setError(`"${file.name}" is ${formatMB(file.size)}MB — the upload limit is ${MAX_UPLOAD_MB}MB per file.${limitHint}`);
       } else {
         setSecondFile(file);
         resetResults();
@@ -410,7 +418,7 @@ export default function FileToolInterface({ tool }: FileToolInterfaceProps) {
 
       if (outcome.status < 200 || outcome.status >= 300) {
         if (outcome.status === 413) {
-          setError(`This upload is too large — the free upload limit is ${MAX_UPLOAD_MB}MB per file.`);
+          setError(`This upload is too large — the upload limit is ${MAX_UPLOAD_MB}MB per file.${limitHint}`);
           return;
         }
         const data = safeJsonParse(await outcome.blob.text());

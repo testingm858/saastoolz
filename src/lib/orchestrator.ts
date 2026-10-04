@@ -36,10 +36,10 @@ function geoFromHeaders(req: NextRequest): { country?: string; region?: string; 
   };
 }
 
-const PLAN_LIMITS: Record<UserPlan, { dailyUses: number; maxFileSizeMB: number }> = {
-  FREE:       { dailyUses: 10,       maxFileSizeMB: 10  },
-  PRO:        { dailyUses: 9999,     maxFileSizeMB: 100 },
-  ENTERPRISE: { dailyUses: 9999,     maxFileSizeMB: 500 },
+const PLAN_LIMITS: Record<UserPlan, { dailyUses: number }> = {
+  FREE:       { dailyUses: 10 },
+  PRO:        { dailyUses: 9999 },
+  ENTERPRISE: { dailyUses: 9999 },
 };
 
 const ANON_DAILY_LIMIT = 3;
@@ -124,8 +124,8 @@ export async function orchestrate(
         {
           error: "rate_limited",
           message: userId
-            ? `Daily limit of ${limit} reached. Upgrade to Pro for unlimited access.`
-            : `Sign in to get ${PLAN_LIMITS.FREE.dailyUses} daily uses per tool.`,
+            ? `You've used all ${limit} of your free daily uses of this tool. Upgrade to Pro for unlimited use.`
+            : `You've used all ${ANON_DAILY_LIMIT} free daily uses of this tool. Sign in free to get ${PLAN_LIMITS.FREE.dailyUses} uses per tool per day.`,
           upgradeUrl: "/pricing",
           loginUrl: "/auth/signin",
         },
