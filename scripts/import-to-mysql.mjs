@@ -1,4 +1,4 @@
-// Loads a backup made by export-neon-backup.mjs into the MySQL database that
+// Loads an NDJSON backup folder (backups/<name>/ with manifest.json, one <table>.ndjson per table) into the MySQL database that
 // DATABASE_URL points at (Hostinger).
 //
 // Usage:  npm run db:import-mysql [-- --dir backups/<folder>] [--append | --replace]
@@ -7,8 +7,7 @@
 // Safety: refuses to run if any target table already has rows, unless --append
 // is passed (then existing ids are skipped, never overwritten). --replace empties
 // every table first, for a final sync right before cutover: it makes MySQL an
-// exact copy of the backup, so take a fresh `npm run db:backup` immediately
-// before it. Row counts are verified against the manifest at the end.
+// exact copy of the backup, so use a freshly exported backup. Row counts are verified against the manifest at the end.
 
 import fs from "node:fs";
 import path from "node:path";
