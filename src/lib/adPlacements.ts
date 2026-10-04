@@ -49,13 +49,15 @@ export function positionLabel(position: string): string {
 // Every placement actually wired into a page right now, for the admin
 // list's "Live placement" vs "Not wired yet" badge.
 //
-// AdSense policy allows ads only on pages with individual publisher content
-// — tool pages and blog posts — never on index/listing pages (home, the
-// /tools index, category pages) or account/legal/admin screens. "home" and
-// "tools" placements exist as AD_PAGES options for backward compatibility
-// with any slots an admin already configured, but nothing renders them
-// anymore; don't wire them back in.
+// AdSense policy favors ads on pages with individual publisher content (tool
+// pages and blog posts). The home page now also carries two manual units, which
+// only render once ad code is pasted in /admin/ads; the "tools" page option is
+// kept for backward compatibility with any slots an admin already configured,
+// but nothing renders it. Index/listing pages are the riskiest place for ads,
+// so keep placements there few.
 export const WIRED_PLACEMENTS: { key: string; description: string }[] = [
+  { key: adSlotKey("home", "top"), description: "Home page — floating banner between the hero and the Free Tools section" },
+  { key: adSlotKey("home", "bottom"), description: "Home page — directly below the \"View all free tools\" link" },
   { key: adSlotKey("tool-action", "top"), description: "Tool page — after \"How to use\" steps, before the guide" },
   { key: adSlotKey("tool-action", "middle"), description: "Tool page — before Related Tools" },
   { key: adSlotKey("tool-action", "bottom"), description: "Tool page — after the FAQ section" },

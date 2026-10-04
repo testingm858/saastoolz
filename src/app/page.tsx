@@ -7,6 +7,10 @@ import ToolCard from "@/components/ToolCard";
 import HeroSearch from "@/components/HeroSearch";
 import AnnouncementBanner from "@/components/AnnouncementBanner";
 import { getActiveAnnouncement } from "@/lib/announcements";
+import AdSlot from "@/components/AdSlot";
+import { getAdCodes } from "@/lib/ads";
+import { canShowAds } from "@/lib/ads/policy";
+import { adSlotKey } from "@/lib/adPlacements";
 
 const HOME_TITLE = "Free Online Tools for PDF, Images, SEO, Coding & More | SaaSToolz";
 const HOME_DESCRIPTION =
@@ -46,6 +50,7 @@ export default async function HomePage() {
   const statsById = new Map(stats.map((s) => [s.toolId, s]));
 
   const announcement = await getActiveAnnouncement();
+  const adCodes = canShowAds("/") ? await getAdCodes("home", ["top", "bottom"]) : {};
 
   return (
     <div>
@@ -93,6 +98,10 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Ad slot 1 — floats over the boundary between the hero and the Free Tools
+          section (the hero clips its own overflow, so this sits between them). */}
+      <AdSlot code={adCodes[adSlotKey("home", "top")] ?? null} position="top" variant="floating" />
+
       {/* Free Tool Categories */}
       <section className="max-w-7xl mx-auto px-4 py-16">
         <div className="flex items-center justify-between mb-8">
@@ -139,6 +148,9 @@ export default async function HomePage() {
             View all {FREE_TOOLS.length} free tools
           </Link>
         </div>
+
+        {/* Ad slot 2 — directly below the "View all" link. */}
+        <AdSlot code={adCodes[adSlotKey("home", "bottom")] ?? null} position="bottom" />
       </section>
 
       {/* Why SaaSToolz */}
