@@ -1,6 +1,8 @@
 import { ImageResponse } from "next/og";
 import prisma from "@/lib/prisma";
 import { extractCoverImage } from "@/lib/markdown";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -13,6 +15,20 @@ export const contentType = "image/png";
 // (/blog/{slug}/opengraph-image), and next/og's renderer (Satori) can embed
 // a data: URI directly as an <img src> with no network fetch needed, so the
 // uploaded cover still ends up baked into the PNG this route returns.
+// The renderer can't fetch a site-relative path like "/blog/x.jpg", so inline
+// files from /public as data: URIs. Anything else (data: or https: URLs) is
+// passed through, and an unreadable file just means no cover.
+async function resolveCover(src: string | null): Promise<string | null> {
+  if (!src || !src.startsWith("/")) return src;
+  try {
+    const buf = await readFile(join(process.cwd(), "public", src));
+    const type = src.endsWith(".png") ? "image/png" : src.endsWith(".webp") ? "image/webp" : "image/jpeg";
+    return `data:${type};base64,${buf.toString("base64")}`;
+  } catch {
+    return null;
+  }
+}
+
 export default async function BlogPostOGImage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = await prisma.blogPost.findUnique({
@@ -23,7 +39,8 @@ export default async function BlogPostOGImage({ params }: { params: Promise<{ sl
   const isLive = post?.published ?? false;
   const title = isLive ? post!.title : "SaaSToolz Blog";
   const displayTitle = title.length > 70 ? `${title.slice(0, 67)}…` : title;
-  const cover = isLive ? (post!.coverImage ?? extractCoverImage(post!.content)) : null;
+  const rawCover = isLive ? (post!.coverImage ?? extractCoverImage(post!.content)) : null;
+  const cover = await resolveCover(rawCover);
 
   return new ImageResponse(
     (
