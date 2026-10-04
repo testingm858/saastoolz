@@ -9,7 +9,7 @@ import AnnouncementBanner from "@/components/AnnouncementBanner";
 import { getActiveAnnouncement } from "@/lib/announcements";
 import AdSlot from "@/components/AdSlot";
 import { getAdCodes } from "@/lib/ads";
-import { canShowAds } from "@/lib/ads/policy";
+import { canShowAds, adSlotVisible } from "@/lib/ads/policy";
 import { adSlotKey } from "@/lib/adPlacements";
 
 const HOME_TITLE = "Free Online Tools for PDF, Images, SEO, Coding & More | SaaSToolz";
@@ -51,6 +51,9 @@ export default async function HomePage() {
 
   const announcement = await getActiveAnnouncement();
   const adCodes = canShowAds("/") ? await getAdCodes("home", ["top", "bottom"]) : {};
+  // When the slot under "View all" is showing, the section padding below it
+  // collapses so the gap above and below the ad card matches.
+  const bottomAdShown = adSlotVisible(adCodes[adSlotKey("home", "bottom")] ?? null);
 
   return (
     <div>
@@ -103,7 +106,7 @@ export default async function HomePage() {
       <AdSlot code={adCodes[adSlotKey("home", "top")] ?? null} position="top" variant="floating" />
 
       {/* Free Tool Categories */}
-      <section className="max-w-7xl mx-auto px-4 py-16">
+      <section className={`max-w-7xl mx-auto px-4 pt-16 ${bottomAdShown ? "pb-0" : "pb-16"}`}>
         <div className="flex items-center justify-between mb-8">
           <div>
             <h2 className="text-2xl font-bold text-gray-900">Free Tools</h2>
@@ -154,7 +157,7 @@ export default async function HomePage() {
       </section>
 
       {/* Why SaaSToolz */}
-      <section className="max-w-7xl mx-auto px-4 py-20">
+      <section className={`max-w-7xl mx-auto px-4 pb-20 ${bottomAdShown ? "pt-0" : "pt-20"}`}>
         <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Why SaaSToolz?</h2>
         <div className="grid md:grid-cols-3 gap-6">
           {[
