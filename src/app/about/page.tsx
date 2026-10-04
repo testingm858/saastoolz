@@ -4,10 +4,10 @@ import { Zap, Shield, Star } from "lucide-react";
 import { FREE_TOOLS } from "@/lib/tools";
 
 export const metadata: Metadata = {
-  title: "About",
-  description: "Why SaaSToolz exists and how it's built.",
+  title: "About SaaSToolz — Free Online Tools, No Signup",
+  description: "Learn why SaaSToolz exists and how it's built: free online PDF, image, audio and developer tools you can use instantly, with no account required.",
   alternates: { canonical: "/about" },
-  openGraph: { title: "About | SaaSToolz", description: "Why SaaSToolz exists and how it's built." },
+  openGraph: { title: "About | SaaSToolz", description: "Learn why SaaSToolz exists and how it's built: free online PDF, image, audio and developer tools you can use instantly, with no account required.", images: [{ url: "/opengraph-image", width: 1200, height: 630 }] },
 };
 
 export default function AboutPage() {

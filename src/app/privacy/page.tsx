@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "How SaaSToolz collects, uses and protects your data.",
+  description: "How SaaSToolz collects, uses and protects your data, including cookies, analytics and advertising, and the choices you have over your information.",
   alternates: { canonical: "/privacy" },
-  openGraph: { title: "Privacy Policy | SaaSToolz", description: "How SaaSToolz collects, uses and protects your data." },
+  openGraph: { title: "Privacy Policy | SaaSToolz", description: "How SaaSToolz collects, uses and protects your data, including cookies, analytics and advertising, and the choices you have over your information.", images: [{ url: "/opengraph-image", width: 1200, height: 630 }] },
 };
 
 const LAST_UPDATED = "September 15, 2026";

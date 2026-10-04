@@ -701,15 +701,30 @@ function fallbackTitle(tool: Tool): string {
   return full.length <= 60 ? full : `${tool.name} — Free, No Signup | SaaSToolz`;
 }
 
+// Google shows roughly 155–160 characters of a meta description; the full
+// suffix pushes longer tool descriptions past that, so fall back to a
+// shorter wording of the same claim when needed.
+const MAX_META_DESCRIPTION = 160;
+
 function fallbackDescription(tool: Tool): string {
   const fileBased = isFileTool(tool.id);
-  const suffix =
+  const [long, short] =
     tool.processing === "client"
-      ? "100% free, no signup required — everything runs instantly in your browser and nothing you enter is ever uploaded."
+      ? [
+          "100% free, no signup required — everything runs instantly in your browser and nothing you enter is ever uploaded.",
+          "Free, no signup — runs in your browser and nothing you enter is uploaded.",
+        ]
       : fileBased
-        ? "Free, no signup, no watermark — files are uploaded securely and permanently removed from our servers within 1 hour."
-        : "Free, no signup, no usage limits — processed securely and never stored on our servers.";
-  return `${tool.description}. ${suffix}`;
+        ? [
+            "Free, no signup, no watermark — files are uploaded securely and permanently removed from our servers within 1 hour.",
+            "Free, no signup, no watermark — files are deleted from our servers within 1 hour.",
+          ]
+        : [
+            "Free, no signup, no usage limits — processed securely and never stored on our servers.",
+            "Free, no signup, no limits — never stored on our servers.",
+          ];
+  const full = `${tool.description}. ${long}`;
+  return full.length <= MAX_META_DESCRIPTION ? full : `${tool.description}. ${short}`;
 }
 
 export function getToolSeo(tool: Tool): ToolSeoContent {

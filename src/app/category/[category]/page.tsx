@@ -28,11 +28,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category } = await params;
   const meta = CATEGORY_META[category];
   if (!meta || category.startsWith("ai-")) return {};
+  const description = `${meta.description}. Free online ${meta.label}, no signup required — choose a tool and get started in seconds.`;
   return {
     title: `${meta.label} — Free Online Tools`,
-    description: meta.description,
+    description,
     alternates: { canonical: `/category/${category}` },
-    openGraph: { title: `${meta.label} | SaaSToolz`, description: meta.description },
+    openGraph: { title: `${meta.label} | SaaSToolz`, description, images: [{ url: "/opengraph-image", width: 1200, height: 630 }] },
   };
 }
 

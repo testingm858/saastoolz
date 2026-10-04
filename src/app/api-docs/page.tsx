@@ -3,10 +3,10 @@ import Link from "next/link";
 import { FREE_TOOLS } from "@/lib/tools";
 
 export const metadata: Metadata = {
-  title: "API Docs",
-  description: "The REST endpoint that powers every SaaSToolz tool.",
+  title: "API Docs — SaaSToolz REST Endpoint",
+  description: "Reference for the REST endpoint that powers every SaaSToolz tool, including how to call it, what to send and what it returns.",
   alternates: { canonical: "/api-docs" },
-  openGraph: { title: "API Docs | SaaSToolz", description: "The REST endpoint that powers every SaaSToolz tool." },
+  openGraph: { title: "API Docs | SaaSToolz", description: "Reference for the REST endpoint that powers every SaaSToolz tool, including how to call it, what to send and what it returns.", images: [{ url: "/opengraph-image", width: 1200, height: 630 }] },
 };
 
 const CODE_BLOCK_CLASS =

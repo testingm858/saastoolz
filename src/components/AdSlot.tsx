@@ -29,6 +29,11 @@ export default function AdSlot({ code, position }: { code: string | null; positi
   const height = isVertical ? 600 : 100;
 
   if (!code) {
+    // Production visitors and crawlers should never see an empty "Advertisement"
+    // box: it's dead space on every tool/blog page and reads as a broken ad.
+    // The dashed placeholder stays in dev/preview so slot positions are still
+    // visible while designing.
+    if (process.env.NODE_ENV === "production") return null;
     return (
       <div className={cn("w-full mx-auto my-8", maxWidth)}>
         <div

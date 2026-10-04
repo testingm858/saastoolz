@@ -14,6 +14,9 @@ export function renderMarkdown(md: string): string {
   const rawHtml = marked.parse(md, { async: false }) as string;
   return sanitizeHtml(rawHtml, {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat(["h1", "h2", "img"]),
+    // The post page already renders the title as its single <h1>; a second
+    // "# Heading" in the body would give the page multiple H1s.
+    transformTags: { h1: "h2" },
     allowedAttributes: {
       ...sanitizeHtml.defaults.allowedAttributes,
       img: ["src", "alt", "title", "width", "height"],

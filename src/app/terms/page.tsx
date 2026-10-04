@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
-  description: "The terms that govern your use of SaaSToolz.",
+  description: "The terms of service that govern your use of SaaSToolz, including acceptable use, accounts, content, advertising and limitations of liability.",
   alternates: { canonical: "/terms" },
-  openGraph: { title: "Terms of Service | SaaSToolz", description: "The terms that govern your use of SaaSToolz." },
+  openGraph: { title: "Terms of Service | SaaSToolz", description: "The terms of service that govern your use of SaaSToolz, including acceptable use, accounts, content, advertising and limitations of liability.", images: [{ url: "/opengraph-image", width: 1200, height: 630 }] },
 };
 
 const LAST_UPDATED = "September 15, 2026";

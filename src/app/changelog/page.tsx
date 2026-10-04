@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { ALL_TOOLS, FREE_TOOLS, AI_TOOLS } from "@/lib/tools";
 
 export const metadata: Metadata = {
-  title: "Changelog",
-  description: "What's new on SaaSToolz.",
+  title: "Changelog — What's New on SaaSToolz",
+  description: "See what's new on SaaSToolz: recently added free online tools, upgrades to existing tools and site improvements, updated whenever we ship.",
   alternates: { canonical: "/changelog" },
-  openGraph: { title: "Changelog | SaaSToolz", description: "What's new on SaaSToolz." },
+  openGraph: { title: "Changelog | SaaSToolz", description: "See what's new on SaaSToolz: recently added free online tools, upgrades to existing tools and site improvements, updated whenever we ship.", images: [{ url: "/opengraph-image", width: 1200, height: 630 }] },
 };
 
 const ENTRIES = [

@@ -22,8 +22,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await prisma.blogPost.findUnique({ where: { slug } });
   if (!post || !post.published) return {};
+  // The root layout appends " | SaaSToolz" (12 chars); skip it when the post
+  // title is already long so the part Google truncates is not the keywords.
+  const title = post.title.length + 12 > 60 ? { absolute: post.title } : post.title;
   return {
-    title: post.title,
+    title,
     description: post.excerpt ?? undefined,
     alternates: { canonical: `/blog/${slug}` },
     openGraph: { title: post.title, description: post.excerpt ?? undefined, type: "article" },

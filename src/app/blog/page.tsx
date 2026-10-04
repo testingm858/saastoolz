@@ -6,10 +6,10 @@ import prisma from "@/lib/prisma";
 import { extractCoverImage } from "@/lib/markdown";
 
 export const metadata: Metadata = {
-  title: "Blog",
-  description: "Tips, tool guides and product updates from SaaSToolz.",
+  title: "Blog — Guides to PDF, Image & Developer Tools",
+  description: "Practical guides and how-tos for PDF, image, audio and developer tools, plus product updates from SaaSToolz. Find the fastest way to get things done.",
   alternates: { canonical: "/blog" },
-  openGraph: { title: "Blog | SaaSToolz", description: "Tips, tool guides and product updates from SaaSToolz." },
+  openGraph: { title: "Blog | SaaSToolz", description: "Practical guides and how-tos for PDF, image, audio and developer tools, plus product updates from SaaSToolz. Find the fastest way to get things done.", images: [{ url: "/opengraph-image", width: 1200, height: 630 }] },
 };
 
 // Posts are published live through /admin/blog with no redeploy — always
