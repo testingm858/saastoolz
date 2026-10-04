@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
   // (node_modules/tesseract.js/src/worker-script/node/index.js) that
   // Turbopack's tracer mangles the same way it mangled ffmpeg-static's path.
   serverExternalPackages: ["sharp", "ffmpeg-static", "@napi-rs/canvas", "tesseract.js", "tesseract.js-core"],
+  // Hostinger's build host kills the child process Turbopack spawns to run
+  // PostCSS ("node process exited before we could connect to it"), failing every
+  // build. Worker threads avoid spawning a process.
+  experimental: { turbopackPluginRuntimeStrategy: "workerThreads" },
 };
 
 export default nextConfig;
