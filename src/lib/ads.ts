@@ -13,7 +13,9 @@ export async function getAdCodes(page: AdPage, positions: AdPosition[]): Promise
   if (process.env.NODE_ENV !== "production") return {};
 
   const keys = positions.map((p) => adSlotKey(page, p));
-  const slots = await prisma.adSlot.findMany({ where: { key: { in: keys } } });
+  // Ad code is purely additive — a database hiccup should mean "no ad", not a
+  // 500 on the tool or blog page that asked for it.
+  const slots = await prisma.adSlot.findMany({ where: { key: { in: keys } } }).catch(() => []);
   const codes: Record<string, string | null> = {};
   for (const slot of slots) {
     codes[slot.key] = slot.enabled ? slot.code : null;

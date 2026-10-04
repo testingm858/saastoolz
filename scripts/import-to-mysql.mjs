@@ -1,12 +1,14 @@
 // Loads a backup made by export-neon-backup.mjs into the MySQL database that
 // DATABASE_URL points at (Hostinger).
 //
-// Usage:  npm run db:import-mysql [-- --dir backups/<folder>] [--append]
+// Usage:  npm run db:import-mysql [-- --dir backups/<folder>] [--append | --replace]
 //
 // Prerequisite: the tables already exist (run `npx prisma db push` first).
 // Safety: refuses to run if any target table already has rows, unless --append
-// is passed (then existing ids are skipped, never overwritten). Row counts are
-// verified against the backup manifest at the end.
+// is passed (then existing ids are skipped, never overwritten). --replace empties
+// every table first, for a final sync right before cutover: it makes MySQL an
+// exact copy of the backup, so take a fresh `npm run db:backup` immediately
+// before it. Row counts are verified against the manifest at the end.
 
 import fs from "node:fs";
 import path from "node:path";
@@ -52,10 +54,11 @@ function loadEnvFile(file) {
 }
 
 function parseArgs(argv) {
-  const out = { append: false };
+  const out = { append: false, replace: false };
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === "--dir") out.dir = argv[++i];
     else if (argv[i] === "--append") out.append = true;
+    else if (argv[i] === "--replace") out.replace = true;
   }
   return out;
 }
@@ -98,8 +101,18 @@ async function main() {
   const host = new URL(url).hostname;
   console.log(`Target: ${host}${new URL(url).pathname}\nSource: ${dir} (exported ${manifest.exportedAt})\n`);
 
+  if (args.append && args.replace) {
+    console.error("Use either --append or --replace, not both.");
+    process.exit(1);
+  }
+
   const prisma = new PrismaClient();
   try {
+    if (args.replace) {
+      console.log("--replace: emptying every table before loading (children first)...");
+      for (const [, model] of [...IMPORT_ORDER].reverse()) await prisma[model].deleteMany();
+    }
+
     // 1. Safety check: target must be empty unless --append.
     if (!args.append) {
       const nonEmpty = [];
