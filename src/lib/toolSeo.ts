@@ -479,6 +479,166 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
     ],
   },
+  "mortgage-calculator": {
+    title: "Mortgage Calculator — Payment & Amortization | SaaSToolz",
+    metaDescription:
+      "Calculate your monthly mortgage payment, total interest, and a full amortization schedule from home price, down payment and rate. Free, instant.",
+    intro:
+      "Mortgage Calculator works out your loan amount from the home price and down payment, then calculates the monthly payment, total interest over the full term, and an amortization schedule showing how much of each payment goes to principal versus interest.",
+    steps: [
+      "Enter the home price and your down payment percentage.",
+      "Enter the annual interest rate and the loan term in years.",
+      "Click \"Calculate\" to see your monthly payment and total interest.",
+      "Review the amortization schedule to see the principal/interest split over time.",
+    ],
+    faqs: [
+      { q: "How is the loan amount worked out?", a: "Home price minus your down payment (entered as a percentage) — that remaining amount is what the monthly payment and interest are calculated on." },
+      { q: "Why does the interest portion shrink over time?", a: "Early payments are mostly interest, charged on the full remaining balance; as the balance shrinks with each payment, less interest accrues and more of the fixed payment goes toward principal. This is normal amortization, not an error." },
+      { q: "Does this account for property tax, insurance or HOA fees?", a: "No — this calculates the principal-and-interest payment only, based on the loan amount, rate and term. Add your local tax, insurance and any fees separately for your real total monthly cost." },
+      { q: "Can I use this for a loan term in months instead of years?", a: "Enter years — fractional years (like 2.5) are accepted and converted to the nearest whole month internally." },
+      { q: "Does this tool send my numbers to a server?", a: "Yes — your figures are sent to our servers to compute the result and the result is returned to you; we don't store the values." },
+    ],
+  },
+  "timezone-calculator": {
+    title: "Time Zone Converter — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Convert a date and time between any two IANA time zones, handling daylight saving automatically. Free, instant, no signup.",
+    intro:
+      "Time Zone Converter takes a date and time in one time zone and shows the equivalent moment in another, using each zone's official IANA name (like \"America/New_York\" or \"Asia/Tokyo\") so daylight saving transitions are applied automatically and correctly for that specific date.",
+    steps: [
+      "Enter the date and time you want to convert.",
+      "Choose the source time zone.",
+      "Choose the destination time zone.",
+      "The converted local time in both zones is shown instantly.",
+    ],
+    faqs: [
+      { q: "Why use zone names like \"Europe/London\" instead of GMT/UTC offsets?", a: "A fixed offset (like UTC+1) doesn't know about daylight saving, so it gives the wrong answer for half the year in many regions. A named zone carries its own daylight-saving rules, so the conversion is correct for the specific date you enter, not just a snapshot offset." },
+      { q: "Does it handle daylight saving automatically?", a: "Yes — because the conversion uses the full IANA time zone database via the browser and server's built-in date handling, not a fixed offset, transitions are applied correctly based on the date you enter." },
+      { q: "What date format should I use?", a: "A standard date-and-time format such as 2026-07-15T14:00:00. If the input isn't a valid date, you'll get a clear error rather than a silently wrong result." },
+      { q: "Does this tool send my input to a server?", a: "Yes — the date and zone names are sent to our servers to compute the result and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "redirect-checker": {
+    title: "Redirect Checker — Trace the Full Chain | SaaSToolz",
+    metaDescription:
+      "Follow a URL through every redirect, up to 10 hops, and see each address with its status code and the final destination. Free, instant.",
+    intro:
+      "Redirect Checker follows a URL through up to 10 redirect hops, showing the status code at every step and the final destination it lands on — so you can confirm a redirect goes straight to the right place instead of chaining through several unnecessary steps.",
+    steps: [
+      "Enter the URL you want to check.",
+      "Click \"Check Redirects\" to follow the chain.",
+      "Review each hop's URL and status code in order.",
+      "Check the final destination matches what you expect.",
+    ],
+    faqs: [
+      { q: "How many redirects will it follow?", a: "Up to 10 hops. If a chain is still redirecting after 10 steps, that's almost always a sign of a loop or a configuration problem worth fixing on its own." },
+      { q: "What's the difference between a 301 and a 302?", a: "A 301 means the move is permanent, and search engines transfer most of the old page's ranking value to the new address. A 302 means temporary, and the original address stays the one search engines index. Use 301 for anything that moved for good." },
+      { q: "Why does a redirect chain matter for SEO?", a: "Each extra hop adds load time and a small chance the chain breaks somewhere. The ideal is one redirect straight to the final address — see our guide to canonical URLs, redirects and hreflang for the full picture." },
+      { q: "Does this tool send the URL to a server?", a: "Yes — the URL is fetched from our servers to trace the chain; the URL itself isn't stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "bmr-calculator": {
+    title: "BMR Calculator — Mifflin-St Jeor Formula | SaaSToolz",
+    metaDescription:
+      "Calculate your Basal Metabolic Rate — the calories your body burns at rest — using the Mifflin-St Jeor formula. Free, instant, no signup.",
+    intro:
+      "BMR Calculator estimates your Basal Metabolic Rate, the calories your body burns at complete rest just to keep breathing, circulating blood and maintaining temperature, using the Mifflin-St Jeor formula: 10 × weight(kg) + 6.25 × height(cm) − 5 × age, plus 5 for men or minus 161 for women.",
+    steps: [
+      "Enter your weight and height.",
+      "Enter your age and sex.",
+      "Click \"Calculate BMR\" to see your estimated resting calorie burn.",
+      "Use the result as the base for the Calorie Calculator if you want your full daily number including activity.",
+    ],
+    faqs: [
+      { q: "What is BMR, exactly?", a: "The calories your body uses just to stay alive at rest — breathing, circulation, maintaining temperature — before any movement or activity is counted. For most people it's the largest share of total daily calorie burn." },
+      { q: "Why does the formula need my age and sex?", a: "Resting metabolism naturally declines with age and differs on average between men and women, mainly due to differences in typical muscle mass; the formula's age and sex terms adjust for that." },
+      { q: "Is this my full daily calorie burn?", a: "No — BMR is calories at complete rest only. For your estimated total daily burn including activity, use the Calorie Calculator, which applies an activity multiplier on top of this BMR figure." },
+      { q: "Does this tool send my numbers to a server?", a: "Yes — your figures are sent to our servers to compute the result and the result is returned to you; we don't store the values." },
+      { q: "Is this medical advice?", a: "No. This is a general estimate, not medical advice — speak to a doctor or registered dietitian about your own calorie or health needs." },
+    ],
+  },
+  "percentage-calculator": {
+    title: "Percentage Calculator — 3 Common Calculations | SaaSToolz",
+    metaDescription:
+      "Find X% of a number, the percentage change between two values, or what percentage one number is of another. Free, instant, no signup.",
+    intro:
+      "Percentage Calculator covers the three percentage questions people actually need: what is X% of a number, what's the percentage increase or decrease between two values, and what percentage one number is of another — each with its own clear formula so the result is easy to check by hand.",
+    steps: [
+      "Choose the calculation you need: \"X% of Y\", percentage change, or \"what % is X of Y\".",
+      "Enter the two numbers it asks for.",
+      "Click \"Calculate\" to see the result instantly.",
+      "Switch calculation types any time without re-entering your numbers from scratch.",
+    ],
+    faqs: [
+      { q: "What's the difference between the three calculation types?", a: "\"X% of Y\" answers questions like a tip or discount amount. \"Percentage change\" answers how much a value grew or shrank, always measured against the starting value. \"What percent is X of Y\" answers questions like a test score or budget share." },
+      { q: "Why isn't a 25% increase undone by a 25% decrease?", a: "Because each percentage is calculated against a different base — the starting value changes after the first calculation, so the two percentages aren't symmetrical. See our full guide to percentage formulas for worked examples." },
+      { q: "Can I calculate a percentage decrease, not just an increase?", a: "Yes — the percentage change calculation returns a negative result automatically when the second value is lower than the first." },
+      { q: "Does this tool send my numbers to a server?", a: "Yes — the numbers are sent to our servers to compute the result and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "favicon-generator": {
+    title: "Favicon Generator — Free Full Icon Set | SaaSToolz",
+    metaDescription:
+      "Upload one image and get a complete favicon set (16px to 512px, plus Apple touch icon) as a zip, with the HTML to paste in. Free, instant.",
+    intro:
+      "Favicon Generator takes one image and produces the full set of icon sizes a modern site needs — 16×16 and 32×32 browser favicons, a 180×180 Apple touch icon, and 192×192 and 512×512 Android/PWA icons — bundled into a zip with the exact HTML tags to paste into your page's head.",
+    steps: [
+      "Upload a square image (your logo or icon works best).",
+      "Click \"Generate\" to create every standard size.",
+      "Download the zip containing all five PNG files.",
+      "Paste the included HTML snippet into your site's <head>.",
+    ],
+    faqs: [
+      { q: "Which sizes are included?", a: "16×16 and 32×32 (standard browser favicons), 180×180 (Apple touch icon), and 192×192 and 512×512 (Android Chrome and PWA icons) — the sizes covered by every current browser and app manifest." },
+      { q: "Why PNG files instead of a single .ico file?", a: "A .ico file is a separate container format bundling multiple resolutions, which isn't what most sites actually need today — every modern browser accepts a plain PNG as a favicon via the HTML tag, so you get simpler, directly-usable files instead." },
+      { q: "What image should I upload?", a: "A square image works best, since every output size is cropped to a square. A simple logo or icon reads much better at 16×16 than detailed artwork, which can turn into a blur at the smallest sizes." },
+      { q: "Does this tool send my image to a server?", a: "Yes — your image is uploaded securely, resized into the full set, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no watermark on the output." },
+    ],
+  },
+  "meeting-cost": {
+    title: "Meeting Cost Calculator — Free, Instant | SaaSToolz",
+    metaDescription:
+      "See the real cost of a meeting from attendee count, average salary and duration — often a useful reality check before scheduling one. Free, instant.",
+    intro:
+      "Meeting Cost Calculator multiplies the number of attendees by their average hourly salary and the meeting's duration to show what a meeting actually costs in salary time — a number that's easy to ignore until you see it.",
+    steps: [
+      "Enter the number of attendees.",
+      "Enter their average hourly salary.",
+      "Enter the meeting's duration in minutes.",
+      "The total cost and cost per minute are shown instantly.",
+    ],
+    faqs: [
+      { q: "How is the cost calculated?", a: "Attendees × average hourly salary × (duration in minutes ÷ 60) — the straightforward total of everyone's time, valued at their hourly rate, for the length of the meeting." },
+      { q: "Where do I get an \"average hourly salary\" figure?", a: "Take the group's average annual salary and divide by roughly 2,080 (standard full-time hours per year) for a reasonable estimate, or use a rate you already track for cost purposes." },
+      { q: "Does this include overhead, not just salary?", a: "No — this is a straightforward salary-time calculation only. Benefits, overhead and opportunity cost would push the real figure higher; treat the result as a conservative baseline, not the full cost." },
+      { q: "Does this tool send my numbers to a server?", a: "Yes — your figures are sent to our servers to compute the result and the result is returned to you; we don't store the values." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "calorie-calculator": {
+    title: "Calorie Calculator — BMR, TDEE & Targets | SaaSToolz",
+    metaDescription:
+      "Calculate your daily calorie needs from BMR and activity level, with targets for mild and standard weight loss or gain. Free, instant, no signup.",
+    intro:
+      "Calorie Calculator estimates your Basal Metabolic Rate (Mifflin-St Jeor formula), multiplies it by an activity-level factor to estimate your maintenance calories (your TDEE), and shows targets 250 and 500 calories below or above that for mild or standard weight loss and gain.",
+    steps: [
+      "Enter your weight, height, age and sex.",
+      "Choose your activity level, from sedentary to very active.",
+      "Click \"Calculate\" to see your BMR and maintenance calories.",
+      "Review the weight-loss and weight-gain targets alongside your maintenance figure.",
+    ],
+    faqs: [
+      { q: "What's the difference between BMR and the calorie number this tool gives me?", a: "BMR is calories burned at complete rest. This tool multiplies that by an activity-level factor (1.2 for sedentary up to 1.9 for very active) to estimate your total daily calories including movement and exercise, often called TDEE." },
+      { q: "How should I choose my activity level?", a: "Be honest rather than aspirational — most people overestimate it. \"Sedentary\" means a desk job with little or no exercise; \"light\" means exercising roughly 1–3 days a week. Choosing one level too high will overstate your calorie needs." },
+      { q: "What do the weight-loss and weight-gain targets mean?", a: "They're your maintenance calories adjusted by 250 or 500 calories in either direction — a smaller gap for a gradual change, a larger one for a faster change. Very low intakes aren't shown, since cutting too far isn't safe without professional guidance." },
+      { q: "Does this tool send my numbers to a server?", a: "Yes — your figures are sent to our servers to compute the result and the result is returned to you; we don't store the values." },
+      { q: "Is this medical or dietary advice?", a: "No. This is a general estimate, not medical or dietary advice — speak to a doctor or registered dietitian before making a significant change to your eating." },
+    ],
+  },
   "invoice-generator": {
     title: "Free Invoice Generator Online — Instant PDF | SaaSToolz",
     metaDescription:
