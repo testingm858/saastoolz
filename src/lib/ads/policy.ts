@@ -9,10 +9,13 @@
 const AD_DENIED_TOOL_SLUGS = new Set(["pdf-unlock"]);
 
 // Whether an ad slot with no ad code configured still draws its labeled
-// "Advertisement" placeholder card on the live site. Turn this off to show
-// visitors nothing at all until real ad code is pasted in /admin/ads. In
-// development and preview the placeholder always shows.
-export const SHOW_EMPTY_AD_PLACEHOLDERS = true;
+// "Advertisement" placeholder card on the live site. Off: a site-wide scan
+// found up to 23 empty "Advertisement" boxes on /tools alone (none of the
+// slots have real ad code yet), which is a plausible contributor to
+// AdSense's "Needs attention" status — flip to true only once real ad code
+// is live in most slots. In development and preview the placeholder always
+// shows regardless of this flag.
+export const SHOW_EMPTY_AD_PLACEHOLDERS = false;
 
 export function adSlotVisible(code: string | null): boolean {
   return Boolean(code) || SHOW_EMPTY_AD_PLACEHOLDERS || process.env.NODE_ENV !== "production";
