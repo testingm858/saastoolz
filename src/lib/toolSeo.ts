@@ -319,6 +319,166 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
     ],
   },
+  "bmi-calculator": {
+    title: "BMI Calculator — Free, Metric & Imperial | SaaSToolz",
+    metaDescription:
+      "Calculate your Body Mass Index in metric or imperial units, with your category and healthy weight range for your height. Free, instant, no signup.",
+    intro:
+      "BMI Calculator divides your weight by your height squared (metric: kg / m², imperial: 703 × lb / in²) to give your Body Mass Index, your category (underweight, normal, overweight, obese per WHO thresholds), and the healthy weight range for your exact height.",
+    steps: [
+      "Choose metric (kg, cm) or imperial (lb, inches) units.",
+      "Enter your weight and height.",
+      "Click \"Calculate BMI\" to see your BMI, category, and healthy weight range.",
+      "Switch units any time — the same figures are recalculated instantly.",
+    ],
+    faqs: [
+      { q: "What do the BMI categories mean?", a: "Below 18.5 is underweight, 18.5–24.9 is normal weight, 25–29.9 is overweight, and 30+ is obese, using the WHO's standard adult thresholds." },
+      { q: "Is BMI accurate for everyone?", a: "No — it's a quick screening ratio of weight to height, not a measure of body fat or fitness. It doesn't distinguish muscle from fat, so a muscular person can show a higher BMI without excess fat. It also isn't designed for children, who are assessed on age-and-sex growth charts instead." },
+      { q: "How is the healthy weight range worked out?", a: "By applying the normal-BMI boundaries (18.5 and 24.9) to your own height, so you get a weight range in kg or lb rather than just a single BMI number." },
+      { q: "Does this tool send my numbers to a server?", a: "Yes — your weight and height are sent to our servers to compute the result and the result is returned to you; we don't store the values." },
+      { q: "Is this medical advice?", a: "No. This is general information, not medical advice — speak to a doctor or other qualified health professional about your weight or health." },
+    ],
+  },
+  "age-calculator": {
+    title: "Age Calculator — Exact Years, Months & Days | SaaSToolz",
+    metaDescription:
+      "Calculate exact age in years, months and days between two dates, including total days elapsed. Free, instant, no signup.",
+    intro:
+      "Age Calculator works out the exact time between a birth date and today (or any other date you choose), broken down into years, months and days, plus the total number of days elapsed — correctly handling different month lengths and leap years.",
+    steps: [
+      "Enter the birth date (or starting date).",
+      "Optionally set a different \"as of\" date — defaults to today.",
+      "Click \"Calculate Age\" to see the result in years, months and days.",
+      "Check the total days elapsed shown alongside the breakdown.",
+    ],
+    faqs: [
+      { q: "How is the months-and-days part calculated?", a: "By counting whole years first, then whole months within the current year, then the remaining days — borrowing a month's worth of days from the previous calendar month when the day-of-month hasn't been reached yet, so the result matches how you'd count age by hand." },
+      { q: "Does it account for leap years?", a: "Yes — the calculation uses real calendar dates throughout, so February 29th and variable month lengths are handled automatically rather than assumed to be a fixed number of days." },
+      { q: "Can I calculate the age on a future or past date, not just today?", a: "Yes — set the \"as of\" date to any date after the birth date, useful for working out how old someone was (or will be) on a specific event date." },
+      { q: "Does this tool send my dates to a server?", a: "Yes — the dates are sent to our servers to compute the result and the result is returned to you; we don't store the values." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "regex-tester": {
+    title: "Regex Tester — Live Matches, Groups & Flags | SaaSToolz",
+    metaDescription:
+      "Test a regular expression against your text and see every match, capture group and index highlighted live. Free, instant, no signup.",
+    intro:
+      "Regex Tester runs your pattern against a test string and shows every match, its position, and any capture groups — so you can see exactly what a regular expression does before you put it in real code.",
+    steps: [
+      "Type or paste your regular expression pattern.",
+      "Set any flags you need (g, i, m, s, u, y).",
+      "Paste the text you want to test it against.",
+      "Matches, their positions, and capture groups update as you type.",
+    ],
+    faqs: [
+      { q: "Which regex flags are supported?", a: "g (global), i (case-insensitive), m (multiline), s (dotAll), u (unicode) and y (sticky) — the standard JavaScript regex flags." },
+      { q: "Why would a pattern time out instead of matching?", a: "Some patterns (nested quantifiers like (a+)+ against certain input) can trigger catastrophic backtracking, where matching time explodes exponentially. Matches are run with a 1-second limit so a runaway pattern fails fast with a clear message instead of hanging." },
+      { q: "Does this tool send my pattern and text to a server?", a: "Yes — both are sent to our servers to run the match and the result is returned to you; we don't store them." },
+      { q: "Can I test capture groups?", a: "Yes — each match shows its full text, its index in the string, and the text captured by every group in the pattern." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "uuid-generator": {
+    title: "UUID Generator — Free, Bulk v4 UUIDs | SaaSToolz",
+    metaDescription:
+      "Generate cryptographically random v4 UUIDs one at a time or in bulk, up to 1000 at once. Free, instant, no signup.",
+    intro:
+      "UUID Generator creates version 4 (random) UUIDs using the browser's or server's cryptographic random number generator — the standard way to generate unique identifiers with no coordination needed between systems.",
+    steps: [
+      "Choose how many UUIDs you need (up to 1000 at once).",
+      "Click \"Generate\" to create them instantly.",
+      "Copy a single UUID, or copy the whole list at once.",
+      "Generate again any time for a fresh, unrelated set.",
+    ],
+    faqs: [
+      { q: "What's a v4 UUID, and why that version?", a: "Version 4 UUIDs are generated from random bits rather than from a timestamp or hardware address (as v1 does), which avoids leaking when or where they were created and is the version almost every modern system expects by default." },
+      { q: "How likely is a collision?", a: "Astronomically unlikely — a v4 UUID has 122 random bits, so you'd need to generate billions of UUIDs per second for centuries before a coincidental duplicate became plausible." },
+      { q: "Is the randomness actually secure?", a: "Yes — generation uses the platform's cryptographic random number generator (crypto.randomUUID()), not a predictable pseudo-random source." },
+      { q: "Does this tool send anything to a server?", a: "Yes — the generation request is sent to our servers and the UUIDs are returned to you; nothing is stored." },
+      { q: "Is there a limit on how many I can generate?", a: "Up to 1000 UUIDs per request — generate again as many times as you need." },
+    ],
+  },
+  "audio-watermark": {
+    title: "Audio Watermark — Protect Preview Tracks | SaaSToolz",
+    metaDescription:
+      "Mix a watermark clip into your track at an adjustable volume, so previews stay protected until payment. Free, no signup, outputs MP3.",
+    intro:
+      "Audio Watermark loops a short watermark clip (a spoken tag or stamped sound) continuously under your main track at a volume you set, producing a single MP3 you can safely send as a preview before a sale or license is confirmed.",
+    steps: [
+      "Upload your main track and a short watermark clip.",
+      "Set the watermark volume relative to the main track (0–100%).",
+      "Click \"Add Watermark\" to mix and render the result.",
+      "Download the watermarked MP3 and use it for every preview or demo link.",
+    ],
+    faqs: [
+      { q: "What happens if the watermark clip is shorter than the main track?", a: "It loops continuously for the full length of the main track, so the watermark is present throughout, not just once at the start." },
+      { q: "What format is the output?", a: "A single MP3 file, regardless of the input formats, so it's easy to share anywhere." },
+      { q: "How loud should the watermark be?", a: "Loud enough that the track is unusable without paying for the clean version, but not so loud it drowns out the music a buyer needs to evaluate. Test a few volume levels and listen on more than one device before settling on one." },
+      { q: "Does this tool send my audio to a server?", a: "Yes — your files are uploaded securely, processed to mix the watermark in, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no watermark on the tool itself." },
+    ],
+  },
+  "currency-converter": {
+    title: "Currency Converter — 30 Currencies, Daily Rates | SaaSToolz",
+    metaDescription:
+      "Convert between 30 major currencies using daily European Central Bank reference rates. Free, instant, no signup, no API key needed.",
+    intro:
+      "Currency Converter converts an amount between any two of 30 major currencies using the European Central Bank's daily reference exchange rates, so the figure you get reflects that day's official rate rather than a marked-up or delayed one.",
+    steps: [
+      "Enter the amount you want to convert.",
+      "Choose the currency you're converting from.",
+      "Choose the currency you're converting to.",
+      "The converted amount and the exact rate used are shown instantly.",
+    ],
+    faqs: [
+      { q: "Which currencies are supported?", a: "30 major currencies published daily by the European Central Bank, including USD, EUR, GBP, JPY, CAD, AUD, INR and most other widely traded currencies. Smaller or pegged currencies outside the ECB's daily list aren't included." },
+      { q: "How current are the exchange rates?", a: "Rates come from the ECB's daily reference rates, updated once per business day — not real-time trading rates, so they're a close but not tick-by-tick match to what a bank or exchange would quote at a given moment." },
+      { q: "Is this accurate enough for sending money abroad?", a: "Use it to estimate amounts, not to price an actual transfer — banks and money-transfer services add their own margin on top of the reference rate, so the amount you receive will differ from a pure conversion." },
+      { q: "Does this tool send my amount to a server?", a: "Yes — the amount and currencies are sent to our servers to fetch the rate and compute the result; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no API key required." },
+    ],
+  },
+  "hex-to-rgb": {
+    title: "HEX to RGB Converter — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Convert HEX color codes to RGB and HSL values instantly, in your browser. Free, no signup, no ads on results.",
+    intro:
+      "HEX to RGB converts a hex color code (like #7c3aed) into its RGB values (red, green and blue, each 0–255) and HSL values (hue, saturation, lightness), updating instantly as you type or pick a color.",
+    steps: [
+      "Type a hex color code, or use the color picker.",
+      "The RGB values (0–255 for red, green, blue) appear instantly.",
+      "The equivalent HSL values are shown alongside.",
+      "Copy whichever format your code or design tool needs.",
+    ],
+    faqs: [
+      { q: "Why do I need both RGB and HSL?", a: "RGB is how screens actually store color, so it's what most code expects. HSL (hue, saturation, lightness) is easier for humans to reason about — for example, lowering lightness darkens a color without changing its hue, which isn't a simple operation in RGB." },
+      { q: "Does this tool send my color to a server?", a: "No — the conversion happens entirely in your browser; nothing you enter is transmitted or stored." },
+      { q: "Does it support 3-digit hex codes like #fff?", a: "Yes — shorthand 3-digit hex codes are expanded to their full 6-digit equivalent automatically before conversion." },
+      { q: "Can I go the other way, from RGB to HEX?", a: "Yes — use RGB to HEX for the reverse conversion." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "webhook-tester": {
+    title: "Webhook Tester — Free Temporary Inspection URL | SaaSToolz",
+    metaDescription:
+      "Get a temporary URL, send it real webhook requests, and inspect the exact headers and body received. Free, no signup, 30-minute sessions.",
+    intro:
+      "Webhook Tester gives you a temporary, unique URL you can paste into Stripe, GitHub, a payment provider, or anything else that sends webhooks — then shows you the exact method, headers and body of every request that arrives, so you can debug an integration without deploying any code.",
+    steps: [
+      "Click \"Generate URL\" to get a temporary, unique webhook endpoint.",
+      "Paste that URL into the service you're testing (Stripe, GitHub, etc.).",
+      "Trigger the event from that service, or send a request yourself.",
+      "Watch the request's method, headers and body appear as they arrive.",
+    ],
+    faqs: [
+      { q: "How long does the URL stay active?", a: "30 minutes from when it's generated. Generate a new one any time you need a fresh session." },
+      { q: "Is there a limit on the request body size?", a: "Yes — up to 1MB is accepted, and up to 10,000 characters of the body are stored for display; this covers virtually every real-world webhook payload." },
+      { q: "Can any service send a request to the URL?", a: "Yes — the URL accepts requests from anywhere with no authentication required, by design, since the whole point is that an external service (which you don't control) can reach it directly. Treat the URL as disposable: don't reuse it beyond the session, and don't rely on it for anything sensitive." },
+      { q: "What happens to the captured requests afterward?", a: "They exist only for the 30-minute session and are not kept once it expires." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
   "invoice-generator": {
     title: "Free Invoice Generator Online — Instant PDF | SaaSToolz",
     metaDescription:
