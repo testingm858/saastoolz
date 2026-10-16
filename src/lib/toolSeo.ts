@@ -959,6 +959,166 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
     ],
   },
+  "js-beautifier": {
+    title: "JS Beautifier — Free, Instant JavaScript Formatter | SaaSToolz",
+    metaDescription:
+      "Paste minified or messy JavaScript and get readable, properly indented code back instantly. Free, no signup.",
+    intro:
+      "JS Beautifier reformats JavaScript by tracking brace and bracket depth and inserting consistent 2-space indentation and line breaks after every statement, turning a single minified line (or inconsistently formatted code) into something readable.",
+    steps: [
+      "Paste your JavaScript code.",
+      "Click \"Beautify\" to reformat it.",
+      "Review the indented, line-broken result.",
+      "Copy the formatted code.",
+    ],
+    faqs: [
+      { q: "Does this rename variables or change the code's logic?", a: "No — only whitespace, indentation and line breaks change. The code runs exactly the same before and after; nothing about its behavior, variable names, or logic is touched." },
+      { q: "Will this work on heavily minified code with no spaces at all?", a: "Yes — formatting is based on tracking braces, brackets and semicolons, not on existing whitespace, so it reconstructs structure even from a single densely packed line." },
+      { q: "Does it respect strings so braces inside them aren't miscounted?", a: "Yes — the beautifier tracks whether it's inside a quoted string (including backtick template literals) and leaves everything inside untouched, so a brace or semicolon character inside a string won't throw off the indentation." },
+      { q: "Does this tool send my code to a server?", a: "Yes — it's sent to our servers to format and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "flexbox-generator": {
+    title: "CSS Flexbox Generator — Free, Instant Code | SaaSToolz",
+    metaDescription:
+      "Build a flexbox layout visually and copy the ready-to-use flex-direction, justify-content and align-items CSS. Free, instant, no signup.",
+    intro:
+      "CSS Flexbox Generator lets you set direction, justification, alignment, wrapping and gap, then outputs the exact display: flex rule and its related properties ready to paste into your stylesheet — no need to memorize which property controls which axis.",
+    steps: [
+      "Choose a flex direction (row, column, or reversed).",
+      "Set justify-content and align-items to position items.",
+      "Choose whether items wrap, and set the gap between them.",
+      "Copy the generated CSS.",
+    ],
+    faqs: [
+      { q: "What's the difference between justify-content and align-items?", a: "justify-content positions items along the main axis (horizontally for a row, vertically for a column), while align-items positions them along the cross axis (the opposite direction). Switching direction swaps which one controls which visual axis." },
+      { q: "Why would I use row-reverse or column-reverse instead of changing my HTML order?", a: "Reversing the direction flips the visual order without touching your markup, which keeps the DOM order (important for accessibility and tab order) separate from the visual order." },
+      { q: "Do I need anything besides this CSS to make the layout work?", a: "Just apply display: flex (included in the generated code) to the container; its direct children become flex items automatically with no extra markup needed." },
+      { q: "Does this tool send anything to a server?", a: "No — the CSS is generated entirely in your browser; nothing you enter is transmitted or stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "mrr-calculator": {
+    title: "SaaS MRR / ARR Calculator — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Calculate Monthly and Annual Recurring Revenue from your customer plans, plus net new MRR from churn and new business. Free, instant, no signup.",
+    intro:
+      "SaaS MRR Calculator sums each plan's price times its customer count to get your Monthly Recurring Revenue, multiplies by 12 for Annual Recurring Revenue, and nets your new MRR against churned MRR to show whether you're growing or shrinking month over month.",
+    steps: [
+      "Enter each pricing plan's price and customer count.",
+      "Enter MRR churned this month, if any.",
+      "Enter new MRR added this month, if any.",
+      "MRR, ARR, and net new MRR are calculated instantly.",
+    ],
+    faqs: [
+      { q: "How is ARR calculated from MRR?", a: "Simply MRR × 12 — it assumes current MRR holds steady for a year, which is the standard convention, not a growth forecast." },
+      { q: "What does \"net new MRR\" tell me?", a: "New MRR added this month minus MRR lost to churn. A positive number means you grew; a negative number means churn outpaced new business, even if your total MRR still looks healthy." },
+      { q: "Can I enter more than one pricing plan?", a: "Yes — add a row for each plan tier with its price and customer count, and the calculator sums all of them into your total MRR." },
+      { q: "Does this tool send my numbers to a server?", a: "Yes — your figures are sent to our servers to compute the result and the result is returned to you; we don't store the values." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "jwt-encoder": {
+    title: "JWT Encoder — Free, Instant HS256 Signing | SaaSToolz",
+    metaDescription:
+      "Build and sign a JWT from your own payload and secret using HS256. Free, instant, no signup.",
+    intro:
+      "JWT Encoder takes the JSON payload and secret you provide, adds an iat (issued-at) claim automatically and an exp (expiry) claim if you set one, then signs the token with HMAC-SHA256 using the Web Crypto API — producing a real, working JWT you can use for testing.",
+    steps: [
+      "Enter your payload as a JSON object.",
+      "Enter the secret to sign with.",
+      "Optionally set an expiry time.",
+      "Copy the signed JWT.",
+    ],
+    faqs: [
+      { q: "What signing algorithm does this use?", a: "HS256 (HMAC with SHA-256) — a symmetric algorithm where the same secret is used to sign and later verify the token. It's the most common default for simple JWT setups." },
+      { q: "What gets added to my payload automatically?", a: "An iat claim (issued-at, the current Unix timestamp) is always added. If you set an expiry, an exp claim is added too, calculated as the current time plus however many seconds you specify." },
+      { q: "Is the secret I enter stored anywhere?", a: "No — it's used only to compute the signature for this one request and isn't stored. Still, use a test secret rather than a real production signing key, since it is transmitted to generate the token." },
+      { q: "Does this tool send my payload and secret to a server?", a: "Yes — they're sent to our servers to sign the token and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "pregnancy-calculator": {
+    title: "Pregnancy Due Date Calculator — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Estimate your due date, current week, and trimester from your last period date. Free, instant, no signup.",
+    intro:
+      "Pregnancy Calculator uses the standard 280-day (40-week) estimate from your last menstrual period to calculate your due date, then works out exactly how many weeks and days pregnant you are today and which trimester that falls into.",
+    steps: [
+      "Enter the first day of your last menstrual period.",
+      "Your estimated due date appears instantly.",
+      "See how many weeks and days pregnant you are today.",
+      "See which trimester you're currently in.",
+    ],
+    faqs: [
+      { q: "Why 280 days specifically?", a: "280 days (40 weeks) from the last menstrual period is the standard clinical convention for estimating a due date, even though actual ovulation and conception happen roughly two weeks into that window." },
+      { q: "How are the trimesters defined here?", a: "Weeks 1 through 12 are the first trimester, weeks 13 through 26 are the second, and week 27 onward is the third — the commonly used breakdown, though exact boundaries can vary slightly by source." },
+      { q: "Is this a substitute for a doctor's estimate?", a: "No — this is a quick estimate based on a standard formula. Your doctor's estimate, especially one based on an ultrasound, is more accurate for your specific pregnancy." },
+      { q: "Does this tool send my date to a server?", a: "Yes — the date is sent to our servers to compute the result and the result is returned to you; we don't store it." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "image-crop": {
+    title: "Crop Image — Free, Instant, Exact Pixels | SaaSToolz",
+    metaDescription:
+      "Crop an image to an exact rectangle by pixel coordinates. Free, instant, no signup, no watermark.",
+    intro:
+      "Crop Image cuts out a precise rectangular region from your image using the exact left, top, width and height pixel values you specify, in whatever format the image was already in.",
+    steps: [
+      "Upload your image.",
+      "Enter the left and top position of the crop area.",
+      "Enter the width and height of the crop area.",
+      "Download the cropped image.",
+    ],
+    faqs: [
+      { q: "How do I know which pixel coordinates to use?", a: "Left and top set where the crop box starts, measured from the image's top-left corner; width and height set how big the box is from there. Check your image's dimensions first so the box stays within bounds." },
+      { q: "What happens if I set width or height to 0?", a: "It's rejected with a clear error — a 0-pixel crop isn't a valid image region, so this tool checks for it upfront rather than letting it fail with a confusing error." },
+      { q: "Does cropping change the image format?", a: "No — the cropped output keeps the same format as your original (JPEG stays JPEG, PNG stays PNG, and so on)." },
+      { q: "Does this tool send my image to a server?", a: "Yes — your image is uploaded securely, cropped, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no watermark on the output." },
+    ],
+  },
+  "sql-formatter": {
+    title: "SQL Formatter — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Paste a dense SQL query and get it reformatted with each clause on its own line. Free, instant, no signup.",
+    intro:
+      "SQL Formatter recognizes major SQL keywords — SELECT, FROM, WHERE, JOIN variants, GROUP BY, ORDER BY, and more — and puts each one on its own line, turning a single dense query into a readable, clause-by-clause layout.",
+    steps: [
+      "Paste your SQL query.",
+      "Click \"Format\" to reformat it.",
+      "Review each clause now on its own line.",
+      "Copy the formatted SQL.",
+    ],
+    faqs: [
+      { q: "Which keywords does this recognize?", a: "The major clause-starting keywords — SELECT, FROM, WHERE, GROUP BY, ORDER BY, HAVING, LIMIT, INSERT INTO, VALUES, UPDATE, SET, DELETE FROM, the JOIN variants, ON, AND, OR, and UNION — each gets placed on its own new line." },
+      { q: "Does this validate that my SQL is syntactically correct?", a: "No — it reformats layout based on recognized keywords, but it doesn't parse or validate the query against any particular database's SQL dialect." },
+      { q: "Will this work with any SQL dialect (MySQL, Postgres, etc.)?", a: "Yes, for standard clause keywords common across dialects — formatting is based on keyword recognition, not on dialect-specific syntax, so it works the same regardless of which database you're targeting." },
+      { q: "Does this tool send my query to a server?", a: "Yes — it's sent to our servers to format and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "image-metadata-remove": {
+    title: "Remove Image Metadata — Free, Strip EXIF & GPS | SaaSToolz",
+    metaDescription:
+      "Strip EXIF, GPS location and other hidden metadata from a photo in seconds. Free, instant, no signup.",
+    intro:
+      "Remove Image Metadata re-encodes your photo without copying over its EXIF, GPS or ICC color-profile metadata — stripping out details like the camera model, capture settings, and precise location that are normally embedded invisibly in the file.",
+    steps: [
+      "Upload your image.",
+      "Click \"Remove Metadata\" to re-encode it clean.",
+      "Download the stripped image.",
+      "The photo itself looks identical — only the hidden metadata is gone.",
+    ],
+    faqs: [
+      { q: "Why would a photo need this?", a: "Many phones embed GPS coordinates and camera details directly in photo files. Sharing a photo online without stripping this can unintentionally reveal where and when it was taken." },
+      { q: "Does this change how the image looks?", a: "No — only the invisible metadata is removed. The visible pixels, dimensions and format stay exactly the same." },
+      { q: "What kind of metadata gets removed?", a: "EXIF data (camera model, settings, capture date), GPS coordinates if present, and the embedded ICC color profile — all dropped by default when the image is re-encoded." },
+      { q: "Does this tool send my photo to a server?", a: "Yes — your image is uploaded securely, stripped, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no watermark on the output." },
+    ],
+  },
   "invoice-generator": {
     title: "Free Invoice Generator Online — Instant PDF | SaaSToolz",
     metaDescription:
