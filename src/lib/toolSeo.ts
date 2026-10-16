@@ -1119,6 +1119,1024 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no watermark on the output." },
     ],
   },
+  "json-minifier": {
+    title: "JSON Minifier — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Strip whitespace from JSON to shrink its size, with validation to catch broken syntax first. Free, instant, no signup.",
+    intro:
+      "JSON Minifier parses your JSON and re-serializes it with no extra whitespace — removing every indentation space and line break that formatted JSON carries, while confirming along the way that the structure is actually valid.",
+    steps: [
+      "Paste your JSON.",
+      "Click \"Minify\" to parse and compact it.",
+      "If the JSON is invalid, the exact parse error is shown.",
+      "Copy the minified result.",
+    ],
+    faqs: [
+      { q: "Does minifying change the data itself?", a: "No — only whitespace is removed. The JSON is parsed into real data first, so the keys, values, and structure are identical; only formatting is stripped." },
+      { q: "What happens if my JSON has a syntax error?", a: "Minifying requires successfully parsing the JSON first, so invalid input fails with the exact parse error message rather than producing a corrupted result." },
+      { q: "When is minified JSON actually useful?", a: "Mainly for reducing payload size in things like API responses, config files, or embedded data — whitespace adds up in large JSON documents even though it's invisible to the data itself." },
+      { q: "Does this tool send my JSON to a server?", a: "Yes — it's sent to our servers to parse and minify, and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "hash-generator": {
+    title: "Hash Generator — MD5, SHA-1, SHA-256, SHA-384, SHA-512 | SaaSToolz",
+    metaDescription:
+      "Generate MD5, SHA-1, SHA-256, SHA-384 and SHA-512 hashes of any text, all at once. Free, instant, no signup.",
+    intro:
+      "Hash Generator computes five different hash digests of your text in one pass — MD5 and SHA-1 (older, faster, not collision-resistant), plus SHA-256, SHA-384 and SHA-512 via the Web Crypto API — so you can compare or use whichever algorithm you need without re-entering your text.",
+    steps: [
+      "Paste the text you want to hash.",
+      "Click \"Generate\" to compute all five hashes at once.",
+      "Each algorithm's digest appears as a hex string.",
+      "Copy whichever hash you need.",
+    ],
+    faqs: [
+      { q: "Which hash algorithm should I use?", a: "SHA-256 is the common modern default for most use cases. MD5 and SHA-1 are still widely used for checksums and legacy compatibility, but both are considered cryptographically broken for security purposes like password storage." },
+      { q: "Is the same text guaranteed to always produce the same hash?", a: "Yes — hashing is deterministic, so identical input always produces an identical digest for a given algorithm, with no randomness involved." },
+      { q: "Can a hash be reversed back into the original text?", a: "No — hashing is one-way by design. These algorithms are meant for verifying that data matches (like a checksum), not for recovering the original input." },
+      { q: "Does this tool send my text to a server?", a: "Yes — it's sent to our servers to compute the hashes and the results are returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "twitter-card": {
+    title: "Twitter Card Generator — Free, Instant Meta Tags | SaaSToolz",
+    metaDescription:
+      "Generate the meta tags that control how your link previews on X/Twitter. Free, instant, no signup.",
+    intro:
+      "Twitter Card Generator builds the twitter:card meta tags — card type, title, description, image, site and creator handles — that control how a link to your page previews when shared on X/Twitter, ready to paste into your page's head.",
+    steps: [
+      "Choose a card type (summary, large image, app, or player).",
+      "Enter your title, description and image URL.",
+      "Optionally add your site and creator @handles.",
+      "Copy the generated meta tags into your page's head.",
+    ],
+    faqs: [
+      { q: "What's the difference between \"summary\" and \"summary_large_image\"?", a: "summary shows a small square thumbnail next to the text, while summary_large_image shows a full-width image above it — the large-image variant is generally better for visual content." },
+      { q: "Do I still need Open Graph tags if I add Twitter Card tags?", a: "Yes — Twitter Card tags only control the preview on X/Twitter specifically. Other platforms (Facebook, LinkedIn, Slack, etc.) read Open Graph tags, so most sites use both. Our Open Graph Generator produces those." },
+      { q: "What happens if I don't fill in every field?", a: "Only the fields you provide are included as meta tags — card type is always set, but title, description, image, site and creator are each added only when you've entered a value." },
+      { q: "Does this tool send my inputs to a server?", a: "Yes — they're sent to our servers to build the tags and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "lorem-ipsum": {
+    title: "Lorem Ipsum Generator — Free, Instant Placeholder Text | SaaSToolz",
+    metaDescription:
+      "Generate classic Lorem Ipsum placeholder text by words, sentences, or paragraphs. Free, instant, no signup.",
+    intro:
+      "Lorem Ipsum Generator produces placeholder text using the classic Lorem Ipsum vocabulary, cycling through its words to build exactly the number of words, sentences, or paragraphs you ask for.",
+    steps: [
+      "Choose a unit: words, sentences, or paragraphs.",
+      "Enter how many you need.",
+      "Click \"Generate\" to produce the text instantly.",
+      "Copy the result for your mockup or layout.",
+    ],
+    faqs: [
+      { q: "Is there a limit to how much text I can generate?", a: "Yes — up to 10,000 words, 1,000 sentences, or 200 paragraphs per request, a limit set well beyond any real placeholder-text need to keep responses reasonably sized." },
+      { q: "Is the text random or always the same?", a: "The word sequence itself cycles through the same classic Lorem Ipsum vocabulary in a fixed order, while sentence and paragraph lengths vary slightly each time you generate." },
+      { q: "What is Lorem Ipsum actually used for?", a: "It's standard placeholder text for mockups and layouts, used specifically because its Latin-like words don't resemble real language, which keeps designers and readers from being distracted by the actual words while judging layout and typography." },
+      { q: "Does this tool send anything to a server?", a: "Yes — the request is sent to our servers to generate the text and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "remove-spaces": {
+    title: "Remove Extra Spaces — Free, Instant Text Cleanup | SaaSToolz",
+    metaDescription:
+      "Collapse repeated spaces and tabs down to one, trim each line, and drop blank lines. Free, instant, no signup.",
+    intro:
+      "Remove Extra Spaces cleans up messy whitespace line by line — collapsing any run of spaces or tabs down to a single space, trimming leading and trailing whitespace from each line, and removing blank lines entirely.",
+    steps: [
+      "Paste your text.",
+      "Click \"Clean\" to process it.",
+      "Review the cleaned-up result with normalized spacing.",
+      "Copy the result.",
+    ],
+    faqs: [
+      { q: "Does this remove blank lines too, or just extra spaces within a line?", a: "Both — every line with repeated spaces or tabs gets collapsed to single spaces and trimmed, and any line that ends up empty is dropped from the output entirely." },
+      { q: "Will this affect line breaks I want to keep?", a: "Line breaks between non-empty lines are preserved — only the whitespace within each line and fully blank lines are affected." },
+      { q: "What's a common reason to need this?", a: "Text copied from a PDF, email, or formatted document often carries inconsistent spacing and stray blank lines; this normalizes it before you paste it somewhere that expects clean text." },
+      { q: "Does this tool send my text to a server?", a: "Yes — it's sent to our servers to clean up and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "profit-calculator": {
+    title: "Profit Margin Calculator — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Calculate profit, margin percentage, and markup percentage from your revenue and cost. Free, instant, no signup.",
+    intro:
+      "Profit Margin Calculator takes your revenue and cost and returns three numbers that are easy to confuse but mean different things: the raw profit, the margin (profit as a percentage of revenue), and the markup (profit as a percentage of cost).",
+    steps: [
+      "Enter your revenue.",
+      "Enter your cost.",
+      "Profit, margin percentage, and markup percentage are calculated instantly.",
+      "Use margin or markup depending on which framing you need.",
+    ],
+    faqs: [
+      { q: "What's the actual difference between margin and markup?", a: "Margin divides profit by revenue (what percentage of what you sold for is profit); markup divides profit by cost (how much you added on top of cost). The same numbers produce two different percentages, and mixing them up is a common pricing mistake." },
+      { q: "Why does markup show as blank or unavailable sometimes?", a: "Markup is profit divided by cost, so if cost is 0 there's nothing to divide by — markup isn't shown in that case, though profit and margin still calculate normally." },
+      { q: "Can revenue or cost be negative?", a: "No — revenue must be a positive number and cost can't be negative, since both represent real amounts of money in a sale." },
+      { q: "Does this tool send my numbers to a server?", a: "Yes — your figures are sent to our servers to compute the result and the result is returned to you; we don't store the values." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "markdown-convert": {
+    title: "Markdown to HTML Converter — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Convert Markdown to clean, safe HTML covering headers, bold/italic, links, inline code and lists. Free, instant, no signup.",
+    intro:
+      "Markdown Converter turns Markdown into HTML, covering the most common syntax — headers, bold and italic, inline code, links, and lists — with every link href checked against a safe-scheme allowlist so malicious link targets can't inject unexpected HTML attributes.",
+    steps: [
+      "Paste your Markdown text.",
+      "Click \"Convert\" to generate HTML.",
+      "Review the rendered HTML output.",
+      "Copy the HTML for wherever you need it.",
+    ],
+    faqs: [
+      { q: "Does this support the full Markdown / CommonMark spec?", a: "No — it covers the common subset: headers, bold/italic, inline code, links, and lists. Advanced features like tables, footnotes, or nested blockquotes aren't supported." },
+      { q: "Is the output HTML safe to insert into a page?", a: "Yes — text content is HTML-escaped and link targets are checked against an allowlist of safe URL schemes (http, https, mailto, tel, and relative paths), so a malicious link value can't break out of the href attribute or inject a dangerous scheme." },
+      { q: "What happens to a link with an unsafe target?", a: "Its href is replaced with # rather than being dropped or passed through, so the link still renders safely but doesn't point anywhere unexpected." },
+      { q: "Does this tool send my Markdown to a server?", a: "Yes — it's sent to our servers to convert and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "base64-encoder": {
+    title: "Base64 Encoder/Decoder — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Encode text to Base64 or decode Base64 back to text, with validation that catches malformed input. Free, instant, no signup.",
+    intro:
+      "Base64 Encoder/Decoder converts text to and from Base64. Decoding checks that your input actually looks like valid Base64 (correct character set, correct padding) before attempting to decode it, rather than silently returning garbage for non-Base64 input.",
+    steps: [
+      "Paste your text or Base64 string.",
+      "Choose Encode (text to Base64) or Decode (Base64 to text).",
+      "The converted result appears instantly.",
+      "Copy the result.",
+    ],
+    faqs: [
+      { q: "What happens if I try to decode something that isn't valid Base64?", a: "It's flagged as invalid rather than decoded into meaningless bytes — the input is checked against the Base64 character set and padding rules first, so a plain sentence won't silently turn into garbage output." },
+      { q: "Is Base64 encryption?", a: "No — Base64 is just a reversible encoding, not encryption. Anyone can decode it back to the original text instantly; it provides no security or confidentiality." },
+      { q: "What's a common use for Base64 encoding?", a: "Representing binary or arbitrary data as plain ASCII text — for example, embedding small images directly in CSS or HTML, or safely transmitting data through systems that only handle text." },
+      { q: "Does this tool send my text to a server?", a: "Yes — it's sent to our servers to encode or decode and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "pdf-unlock": {
+    title: "Unlock PDF — Remove Password Protection | SaaSToolz",
+    metaDescription:
+      "Remove password protection from a PDF once you've verified the password. Free, no signup.",
+    intro:
+      "Unlock PDF removes a PDF's password protection and permission restrictions — but only after verifying the correct password, even for files that are readable without a password but still have an owner password restricting printing, copying or editing.",
+    steps: [
+      "Upload your protected PDF.",
+      "Enter the password that protects it.",
+      "The password is verified before anything is removed.",
+      "Download the unlocked PDF.",
+    ],
+    faqs: [
+      { q: "Can this remove a password I don't know?", a: "No — a correct password is always required and verified before any protection is removed, even for a PDF you can already open freely. This isn't a password-cracking tool; it requires proof you're authorized to remove the protection." },
+      { q: "What if the PDF opens without a password but I still can't print or copy from it?", a: "That's an owner-password restriction — the file is freely readable, but editing, printing, or copying permissions are locked by a separate owner password, which this tool still requires before lifting those restrictions." },
+      { q: "What happens if I enter the wrong password?", a: "You get a clear \"Incorrect password\" error — nothing is removed, and the file isn't touched." },
+      { q: "Does this tool send my PDF to a server?", a: "Yes — your file is uploaded securely, processed, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "color-picker": {
+    title: "Image Color Picker — Free, Exact Pixel RGB | SaaSToolz",
+    metaDescription:
+      "Click any pixel in an uploaded image to read its exact RGB color value. Free, instant, no signup.",
+    intro:
+      "Color Picker reads the exact RGB value of a single pixel at the coordinates you specify in an uploaded image — useful for grabbing an exact color from a screenshot, photo, or design mockup.",
+    steps: [
+      "Upload your image.",
+      "Click (or specify coordinates for) the pixel you want to sample.",
+      "The exact RGB value for that pixel is shown instantly.",
+      "Copy the color value for use elsewhere.",
+    ],
+    faqs: [
+      { q: "Does it sample an average color from an area, or one exact pixel?", a: "One exact pixel at the coordinates given — not an average or blend of surrounding pixels, so you get the precise value at that single point." },
+      { q: "What happens if I pick a point outside the image?", a: "It's rejected with a clear error stating the image's actual dimensions, rather than returning an incorrect or default color." },
+      { q: "Does this account for the image's transparency?", a: "The image is processed with an alpha channel internally to read pixel data consistently, but the result returned is the RGB color value itself." },
+      { q: "Does this tool send my image to a server?", a: "Yes — your image is uploaded securely, processed, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "json-viewer": {
+    title: "JSON Viewer — Free, Instant Tree View | SaaSToolz",
+    metaDescription:
+      "Paste JSON and explore it as a collapsible, readable tree. Free, instant, runs entirely in your browser.",
+    intro:
+      "JSON Viewer parses your JSON and renders it as an interactive, collapsible tree, making it easy to explore deeply nested objects and arrays without scrolling through a wall of raw text.",
+    steps: [
+      "Paste your JSON into the input box.",
+      "The parsed structure renders instantly as a tree.",
+      "Expand or collapse any object or array branch.",
+      "Fix the error shown if your JSON doesn't parse.",
+    ],
+    faqs: [
+      { q: "Does this tool send my JSON to a server?", a: "No — parsing and rendering happen entirely in your browser using JSON.parse; nothing you paste is ever transmitted or stored." },
+      { q: "What happens if my JSON is invalid?", a: "The exact parse error message is shown instead of a tree, so you can see precisely what's wrong rather than getting a generic failure." },
+      { q: "How is this different from the JSON Formatter?", a: "Formatter outputs reformatted text you copy elsewhere; Viewer renders an interactive, expandable/collapsible tree for exploring structure in place, which is better for large or deeply nested JSON." },
+      { q: "Is there a size limit on the JSON I can view?", a: "There's no artificial limit, though extremely large JSON documents may be slower to render as a tree since everything happens in your browser." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "diff-checker": {
+    title: "Diff Checker — Free, Instant Text Comparison | SaaSToolz",
+    metaDescription:
+      "Compare two blocks of text line by line and see exactly what was added, removed, or unchanged. Free, instant, no signup.",
+    intro:
+      "Diff Checker compares two texts line by line using a real longest-common-subsequence algorithm — the same family of algorithm behind most code diff tools — to find the smallest set of additions and removals that explains the difference, rather than a naive line-by-line mismatch.",
+    steps: [
+      "Paste your original text on one side.",
+      "Paste the changed text on the other side.",
+      "Click \"Compare\" to see the diff.",
+      "Review lines marked as same, added, or removed.",
+    ],
+    faqs: [
+      { q: "Does this compare word by word or line by line?", a: "Line by line — each line is treated as a unit, so a single-character change inside a line still marks the whole line as changed." },
+      { q: "Why does it find a different diff than I expected?", a: "The algorithm finds the longest common subsequence between both texts, which gives the minimal set of changes — but when lines could align in more than one valid way, it may pick a different (still correct) alignment than you'd choose by eye." },
+      { q: "What do \"added\" and \"removed\" mean exactly?", a: "\"Removed\" marks a line present in the first text but not the second; \"added\" marks a line present in the second but not the first. Lines present in both, in the same relative order, are marked \"same\"." },
+      { q: "Does this tool send my text to a server?", a: "Yes — both texts are sent to our servers to compute the diff and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "pdf-protect": {
+    title: "Protect PDF — Add Password Encryption | SaaSToolz",
+    metaDescription:
+      "Encrypt a PDF with a password using real AES-256 encryption. Free, no signup.",
+    intro:
+      "Protect PDF encrypts your file with real AES-256 encryption, requiring the password you set to open it afterward — this isn't a cosmetic lock, it's the same standard PDF security handler professional tools use.",
+    steps: [
+      "Upload your PDF.",
+      "Enter the password you want to protect it with.",
+      "The PDF is encrypted with AES-256.",
+      "Download the password-protected PDF.",
+    ],
+    faqs: [
+      { q: "What encryption does this actually use?", a: "AES-256, applied through the PDF's standard security handler — the same mechanism used by professional PDF software, not a superficial lock that other tools can bypass." },
+      { q: "Can I use a password that contains a comma?", a: "No — a comma in the password is rejected upfront, since it would otherwise corrupt the encryption options and could permanently lock the file with no way to recover it, even with the correct password." },
+      { q: "Can I protect a PDF that's already password-protected?", a: "No — protecting an already-encrypted PDF is rejected with a clear error; unlock it first if you want to apply a new password." },
+      { q: "Does this tool send my PDF to a server?", a: "Yes — your file is uploaded securely, encrypted, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "pdf-remove-pages": {
+    title: "Remove PDF Pages — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Delete specific pages from a PDF and download the result. Free, instant, no signup.",
+    intro:
+      "Remove PDF Pages lets you specify which page numbers to delete from a PDF, then rebuilds the document with every other page intact and in its original order.",
+    steps: [
+      "Upload your PDF.",
+      "Specify which page numbers to remove.",
+      "The remaining pages are rebuilt into a new PDF.",
+      "Download the result.",
+    ],
+    faqs: [
+      { q: "Does removing pages affect the content or quality of the remaining pages?", a: "No — the remaining pages are copied through unchanged; only the specified pages are dropped from the document." },
+      { q: "Can I remove multiple non-sequential pages at once?", a: "Yes — specify any combination of page numbers and they're all removed in a single pass, with the remaining pages kept in their original order." },
+      { q: "What happens if I try to remove every page?", a: "A PDF needs at least one page, so removing all of them is rejected rather than producing an empty, invalid file." },
+      { q: "Does this tool send my PDF to a server?", a: "Yes — your file is uploaded securely, processed, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no watermark on the output." },
+    ],
+  },
+  "pdf-extract-pages": {
+    title: "Extract PDF Pages — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Pull specific pages out of a PDF into a new standalone document. Free, instant, no signup.",
+    intro:
+      "Extract PDF Pages pulls just the pages you specify out of a larger PDF and saves them as a new, standalone document — the opposite operation from Remove PDF Pages, which keeps everything except the pages you name.",
+    steps: [
+      "Upload your PDF.",
+      "Specify which page numbers to extract.",
+      "The selected pages are copied into a new document.",
+      "Download the extracted PDF.",
+    ],
+    faqs: [
+      { q: "Does the extracted PDF keep the original page order?", a: "Yes — extracted pages appear in the same relative order as in the source document, regardless of the order you list the page numbers." },
+      { q: "Will extracting pages affect their quality or formatting?", a: "No — pages are copied through exactly as they appear in the original; nothing about their content is altered." },
+      { q: "What's the difference between this and Remove PDF Pages?", a: "This keeps only the pages you specify and discards the rest; Remove PDF Pages does the opposite, discarding the pages you specify and keeping everything else." },
+      { q: "Does this tool send my PDF to a server?", a: "Yes — your file is uploaded securely, processed, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no watermark on the output." },
+    ],
+  },
+  "image-metadata": {
+    title: "Image Metadata Viewer — Free, Instant EXIF Reader | SaaSToolz",
+    metaDescription:
+      "See an image's format, dimensions, color space, and other embedded metadata at a glance. Free, instant, no signup.",
+    intro:
+      "Image Metadata Viewer reads and displays the technical metadata embedded in your image — format, width and height, color space, channel count, alpha transparency, EXIF orientation, and DPI density — without altering the file itself.",
+    steps: [
+      "Upload your image.",
+      "Its embedded metadata is read and displayed instantly.",
+      "Review format, dimensions, color space, and other details.",
+      "No download is needed — this only reads and displays, nothing is modified.",
+    ],
+    faqs: [
+      { q: "Does this tool modify my image?", a: "No — it only reads and displays the existing metadata; the file itself is never altered or re-saved." },
+      { q: "What's the \"orientation\" value I sometimes see?", a: "It's the EXIF orientation flag many cameras and phones embed to indicate how the image should be rotated for correct viewing, separate from the actual pixel dimensions stored in the file." },
+      { q: "If I want to remove this metadata instead of just viewing it, what do I use?", a: "Remove Image Metadata strips EXIF, GPS, and color-profile data by re-encoding the image clean — use that once you've reviewed what's there with this tool." },
+      { q: "Does this tool send my image to a server?", a: "Yes — your image is uploaded securely, read, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "htaccess-generator": {
+    title: ".htaccess Generator — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Generate .htaccess rules for forcing HTTPS, www redirects, custom redirects, basic auth, and custom error pages. Free, instant, no signup.",
+    intro:
+      ".htaccess Generator builds Apache .htaccess rules from the options you choose — forcing HTTPS, adding or removing a www prefix, custom redirects, HTTP basic auth, and custom error pages — ready to drop into your site's root directory.",
+    steps: [
+      "Choose which rules you need (force HTTPS, www redirect, etc.).",
+      "Fill in any specifics, like custom redirect paths or error page URLs.",
+      "Click \"Generate\" to build the rules.",
+      "Copy the result into your .htaccess file.",
+    ],
+    faqs: [
+      { q: "Does this only work on Apache servers?", a: "Yes — .htaccess is an Apache-specific configuration mechanism. If you're on Nginx or another server, you'll need equivalent rules in that server's own config format instead." },
+      { q: "Can I combine multiple rules, like forcing HTTPS and adding www at the same time?", a: "Yes — select as many options as you need and they're all included together in the generated file." },
+      { q: "What's the difference between adding and removing the www prefix?", a: "Adding www redirects bare-domain requests to the www version; removing does the opposite, redirecting www requests to the bare domain. Pick whichever one matches your canonical domain." },
+      { q: "Does this tool send my settings to a server?", a: "Yes — they're sent to our servers to build the rules and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "ip-lookup": {
+    title: "IP Address Lookup — Free, Instant Geolocation | SaaSToolz",
+    metaDescription:
+      "Look up an IP address's country, city, ISP, and approximate location. Free, instant, no signup.",
+    intro:
+      "IP Address Lookup resolves a public IP address to its approximate geolocation — country, city, region, coordinates, timezone, ISP and ASN — using a dedicated geolocation service, rejecting private or reserved addresses since they have no public location to look up.",
+    steps: [
+      "Enter the IP address you want to look up.",
+      "Click \"Lookup\" to resolve it.",
+      "Review the country, city, ISP, and other details returned.",
+      "Leave it blank to look up your own public IP instead.",
+    ],
+    faqs: [
+      { q: "Why does a private IP like 192.168.1.1 fail?", a: "Private and reserved IP ranges aren't publicly routable, so there's no real-world location to resolve — these are rejected upfront with a clear error instead of returning a misleading or blank result." },
+      { q: "How accurate is the location?", a: "IP geolocation is generally accurate to the city or region level, not an exact street address — it reflects where the ISP has registered the IP block, not necessarily the device's precise physical location." },
+      { q: "What does the \"isProxy\" field mean?", a: "It flags whether the IP is known to belong to a proxy, VPN, or similar relay service, which can mean the detected location differs from the actual user's location." },
+      { q: "Does this tool send the IP to a server?", a: "Yes — it's sent to our servers, which query a geolocation service and return the result to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "fuel-calculator": {
+    title: "Fuel Cost Calculator — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Calculate fuel needed and total cost for a trip from distance, fuel efficiency, and price per liter. Free, instant, no signup.",
+    intro:
+      "Fuel Cost Calculator divides your trip distance by your vehicle's fuel efficiency to get liters needed, multiplies by the price per liter for total cost, and also shows the cost per kilometer — useful for comparing trips or vehicles.",
+    steps: [
+      "Enter the distance of your trip in kilometers.",
+      "Enter your vehicle's fuel efficiency in km per liter.",
+      "Enter the price per liter of fuel.",
+      "Liters needed, total cost, and cost per km are calculated instantly.",
+    ],
+    faqs: [
+      { q: "What units does this use?", a: "Kilometers for distance, kilometers per liter for fuel efficiency, and price per liter for fuel cost — metric units throughout." },
+      { q: "What if my car's efficiency is given in miles per gallon?", a: "Convert to km per liter first (roughly: mpg × 0.4251 ≈ km/L), since this calculator expects metric fuel efficiency." },
+      { q: "What's the \"cost per km\" figure useful for?", a: "It lets you compare trips of different lengths, or different vehicles, on a consistent per-distance basis rather than just comparing total trip costs." },
+      { q: "Does this tool send my numbers to a server?", a: "Yes — your figures are sent to our servers to compute the result and the result is returned to you; we don't store the values." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "url-encoder": {
+    title: "URL Encoder/Decoder — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Encode text for safe use in a URL, or decode a percent-encoded URL back to readable text. Free, instant, no signup.",
+    intro:
+      "URL Encoder/Decoder percent-encodes text for safe inclusion in a URL, with two modes — a lighter encoding that leaves URL structure characters like / and : alone, and a full encoding that escapes virtually everything, meant for a single query parameter value rather than a whole URL.",
+    steps: [
+      "Paste your text or URL.",
+      "Choose Encode or Decode.",
+      "If encoding, choose full encoding or standard encoding.",
+      "Copy the result.",
+    ],
+    faqs: [
+      { q: "What's the difference between the two encoding modes?", a: "Standard encoding (encodeURI) leaves characters like / : and ? alone since they're structural parts of a URL, while full encoding (encodeURIComponent) escapes those too — use full encoding for a single value going into a query parameter, not for an entire URL." },
+      { q: "What happens if I try to decode text that isn't properly percent-encoded?", a: "It's handled gracefully — if standard decoding fails, a fallback decoding is tried, and if both fail, a clear error is returned rather than a cryptic exception." },
+      { q: "Why would a URL need encoding at all?", a: "Characters like spaces, &, and # have special meaning in a URL or would break it outright; percent-encoding represents them safely so the URL remains valid." },
+      { q: "Does this tool send my text to a server?", a: "Yes — it's sent to our servers to encode or decode and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "resume-builder": {
+    title: "Resume Builder — Free, Instant PDF Export | SaaSToolz",
+    metaDescription:
+      "Build a professional resume from your details and export it as a clean PDF. Free, no signup.",
+    intro:
+      "Resume Builder takes your name, title, summary, work experience, education, and skills and lays them out into a clean, professionally formatted PDF resume, ready to download and send.",
+    steps: [
+      "Enter your name, title, and professional summary.",
+      "Add your work experience with company, dates, and bullet points.",
+      "Add your education and skills.",
+      "Download your resume as a PDF.",
+    ],
+    faqs: [
+      { q: "Can I add multiple jobs and schools?", a: "Yes — add as many experience entries and education entries as you need, each with its own title, dates, and details." },
+      { q: "Does this use a single fixed template?", a: "Yes — the layout follows a clean, standard resume format focused on readability rather than offering multiple visual templates to choose from." },
+      { q: "What should the bullet points under each job look like?", a: "Short, specific accomplishment statements work best — the PDF lays out whatever bullet points you provide under each job exactly as entered." },
+      { q: "Does this tool send my resume details to a server?", a: "Yes — your information is sent to our servers to generate the PDF and the result is returned to you; we don't store it." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "pdf-organize": {
+    title: "PDF Organizer — Reorder Pages | SaaSToolz",
+    metaDescription:
+      "Drag and reorder the pages of a PDF, then download the reorganized file. Free, instant, no signup.",
+    intro:
+      "PDF Organizer lets you set a new page order for your PDF — specify exactly which page should go where, and the document is rebuilt with pages arranged in that new sequence.",
+    steps: [
+      "Upload your PDF.",
+      "Drag pages into the order you want.",
+      "Click \"Organize\" to rebuild the PDF in that order.",
+      "Download the reorganized PDF.",
+    ],
+    faqs: [
+      { q: "Does reordering affect the content of individual pages?", a: "No — each page is copied through exactly as it was; only the sequence the pages appear in changes." },
+      { q: "Can I duplicate a page by including it twice in the new order?", a: "That depends on what order you specify — the rebuild follows whatever page sequence you provide, so repeating a page number in the order would include it more than once." },
+      { q: "What's the difference between this and Remove PDF Pages?", a: "This keeps every page but changes their order; Remove PDF Pages keeps the order but drops specific pages entirely. Use Organize to rearrange, Remove to delete." },
+      { q: "Does this tool send my PDF to a server?", a: "Yes — your file is uploaded securely, reordered, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no watermark on the output." },
+    ],
+  },
+  "html-minifier": {
+    title: "HTML Minifier — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Strip comments and collapse whitespace from HTML to shrink its size. Free, instant, no signup.",
+    intro:
+      "HTML Minifier removes HTML comments and collapses whitespace between tags, shrinking the file size of your markup without changing how it renders in a browser.",
+    steps: [
+      "Paste your HTML.",
+      "Click \"Minify\" to strip comments and whitespace.",
+      "Review the compacted result.",
+      "Copy the minified HTML.",
+    ],
+    faqs: [
+      { q: "Does this change how the page looks when rendered?", a: "No — browsers already collapse most whitespace between tags when rendering, so removing it from the source doesn't change the visible layout; only comments and extra whitespace in the source file are removed." },
+      { q: "Will this remove whitespace I actually need, like inside a <pre> block?", a: "Whitespace is collapsed primarily between tags; if your markup depends on specific whitespace being preserved inside content (like in <pre> or textarea), check the output carefully before using it." },
+      { q: "Why minify HTML at all?", a: "Smaller file size means slightly faster page loads, especially noticeable on templates with lots of comments or heavily indented markup." },
+      { q: "Does this tool send my HTML to a server?", a: "Yes — it's sent to our servers to minify and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "schema-generator": {
+    title: "Schema Generator — Free JSON-LD for Rich Results | SaaSToolz",
+    metaDescription:
+      "Generate JSON-LD structured data for any schema.org type to help search engines show rich results. Free, instant, no signup.",
+    intro:
+      "Schema Generator builds a JSON-LD structured data block — the format Google and other search engines read to show rich results — by wrapping your chosen schema.org type and data fields in the required @context and @type structure.",
+    steps: [
+      "Choose a schema.org type (Product, Article, FAQPage, etc.).",
+      "Enter the data fields relevant to that type.",
+      "Click \"Generate\" to build the JSON-LD.",
+      "Paste the result into a <script type=\"application/ld+json\"> tag in your page.",
+    ],
+    faqs: [
+      { q: "Does this validate that I've included the right fields for my schema type?", a: "No — it wraps whatever fields you provide in the correct @context/@type JSON-LD structure, but doesn't check against schema.org's full field requirements for each type. Test the output with Google's Rich Results Test before relying on it." },
+      { q: "What type does it use if I don't pick one?", a: "WebPage is the default type if none is specified." },
+      { q: "Where does this JSON-LD actually go on my page?", a: "Inside a <script type=\"application/ld+json\"> tag, typically in your page's <head> — search engines read it without it affecting anything visible on the page." },
+      { q: "Does this tool send my data to a server?", a: "Yes — it's sent to our servers to build the JSON-LD and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "xml-formatter": {
+    title: "XML Formatter — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Paste dense or minified XML and get it reformatted with proper nesting and indentation. Free, instant, no signup.",
+    intro:
+      "XML Formatter reformats XML by tracking which tags are opening, closing, or self-closing, and indenting each line according to its nesting depth — turning a single dense line into a readable, properly nested document.",
+    steps: [
+      "Paste your XML.",
+      "Click \"Format\" to reformat it.",
+      "Review the indented, nested output.",
+      "Copy the formatted XML.",
+    ],
+    faqs: [
+      { q: "Does this validate that my XML is well-formed?", a: "It reformats based on recognizing opening, closing and self-closing tags, but it doesn't perform full schema or DTD validation — badly malformed XML may format oddly rather than throwing a specific error." },
+      { q: "Does this handle self-closing tags and XML declarations correctly?", a: "Yes — tags like <tag/> and the <?xml ...?> declaration are recognized as self-closing and don't trigger an indent increase for following lines." },
+      { q: "Will this work on XHTML or other XML-based formats?", a: "Yes — the same tag-tracking logic applies to any well-formed XML-style markup, including XHTML." },
+      { q: "Does this tool send my XML to a server?", a: "Yes — it's sent to our servers to format and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "markdown-preview": {
+    title: "Markdown Preview — Free, Live Rendering | SaaSToolz",
+    metaDescription:
+      "Write Markdown and see it rendered live as formatted output. Free, instant, no signup.",
+    intro:
+      "Markdown Preview renders your Markdown as formatted output in real time, covering the common syntax — headers, bold and italic, inline code, links and lists — so you can check how your writing will actually look before publishing it.",
+    steps: [
+      "Type or paste your Markdown.",
+      "The rendered preview updates as you type.",
+      "Check headers, formatting, links, and lists render as expected.",
+      "Copy your Markdown once you're happy with how it looks.",
+    ],
+    faqs: [
+      { q: "How is this different from the Markdown Converter?", a: "Both use the same conversion engine, but Markdown Converter gives you the raw HTML to copy and use elsewhere, while Markdown Preview shows the rendered, formatted result directly so you can proofread how it'll actually look." },
+      { q: "Does this support the full CommonMark spec?", a: "No — it covers the common subset: headers, bold/italic, inline code, links, and lists. Tables, footnotes, and some other advanced syntax aren't rendered." },
+      { q: "Are links in my Markdown safe to click in the preview?", a: "Yes — link targets are checked against a safe-scheme allowlist (http, https, mailto, tel, relative paths) before rendering, so an unsafe link value is replaced rather than passed through." },
+      { q: "Does this tool send my Markdown to a server?", a: "Yes — it's sent to our servers to render and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "remove-duplicates": {
+    title: "Remove Duplicate Lines — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Strip exact duplicate lines from a list, keeping the first occurrence of each. Free, instant, no signup.",
+    intro:
+      "Remove Duplicate Lines scans your text line by line and keeps only the first occurrence of each exact line, dropping every repeat while preserving the original order — and tells you exactly how many lines were removed.",
+    steps: [
+      "Paste your list or text.",
+      "Click \"Remove Duplicates\" to process it.",
+      "See how many duplicate lines were removed.",
+      "Copy the deduplicated result.",
+    ],
+    faqs: [
+      { q: "Does this consider lines with different casing as duplicates?", a: "No — matching is exact, so \"Apple\" and \"apple\" are treated as different lines. Normalize casing first if you want those treated as duplicates too." },
+      { q: "Does the order of my list change?", a: "No — the first occurrence of each line stays in its original position; only later repeats are removed." },
+      { q: "What about lines with extra trailing whitespace?", a: "Matching is exact character-for-character, so a line with trailing whitespace is treated as different from the same line without it — clean up whitespace first if that's not what you want." },
+      { q: "Does this tool send my text to a server?", a: "Yes — it's sent to our servers to process and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "contract-builder": {
+    title: "Contract Builder — Free NDA & Freelance Agreement | SaaSToolz",
+    metaDescription:
+      "Generate a Mutual NDA or Freelance Services Agreement from your details. Free, instant — educational starting point, not legal advice.",
+    intro:
+      "Contract Builder fills in one of two common contract templates — a Mutual Non-Disclosure Agreement or a Freelance Services Agreement — with the party names, dates, and terms you provide, as an educational starting point rather than a substitute for legal review.",
+    steps: [
+      "Choose NDA or Freelance Services Agreement.",
+      "Enter both parties' names and the relevant dates.",
+      "Fill in agreement-specific details (purpose and term for NDA; scope, fee and payment terms for freelance).",
+      "Download or copy the generated contract text.",
+    ],
+    faqs: [
+      { q: "Is this legally binding or reviewed by a lawyer?", a: "No — this fills a standard template as an educational starting point, not legal advice. Have an actual contract reviewed by a lawyer before relying on it for anything with real stakes." },
+      { q: "What's the default term for the NDA if I don't specify one?", a: "24 months, unless you set a different term length." },
+      { q: "What happens if I don't specify a jurisdiction?", a: "The governing law clause is left as a placeholder ([jurisdiction]) for you to fill in — it doesn't default to any specific country or state." },
+      { q: "Does this tool send my contract details to a server?", a: "Yes — they're sent to our servers to build the contract text and the result is returned to you; we don't store it." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "word-to-pdf": {
+    title: "Word to PDF — Free, Instant Conversion | SaaSToolz",
+    metaDescription:
+      "Convert a .docx file to PDF, preserving headings, paragraphs, lists, tables, and text formatting. Free, no signup.",
+    intro:
+      "Word to PDF extracts your .docx document's structure — headings, paragraphs, list items, table rows, with bold and italic runs preserved — and lays it out onto PDF pages, aiming for text fidelity rather than a pixel-exact copy of the original layout.",
+    steps: [
+      "Upload your .docx file.",
+      "The document's structure is extracted and converted.",
+      "Pages are laid out automatically to fit the content.",
+      "Download the converted PDF.",
+    ],
+    faqs: [
+      { q: "Will my PDF look pixel-identical to the original Word document?", a: "No — this is a best-effort text-fidelity conversion, not a page-accurate renderer. Headings, paragraphs, lists, tables, and bold/italic formatting carry over, but images, complex table styling, and custom fonts or colors from the source document aren't reproduced." },
+      { q: "Does it support older .doc files, or only .docx?", a: "It's built for .docx (the modern Word format). Older .doc files aren't supported — save as .docx first if needed." },
+      { q: "What happens to images in my Word document?", a: "They aren't reproduced in the converted PDF — this conversion focuses on text and document structure." },
+      { q: "Does this tool send my document to a server?", a: "Yes — your file is uploaded securely, converted, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "pdf-watermark": {
+    title: "Add Watermark to PDF — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Stamp a diagonal text watermark across every page of a PDF, with adjustable opacity. Free, no signup.",
+    intro:
+      "Add Watermark stamps your text diagonally across the center of every page in a PDF, in bold gray type at 45 degrees — the classic watermark look — with an opacity you can adjust so it's subtle or prominent.",
+    steps: [
+      "Upload your PDF.",
+      "Enter the watermark text.",
+      "Adjust the opacity if needed.",
+      "Download the watermarked PDF.",
+    ],
+    faqs: [
+      { q: "Does the watermark appear on every page?", a: "Yes — it's stamped once per page, applied to the entire document, not just the first or last page." },
+      { q: "Can I control how visible the watermark is?", a: "Yes — opacity ranges from 0.05 (very subtle) to 1 (fully opaque), with 0.25 as the default." },
+      { q: "What if my watermark text uses characters outside basic English, like CJK or Arabic?", a: "Unsupported characters are automatically replaced rather than breaking the whole document, since the underlying font only supports a Western character set — stick to standard Latin characters for guaranteed results." },
+      { q: "Does this tool send my PDF to a server?", a: "Yes — your file is uploaded securely, watermarked, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no extra watermark added beyond the one you requested." },
+    ],
+  },
+  "image-to-base64": {
+    title: "Image to Base64 — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Convert an image to a Base64 data URL you can embed directly in CSS or HTML. Free, instant, no signup.",
+    intro:
+      "Image to Base64 encodes your image's raw bytes into a Base64 string and wraps it as a ready-to-use data: URL, which you can embed directly in CSS, HTML, or anywhere else a URL is expected instead of a separate image file.",
+    steps: [
+      "Upload your image.",
+      "The Base64 data URL is generated instantly.",
+      "Copy either the full data URL or just the raw Base64 string.",
+      "Paste it directly into your CSS or HTML.",
+    ],
+    faqs: [
+      { q: "What's a data URL actually useful for?", a: "Embedding a small image directly inside CSS or HTML without a separate file request — useful for icons, small logos, or inline SVGs where an extra network request isn't worth it." },
+      { q: "Does Base64 encoding make the image smaller?", a: "No — Base64 encoding actually makes the data about 33% larger than the original binary, since it's trading file size for being safely representable as plain text." },
+      { q: "Is this a good idea for large images?", a: "Generally no — the size increase and the fact that the browser can't cache an embedded data URL separately from the page make this best suited for small images, not full photos." },
+      { q: "Does this tool send my image to a server?", a: "Yes — your image is uploaded securely, encoded, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "base64-to-image": {
+    title: "Base64 to Image — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Convert a Base64 string or data URL back into a downloadable image file. Free, instant, no signup.",
+    intro:
+      "Base64 to Image decodes a Base64 string or data URL back into real image bytes, verifying the decoded data actually matches a known image file signature (PNG, JPEG, GIF, WebP, or SVG) before handing it back — not just checking that the text looks like Base64.",
+    steps: [
+      "Paste your Base64 string or data URL.",
+      "Click \"Convert\" to decode it.",
+      "The tool verifies the decoded bytes are a real image.",
+      "Download the resulting image file.",
+    ],
+    faqs: [
+      { q: "What happens if I paste text that isn't actually an image?", a: "It's rejected — the decoded bytes are checked against real image file signatures, so text that happens to look like valid Base64 (such as an English sentence) won't silently produce a corrupt \"image\" file." },
+      { q: "Do I need to paste the full data:image/png;base64,... prefix, or just the Base64 part?", a: "Either works — if there's no data: prefix, it defaults to treating the content as PNG." },
+      { q: "Which image formats does this recognize?", a: "PNG, JPEG, GIF, WebP, and SVG — each identified by its real file signature, not just its claimed MIME type." },
+      { q: "Does this tool send my data to a server?", a: "Yes — it's sent to our servers to decode and verify, and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "username-generator": {
+    title: "Username Generator — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Generate random adjective-noun username ideas, with or without a number suffix. Free, instant, no signup.",
+    intro:
+      "Username Generator combines a random adjective and noun into a camelCase username, optionally appending a random 3-digit number for extra uniqueness, and can produce up to 50 at once.",
+    steps: [
+      "Choose how many usernames you want (up to 50).",
+      "Choose whether to include a number suffix.",
+      "Click \"Generate\" to produce the list instantly.",
+      "Pick whichever username you like, or regenerate for more options.",
+    ],
+    faqs: [
+      { q: "Will two usernames ever repeat in the same batch?", a: "It's possible, since each one is chosen independently at random — there's no uniqueness check across the batch you request." },
+      { q: "What's the difference between the two styles?", a: "\"word\" style gives just the adjective-noun combination (like CleverFalcon); \"wordnumber\" style appends a random 3-digit number (like CleverFalcon482) for a username that's more likely to be available on sign-up forms." },
+      { q: "What's the maximum number I can generate at once?", a: "50 per request — a limit set to keep results manageable rather than a technical constraint." },
+      { q: "Does this tool send anything to a server?", a: "Yes — the request is sent to our servers to generate the usernames and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "color-palette": {
+    title: "Color Palette Generator — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Generate a coordinated color palette from a single base HEX color. Free, instant, no signup.",
+    intro:
+      "Color Palette Generator takes one base HEX color and builds a coordinated palette by varying its lightness while keeping the same hue and saturation — producing lighter and darker shades that stay visually related to your original color.",
+    steps: [
+      "Enter a base color as a HEX value.",
+      "Click \"Generate\" to build the palette.",
+      "Review the set of related shades produced.",
+      "Copy any HEX value you want to use.",
+    ],
+    faqs: [
+      { q: "Does this generate complementary or contrasting colors?", a: "No — it generates a monochromatic palette, meaning every color shares the same hue and saturation as your base color, just at different lightness levels. For contrasting colors, you'd pick a different hue manually." },
+      { q: "What format does the base color need to be in?", a: "A valid HEX value, either 3 or 6 digits (like #7c3aed or #7ca), with or without the # symbol." },
+      { q: "Why would I want a monochromatic palette instead of varied colors?", a: "Monochromatic palettes are a common, safe choice for UI design since every shade naturally works together — useful for things like button states, backgrounds, or borders that need to feel related to a primary brand color." },
+      { q: "Does this tool send my color to a server?", a: "Yes — it's sent to our servers to compute the palette and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "rgb-to-hex": {
+    title: "RGB to HEX Converter — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Convert RGB color values to their HEX equivalent instantly. Free, no signup.",
+    intro:
+      "RGB to HEX converts red, green and blue values (0-255 each) into their 6-digit HEX equivalent, validating that each channel is actually a valid number in range before converting.",
+    steps: [
+      "Enter the red, green, and blue values (0-255 each).",
+      "Click \"Convert\" to get the HEX value.",
+      "Copy the resulting HEX color code.",
+    ],
+    faqs: [
+      { q: "What happens if I enter a value above 255 or below 0?", a: "It's rejected with a clear error naming which channel is out of range, since RGB channels are only valid between 0 and 255." },
+      { q: "Does this round decimal RGB values?", a: "Yes — each channel is rounded to the nearest whole number before being converted to its two-digit HEX representation." },
+      { q: "Is HEX just another way of writing the same color as RGB?", a: "Yes — HEX and RGB represent exactly the same color space, just in different notations; converting between them loses no information." },
+      { q: "Does this tool send my values to a server?", a: "Yes — they're sent to our servers to compute the result and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "json-to-csv": {
+    title: "JSON to CSV Converter — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Convert a JSON array of objects into a CSV file, with headers built from every key present. Free, instant, no signup.",
+    intro:
+      "JSON to CSV converts a JSON array of objects into CSV, building its header row from the union of every key found across all objects — so even if some rows are missing a field others have, every column still gets created.",
+    steps: [
+      "Paste your JSON array of objects.",
+      "Click \"Convert\" to generate CSV.",
+      "Review the CSV output with headers from every key.",
+      "Copy or download the CSV result.",
+    ],
+    faqs: [
+      { q: "What format does my JSON need to be in?", a: "A non-empty array of plain objects, like [{\"name\": \"Alice\", \"age\": 30}, ...] — an array of primitives, a single object, or an empty array will all be rejected with a clear error." },
+      { q: "What happens if some objects are missing a field that others have?", a: "The missing field just shows up blank in that row's cell — the header row is built from every key found across all objects, not just the first one." },
+      { q: "Does the column order matter in my source JSON?", a: "No — columns are built from the union of all keys found, in the order they're first encountered across the array, not based on any particular object's key order alone." },
+      { q: "Does this tool send my JSON to a server?", a: "Yes — it's sent to our servers to convert and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "pdf-page-numbers": {
+    title: "Add Page Numbers to PDF — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Stamp page numbers onto every page of a PDF, choosing the start number and position. Free, no signup.",
+    intro:
+      "Add Page Numbers stamps a number onto every page of your PDF, letting you choose which number to start counting from and where it appears — bottom-left, bottom-center, or bottom-right.",
+    steps: [
+      "Upload your PDF.",
+      "Choose a starting number (defaults to 1).",
+      "Choose a position: bottom-left, center, or right.",
+      "Download the numbered PDF.",
+    ],
+    faqs: [
+      { q: "Can I start numbering from something other than 1?", a: "Yes — set any starting number, useful for documents that continue numbering from a previous section or cover page that isn't included in this file." },
+      { q: "Will page numbers be added to every page, including the first?", a: "Yes — every page in the document gets a number stamped on it, starting from whatever number you chose." },
+      { q: "Can I change the position after generating?", a: "Not on the same file — run the tool again with a different position choice if you want to change where the numbers appear." },
+      { q: "Does this tool send my PDF to a server?", a: "Yes — your file is uploaded securely, numbered, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no watermark on the output." },
+    ],
+  },
+  "gitignore-generator": {
+    title: ".gitignore Generator — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Build a .gitignore file by combining templates for Node, Python, Java, Go, Rust, macOS, Windows, and more. Free, instant, no signup.",
+    intro:
+      ".gitignore Generator builds a .gitignore file by combining ready-made templates for common stacks and platforms — Node, Python, Java, Go, Rust, macOS, Windows, JetBrains, and VS Code — into one file with clearly labeled sections.",
+    steps: [
+      "Select the stacks and platforms you're using (e.g. node, macos).",
+      "Click \"Generate\" to build the combined .gitignore.",
+      "Review each section, labeled by stack.",
+      "Copy the result into your project's .gitignore file.",
+    ],
+    faqs: [
+      { q: "Can I combine multiple stacks, like Node and macOS, in one file?", a: "Yes — select as many as apply and each one gets its own labeled section in the combined output." },
+      { q: "Which stacks are supported?", a: "node, python, java, go, rust, macos, windows, jetbrains, and vscode — covering the most common languages, operating systems, and IDEs." },
+      { q: "What happens if I request a stack that isn't supported?", a: "You get a clear error listing exactly which stacks are available, rather than a silent fallback or an incomplete file." },
+      { q: "Does this tool send my selections to a server?", a: "Yes — they're sent to our servers to build the file and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "slug-generator": {
+    title: "Slug Generator — Free, Instant URL Slugs | SaaSToolz",
+    metaDescription:
+      "Convert any text into a clean, URL-safe slug. Free, instant, no signup.",
+    intro:
+      "Slug Generator converts text into a clean, URL-safe slug — lowercasing it, stripping accented characters down to their plain letters, removing anything that isn't a letter, number, space or dash, and collapsing everything into single hyphens.",
+    steps: [
+      "Enter your title or text.",
+      "The URL-safe slug is generated instantly.",
+      "Copy the slug for your URL.",
+    ],
+    faqs: [
+      { q: "What happens to accented characters, like é or ñ?", a: "They're normalized down to their plain-letter equivalent (é becomes e, ñ becomes n) rather than being stripped out entirely or left as broken characters in the URL." },
+      { q: "Does this allow underscores or other special characters?", a: "No — only lowercase letters, numbers, and hyphens remain in the output; everything else, including underscores, punctuation, and symbols, is removed." },
+      { q: "What happens with multiple spaces or existing dashes in my text?", a: "They're all collapsed into single hyphens, so \"Hello   World -- Test\" becomes a single clean slug like hello-world-test." },
+      { q: "Does this tool send my text to a server?", a: "Yes — it's sent to our servers to generate the slug and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "svg-blob-generator": {
+    title: "SVG Blob Generator — Free, Instant Organic Shapes | SaaSToolz",
+    metaDescription:
+      "Generate random organic blob shapes as SVG, with reproducible results via a seed value. Free, instant, no signup.",
+    intro:
+      "SVG Blob Generator creates an organic, rounded blob shape by placing points at randomized distances around a circle and connecting them with smooth curves — the same seed value always reproduces the exact same shape, so you can save a seed you like and recreate it later.",
+    steps: [
+      "Set the size, complexity, and color.",
+      "Optionally set a seed for a reproducible shape.",
+      "Click \"Generate\" to produce the blob.",
+      "Copy the SVG code or regenerate for a new shape.",
+    ],
+    faqs: [
+      { q: "Will I get a different blob every time I generate?", a: "Yes, unless you set a specific seed value — with no seed, a random one is chosen each time; with the same seed, you'll get the exact same shape every time." },
+      { q: "What does \"complexity\" control?", a: "The number of points used to build the blob's outline, from 3 to 12 — fewer points make a more angular shape, more points make a smoother, more organic-looking blob." },
+      { q: "What's a good use for these blobs?", a: "Decorative background shapes, section dividers, or organic accents behind images — common in modern web design for breaking up rigid rectangular layouts." },
+      { q: "Does this tool send anything to a server?", a: "Yes — the request is sent to our servers to generate the SVG and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "case-converter": {
+    title: "Case Converter — Free, 9 Case Styles | SaaSToolz",
+    metaDescription:
+      "Convert text between UPPER, lower, Title, Sentence, camelCase, PascalCase, snake_case, kebab-case and CONSTANT_CASE. Free, instant, no signup.",
+    intro:
+      "Case Converter transforms your text into any of nine common case styles — uppercase, lowercase, Title Case, Sentence case, camelCase, PascalCase, snake_case, kebab-case, and CONSTANT_CASE — covering both everyday writing styles and the naming conventions used in code.",
+    steps: [
+      "Paste your text.",
+      "Choose the case style you need.",
+      "The converted result appears instantly.",
+      "Copy the result.",
+    ],
+    faqs: [
+      { q: "What's the difference between camelCase and PascalCase?", a: "camelCase starts with a lowercase letter (myVariableName), while PascalCase capitalizes every word including the first (MyVariableName) — the choice usually depends on your programming language's naming conventions." },
+      { q: "What's CONSTANT_CASE used for?", a: "It's the common convention for constants in many programming languages — all uppercase with underscores between words, like MAX_RETRY_COUNT." },
+      { q: "Does snake_case or kebab-case strip special characters?", a: "Yes — both lowercase the text, replace spaces with underscores or hyphens respectively, and strip out anything that isn't a letter, number, or the appropriate separator." },
+      { q: "Does this tool send my text to a server?", a: "Yes — it's sent to our servers to convert and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "box-shadow": {
+    title: "CSS Box Shadow Generator — Free, Instant Code | SaaSToolz",
+    metaDescription:
+      "Build a CSS box-shadow visually by setting offset, blur, spread, color, and inset. Free, instant, no signup.",
+    intro:
+      "CSS Box Shadow Generator builds the box-shadow property from the values you set — horizontal and vertical offset, blur radius, spread, color, and whether the shadow sits inside or outside the element — so you don't have to memorize the property's argument order.",
+    steps: [
+      "Set the horizontal and vertical offset.",
+      "Set the blur and spread amounts.",
+      "Choose a color and whether the shadow is inset.",
+      "Copy the generated box-shadow CSS.",
+    ],
+    faqs: [
+      { q: "What's the difference between blur and spread?", a: "Blur softens and extends the shadow's edges outward in every direction equally; spread grows or shrinks the shadow's base size before blur is applied, letting you make a sharper, larger-footprint shadow." },
+      { q: "What does \"inset\" do?", a: "It flips the shadow to render inside the element's border instead of outside it, producing a pressed-in or recessed look instead of a shadow that appears to float behind the element." },
+      { q: "Can I use this for a subtle shadow instead of a dramatic one?", a: "Yes — small offset and blur values with a low-opacity color (like rgba(0,0,0,0.1)) produce the subtle shadows common in modern card and button UI." },
+      { q: "Does this tool send my settings to a server?", a: "Yes — they're sent to our servers to build the CSS and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "button-generator": {
+    title: "CSS Button Generator — Free, Instant Code | SaaSToolz",
+    metaDescription:
+      "Build a styled CSS button with background, hover state, padding, radius and font size. Free, instant, no signup.",
+    intro:
+      "CSS Button Generator builds a complete button style — background color, text color, a hover background with a smooth color transition, padding, border radius, and font size — ready to paste as a .btn class.",
+    steps: [
+      "Set the background and text color.",
+      "Set the hover background color.",
+      "Adjust padding, border radius, and font size.",
+      "Copy the generated CSS.",
+    ],
+    faqs: [
+      { q: "Does the hover effect work automatically, or do I need extra JavaScript?", a: "No JavaScript needed — the hover state is a plain CSS :hover rule with a background-color transition, so it works as soon as you apply the generated class." },
+      { q: "Can I use this class name on any element, not just a <button>?", a: "Yes — it's just a CSS class (.btn) targeting background, padding, and other visual properties, so it'll style any element you apply it to, though a real <button> or <a> is the semantically correct choice." },
+      { q: "What transition speed does the hover use?", a: "0.2 seconds with an ease timing function — fast enough to feel responsive without being abrupt." },
+      { q: "Does this tool send my settings to a server?", a: "Yes — they're sent to our servers to build the CSS and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "sort-text": {
+    title: "Alphabetical Sort — Free, Instant Line Sorting | SaaSToolz",
+    metaDescription:
+      "Sort lines of text alphabetically, ascending or descending, with optional case sensitivity. Free, instant, no signup.",
+    intro:
+      "Alphabetical Sort arranges your lines of text in order, letting you choose ascending or descending direction and whether the comparison is case-sensitive — blank lines are dropped from the result.",
+    steps: [
+      "Paste your list, one item per line.",
+      "Choose ascending or descending order.",
+      "Choose whether sorting is case-sensitive.",
+      "Copy the sorted result.",
+    ],
+    faqs: [
+      { q: "What happens with case sensitivity off vs on?", a: "With it off (the default), \"Apple\" and \"apple\" sort together regardless of case. With it on, uppercase and lowercase letters sort by their actual character codes, which can place all-uppercase words before lowercase ones." },
+      { q: "Are blank lines kept in the sorted output?", a: "No — blank lines are filtered out before sorting, so your result contains only the actual content lines." },
+      { q: "Does this sort numbers numerically or alphabetically?", a: "Alphabetically as text, so \"10\" sorts before \"2\" (since \"1\" comes before \"2\" character by character) — this isn't a numeric sort." },
+      { q: "Does this tool send my text to a server?", a: "Yes — it's sent to our servers to sort and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "animation-generator": {
+    title: "CSS Animation Generator — Free, Instant Keyframes | SaaSToolz",
+    metaDescription:
+      "Generate CSS @keyframes animations — fade, slide, bounce, spin, or pulse — with custom duration and easing. Free, instant, no signup.",
+    intro:
+      "CSS Animation Generator builds a complete @keyframes block plus the animation shorthand property for six common effects — fade, slide-up, slide-in, bounce, spin, and pulse — with your chosen duration, easing, and repeat count.",
+    steps: [
+      "Choose an animation type (fade, slide, bounce, spin, or pulse).",
+      "Set the duration, easing, and how many times it repeats.",
+      "Copy the generated @keyframes and animation CSS.",
+      "Apply the animation name to your element's class.",
+    ],
+    faqs: [
+      { q: "What's the difference between slide-up and slide-in?", a: "slide-up animates the element moving upward into place (translateY), while slide-in moves it in from the left (translateX) — pick based on which direction fits your layout." },
+      { q: "What does the iteration count control?", a: "How many times the animation plays — set it to a number for a fixed count, or \"infinite\" for an animation that loops forever, like the spin or pulse effects commonly used for loading indicators." },
+      { q: "Do I need to write any JavaScript to use this?", a: "No — it's pure CSS. Paste the generated @keyframes block into your stylesheet and apply the animation property to whichever element you want animated." },
+      { q: "Does this tool send my settings to a server?", a: "Yes — they're sent to our servers to build the CSS and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "pdf-metadata": {
+    title: "PDF Metadata Editor — Free, Instant | SaaSToolz",
+    metaDescription:
+      "View and edit a PDF's title, author, subject, and keywords. Free, no signup.",
+    intro:
+      "PDF Metadata Editor reads a PDF's embedded metadata — title, author, subject, keywords, creator, producer, and creation/modification dates — and lets you edit the title, author, subject, and keywords fields and save the changes back into the file.",
+    steps: [
+      "Upload your PDF.",
+      "Review its current metadata fields.",
+      "Edit the title, author, subject, or keywords.",
+      "Download the PDF with updated metadata.",
+    ],
+    faqs: [
+      { q: "Can I edit every metadata field, or just some?", a: "You can edit title, author, subject, and keywords. Creator, producer, and the creation/modification dates are shown for reference but reflect how the PDF was originally made, so they aren't editable through this tool." },
+      { q: "How should I enter multiple keywords?", a: "As a comma-separated list — each one is trimmed and stored as a separate keyword in the PDF's metadata." },
+      { q: "Does editing metadata change the PDF's visible content?", a: "No — metadata is invisible information about the document, separate from the pages themselves; editing it doesn't touch any visible content." },
+      { q: "Does this tool send my PDF to a server?", a: "Yes — your file is uploaded securely, edited, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "reverse-text": {
+    title: "Reverse Text — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Reverse text by character, word, or line, with correct handling of emoji and other multi-byte characters. Free, instant, no signup.",
+    intro:
+      "Reverse Text flips your text in one of three modes — character by character, word order, or line order — correctly handling emoji and other characters that take up more than one UTF-16 code unit, so they don't get corrupted into broken symbols.",
+    steps: [
+      "Paste your text.",
+      "Choose a reverse mode: characters, words, or lines.",
+      "The reversed result appears instantly.",
+      "Copy the result.",
+    ],
+    faqs: [
+      { q: "Will reversing break emoji or other special characters?", a: "No — reversal is done by Unicode code point, not raw UTF-16 units, so multi-byte characters like emoji stay intact as whole characters instead of being split and corrupted." },
+      { q: "What's the difference between \"words\" and \"characters\" mode?", a: "Character mode reverses every individual character (\"hello\" becomes \"olleh\"); word mode keeps each word intact but reverses their order (\"hello world\" becomes \"world hello\")." },
+      { q: "What does \"lines\" mode do with a multi-line block of text?", a: "It reverses the order of entire lines — the last line becomes the first, and so on — while leaving the content of each line unchanged." },
+      { q: "Does this tool send my text to a server?", a: "Yes — it's sent to our servers to reverse and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "svg-converter": {
+    title: "SVG Converter — Free, Instant Rasterization | SaaSToolz",
+    metaDescription:
+      "Convert an SVG vector file into a PNG, JPEG, or other raster image at high quality. Free, no signup.",
+    intro:
+      "SVG Converter rasterizes a vector SVG file into a standard raster format like PNG or JPEG, rendering at 300 DPI for crisp results, with an optional width to resize the output.",
+    steps: [
+      "Upload your SVG file.",
+      "Choose your target format (PNG, JPEG, etc.).",
+      "Optionally set an output width.",
+      "Download the converted raster image.",
+    ],
+    faqs: [
+      { q: "Why would I need to convert SVG to a raster format at all?", a: "Many platforms and tools (certain social media uploads, some older software, email clients) don't support SVG and need a standard raster image like PNG or JPEG instead." },
+      { q: "Will the converted image look sharp, or pixelated?", a: "Rendering happens at 300 DPI, which produces crisp, print-quality results rather than a low-resolution rasterization." },
+      { q: "What if I need a specific pixel width?", a: "Set the width option and the SVG is rendered at that exact size, scaling proportionally." },
+      { q: "Does this tool send my file to a server?", a: "Yes — your file is uploaded securely, converted, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "og-generator": {
+    title: "Open Graph Generator — Free, Instant Meta Tags | SaaSToolz",
+    metaDescription:
+      "Generate Open Graph meta tags, with matching Twitter Card tags included automatically. Free, instant, no signup.",
+    intro:
+      "Open Graph Generator builds the og: meta tags that control how your link previews on Facebook, LinkedIn, Slack, and other platforms that read Open Graph data — and automatically includes matching twitter:card tags too, so one tool covers both.",
+    steps: [
+      "Enter your title, description, image, and page URL.",
+      "Optionally set the content type and site name.",
+      "Click \"Generate\" to build the tags.",
+      "Copy the result into your page's <head>.",
+    ],
+    faqs: [
+      { q: "Does this also handle Twitter/X previews, or do I need a separate tool?", a: "This one tool covers both — it automatically adds matching twitter:card, twitter:title, twitter:description and twitter:image tags alongside the Open Graph tags, using the summary_large_image card type." },
+      { q: "What does the \"type\" field control?", a: "It sets og:type, which tells platforms what kind of content the page is (website, article, product, etc.) — it defaults to \"website\" if you don't set anything." },
+      { q: "What happens if I leave a field blank?", a: "Only the fields you fill in are included in the output — there's no placeholder or default text inserted for empty fields." },
+      { q: "Does this tool send my inputs to a server?", a: "Yes — they're sent to our servers to build the tags and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "hreflang-generator": {
+    title: "Hreflang Generator — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Generate hreflang tags to tell search engines which language or region version of a page to show. Free, instant, no signup.",
+    intro:
+      "Hreflang Generator builds the hreflang link tags that tell search engines which language- or region-specific version of your page to serve to which visitors, including an optional x-default fallback for visitors who don't match any listed language.",
+    steps: [
+      "Add each language/region version with its language code and URL.",
+      "Optionally set a default URL for unmatched visitors.",
+      "Click \"Generate\" to build the tags.",
+      "Copy the result into each page's <head>.",
+    ],
+    faqs: [
+      { q: "What does the x-default tag do?", a: "It's the fallback version shown to visitors whose language or region doesn't match any of the specific hreflang entries you've listed — useful for a language-selector page or a generic international version." },
+      { q: "Do I need to add this tag to every language version of my page, or just one?", a: "Every version should include the same set of hreflang tags (including pointing to itself), which is how search engines understand the full set of alternates for that content." },
+      { q: "What format should the language code be in?", a: "Standard language codes like en, en-US, or fr-CA — the format Google's hreflang implementation expects." },
+      { q: "Does this tool send my inputs to a server?", a: "Yes — they're sent to our servers to build the tags and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "keyword-density": {
+    title: "Keyword Density Checker — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Analyze text to find your top keywords and their density percentage, with an optional target keyword check. Free, instant, no signup.",
+    intro:
+      "Keyword Density Checker counts every word in your text (ignoring short words of two characters or fewer) and reports the top 15 most frequent words with their density percentage, plus the specific density of a target keyword if you name one.",
+    steps: [
+      "Paste your text (an article, page copy, etc.).",
+      "Optionally enter a target keyword to check specifically.",
+      "Click \"Analyze\" to see the results.",
+      "Review the top keywords and their density percentages.",
+    ],
+    faqs: [
+      { q: "How is density calculated?", a: "A word's count divided by the total word count, as a percentage — so a word appearing 5 times in a 500-word text has a 1% density." },
+      { q: "Why are short words like \"a\" or \"to\" excluded?", a: "Words of two characters or fewer are filtered out before counting, since common short function words would otherwise dominate the results without being meaningful for SEO purposes." },
+      { q: "Is there an ideal keyword density to aim for?", a: "There's no single correct number — modern SEO generally favors natural, readable writing over hitting a specific density target, since search engines have moved well past simple keyword-counting algorithms." },
+      { q: "Does this tool send my text to a server?", a: "Yes — it's sent to our servers to analyze and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
   "invoice-generator": {
     title: "Free Invoice Generator Online — Instant PDF | SaaSToolz",
     metaDescription:
