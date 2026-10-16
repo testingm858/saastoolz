@@ -799,6 +799,166 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no watermark on the output." },
     ],
   },
+  "gst-calculator": {
+    title: "GST / VAT Calculator — Add or Remove Tax | SaaSToolz",
+    metaDescription:
+      "Add GST or VAT to a price, or work the tax back out of a tax-inclusive total, at any rate. Free, instant, no signup.",
+    intro:
+      "GST / VAT Calculator works in both directions: add tax to a net price (price × (1 + rate)) to get the tax-inclusive total, or take a tax-inclusive total and work backward (total ÷ (1 + rate)) to find the original net amount and the tax within it.",
+    steps: [
+      "Enter the amount.",
+      "Enter the tax rate as a percentage.",
+      "Choose whether the amount is tax-exclusive (add tax) or tax-inclusive (remove tax).",
+      "The base amount, tax, and total are shown instantly.",
+    ],
+    faqs: [
+      { q: "Why can't I just subtract the tax rate from a tax-inclusive total?", a: "Because the tax was calculated on the smaller net amount, not the larger total — subtracting a straight percentage of the total always gives the wrong base. Dividing by (1 + rate) is the correct way to reverse it. See our full guide to adding and removing VAT or GST for worked examples of exactly this mistake." },
+      { q: "What's the difference between \"exclusive\" and \"inclusive\" mode?", a: "Exclusive means your entered amount doesn't yet include tax, and the tool adds it. Inclusive means your amount already includes tax, and the tool extracts the tax and base amount from within it." },
+      { q: "Does this work for any tax rate, not just one country's?", a: "Yes — enter whatever rate applies to you (5%, 15%, 20%, or any other), since the calculation is pure math and isn't tied to a specific country's rate." },
+      { q: "Does this tool send my numbers to a server?", a: "Yes — your figures are sent to our servers to compute the result and the result is returned to you; we don't store the values." },
+      { q: "Is this tax advice?", a: "No. This is a general calculator, not tax advice — check your local tax authority's rules for your specific situation." },
+    ],
+  },
+  "http-header-checker": {
+    title: "HTTP Header Checker — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Fetch any public URL and see its exact status code and response headers. Free, instant, no signup.",
+    intro:
+      "HTTP Header Checker sends a real request to a URL you give it and shows the exact status code and every response header that came back — useful for confirming caching, security or redirect headers are actually set the way you expect, without opening developer tools yourself.",
+    steps: [
+      "Enter the URL you want to inspect.",
+      "Click \"Check Headers\" to fetch it.",
+      "Review the status code returned.",
+      "Scan the full list of response headers.",
+    ],
+    faqs: [
+      { q: "Can I check any URL, including internal or private addresses?", a: "No — only public, routable addresses are allowed. Private and internal IP ranges are rejected before any request is made, which prevents this tool from being used to probe internal network addresses." },
+      { q: "What headers are commonly worth checking?", a: "content-encoding (confirms compression is working), cache-control (confirms caching behavior), and security headers like strict-transport-security — all directly visible in the results here." },
+      { q: "What's the difference between this and the Redirect Checker?", a: "This shows one request's full headers. Redirect Checker follows a chain of redirects and reports the status at each hop plus the final destination — use that when a URL might not go straight to its target." },
+      { q: "Does this tool send the URL to a server?", a: "Yes — the request is made from our servers, which is what lets it check headers that a browser's own CORS restrictions would otherwise hide." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "html-encode": {
+    title: "HTML Encoder/Decoder — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Encode special characters to HTML entities, or decode entities back to plain text, instantly in your browser. Free, no signup.",
+    intro:
+      "HTML Encoder/Decoder converts the five characters that have special meaning in HTML (&, <, >, \" and ') into their safe entity form, or reverses the process to turn entities like &amp; back into plain text.",
+    steps: [
+      "Paste your text.",
+      "Choose Encode (plain text to entities) or Decode (entities to plain text).",
+      "The converted result appears instantly.",
+      "Copy the result for wherever you need it.",
+    ],
+    faqs: [
+      { q: "Why would I need to encode these characters?", a: "If a literal < or & ends up inside HTML content without encoding, a browser can misread it as the start of a tag or entity, breaking the page or, in the worst case, enabling injected content. Encoding makes the characters display safely as text." },
+      { q: "Which characters does this convert?", a: "The five with HTML significance: & becomes &amp;, < becomes &lt;, > becomes &gt;, \" becomes &quot;, and ' becomes &#39;." },
+      { q: "When would I need to decode instead?", a: "When you've received HTML-encoded text (for example, from an API or a CMS export) and need the actual readable characters back, such as turning &amp; back into &." },
+      { q: "Does this tool send my text to a server?", a: "No — the conversion happens entirely in your browser; nothing you enter is transmitted or stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "yaml-formatter": {
+    title: "YAML Formatter & Validator — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Format YAML with consistent indentation and check it's valid in one step. Free, instant, no signup.",
+    intro:
+      "YAML Formatter cleans up indentation and spacing in a YAML document and checks it parses correctly — catching the indentation mistakes that are YAML's most common source of broken config files, since unlike JSON, YAML's structure is defined entirely by whitespace.",
+    steps: [
+      "Paste your YAML content.",
+      "Click \"Format\" to clean up indentation and spacing.",
+      "Check the validation result confirms it parses correctly.",
+      "Copy the formatted YAML.",
+    ],
+    faqs: [
+      { q: "Why is YAML so sensitive to indentation?", a: "Unlike JSON, which uses braces and brackets to show structure, YAML relies entirely on indentation level to show nesting — a single misplaced space changes what a document means, or breaks it outright. Consistent formatting is what prevents this." },
+      { q: "What does validation actually check?", a: "Whether the document parses as valid YAML at all — not whether it matches a specific schema your particular tool (like Docker Compose or GitHub Actions) expects. A file can be valid YAML and still be wrong for its intended use." },
+      { q: "Can tabs be used for indentation in YAML?", a: "No — the YAML specification doesn't allow tab characters for indentation, only spaces. A file with tabs will fail to parse, which this tool will flag as invalid." },
+      { q: "Does this tool send my content to a server?", a: "Yes — it's sent to our servers to format and validate, and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "pdf-sign": {
+    title: "PDF Signer — Free Signature Stamp | SaaSToolz",
+    metaDescription:
+      "Stamp a typed signature onto any page of a PDF in seconds. Free, no signup — a visual signature, not a certified digital one.",
+    intro:
+      "PDF Signer stamps your typed name onto a PDF in a cursive-style font, placed in the bottom-right corner of the page you choose (the last page by default) — a quick way to sign an informal document without printing, signing by hand, and scanning it back in.",
+    steps: [
+      "Upload your PDF.",
+      "Type your signature text.",
+      "Choose which page to sign (defaults to the last page).",
+      "Download the signed PDF.",
+    ],
+    faqs: [
+      { q: "Is this a legally binding digital signature?", a: "No — this stamps a visual signature (your typed name, styled like a signature) onto the page. It doesn't use a digital certificate and can't prove who signed or whether the document was altered afterward, unlike a certified e-signature service. For contracts or anything needing legal verification, check what your jurisdiction and the other party actually require." },
+      { q: "Where does the signature appear on the page?", a: "In the bottom-right corner of whichever page you choose, which defaults to the last page of the document — the conventional place for a signature line." },
+      { q: "Can I sign more than one page?", a: "Each run signs one chosen page. For a document needing signatures on multiple pages, run the tool again on the already-signed output, selecting a different page each time." },
+      { q: "Does this tool send my document to a server?", a: "Yes — your file is uploaded securely, stamped, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no watermark added beyond your own signature text." },
+    ],
+  },
+  "audio-converter": {
+    title: "Audio Converter — MP3, WAV, OGG, FLAC | SaaSToolz",
+    metaDescription:
+      "Convert audio between MP3, WAV, OGG and FLAC in either direction. Free, instant, no signup, no watermark.",
+    intro:
+      "Audio Converter switches an audio file between MP3, WAV, OGG and FLAC in either direction, so you can go from a large lossless WAV master down to a shareable MP3, or from a lossy format up to WAV when another tool specifically requires it.",
+    steps: [
+      "Upload your audio file.",
+      "Choose the format you want to convert to.",
+      "Click \"Convert\" to process it.",
+      "Download the converted file.",
+    ],
+    faqs: [
+      { q: "Which formats are supported?", a: "MP3, WAV, OGG and FLAC — convert between any of the four in either direction." },
+      { q: "Will converting a lossy file to a lossless one improve its quality?", a: "No — converting, say, an MP3 to WAV makes a larger file but can't restore detail the MP3 already discarded. For the best result, always convert from the highest-quality source you actually have. See our guide to audio formats for when to use each one." },
+      { q: "Does the converted file keep the same length and content?", a: "Yes — conversion changes the format and encoding only; the audio content and duration stay the same." },
+      { q: "Does this tool send my audio to a server?", a: "Yes — your file is uploaded securely, converted, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no watermark on the output." },
+    ],
+  },
+  "image-resize": {
+    title: "Image Resizer — Free, 5 Fit Modes | SaaSToolz",
+    metaDescription:
+      "Resize an image to exact dimensions with 5 fit modes — crop, fit within, stretch, or shrink/grow only. Free, instant, no signup.",
+    intro:
+      "Image Resizer changes an image to exact dimensions you specify, with 5 fit modes controlling exactly how it adapts: crop to fill, fit within without cropping, stretch to match, or constrain to only shrink or only grow from the original size.",
+    steps: [
+      "Upload your image.",
+      "Enter the target width and/or height.",
+      "Choose a fit mode (cover, contain, fill, inside, or outside).",
+      "Download the resized image.",
+    ],
+    faqs: [
+      { q: "What's the difference between the fit modes?", a: "Cover crops the image to completely fill the target size. Contain fits the whole image inside the target without cropping, which may leave empty space. Fill stretches the image to match exactly, which can distort it. Inside only shrinks an oversized image, never enlarging it. Outside only grows an undersized image, never shrinking it." },
+      { q: "Which fit mode should I use for a profile photo or thumbnail?", a: "Cover is usually right for a fixed-size thumbnail or avatar, since it fills the frame completely without any distortion or empty space." },
+      { q: "Will resizing up make a small image sharper?", a: "No — enlarging an image can only interpolate existing pixels, not add real detail, so a small source image will look soft when scaled up. Start from the highest-resolution original you have." },
+      { q: "Does this tool send my image to a server?", a: "Yes — your image is uploaded securely, resized, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no watermark on the output." },
+    ],
+  },
+  "grid-generator": {
+    title: "CSS Grid Generator — Free, Instant Code | SaaSToolz",
+    metaDescription:
+      "Build a CSS grid layout visually and copy the ready-to-use grid-template code. Free, instant, no signup.",
+    intro:
+      "CSS Grid Generator lets you set the number of columns and rows (or custom column/row sizes) and a gap, then outputs the exact grid-template-columns, grid-template-rows and gap CSS ready to paste into your stylesheet.",
+    steps: [
+      "Set the number of columns and rows, or enter custom sizes for each.",
+      "Set the gap between grid items.",
+      "Preview the layout update as you adjust it.",
+      "Copy the generated CSS.",
+    ],
+    faqs: [
+      { q: "What do the default columns and rows look like in the CSS?", a: "By default each column and row gets an equal fraction of the available space, written as repeat(n, 1fr) — so three equal columns becomes repeat(3, 1fr)." },
+      { q: "Can I set custom column widths instead of equal ones?", a: "Yes — enter your own track sizes (like 200px 1fr 2fr) instead of using the equal-column default, for layouts where columns shouldn't all be the same width." },
+      { q: "Do I need to add anything else to make this work?", a: "Just apply display: grid (included in the generated code) to the container, and the grid-template and gap properties handle the layout — no extra markup is required beyond normal HTML elements inside the container." },
+      { q: "Does this tool send anything to a server?", a: "No — the CSS is generated entirely in your browser; nothing you enter is transmitted or stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
   "invoice-generator": {
     title: "Free Invoice Generator Online — Instant PDF | SaaSToolz",
     metaDescription:
