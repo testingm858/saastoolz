@@ -639,6 +639,166 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "Is this medical or dietary advice?", a: "No. This is a general estimate, not medical or dietary advice — speak to a doctor or registered dietitian before making a significant change to your eating." },
     ],
   },
+  "canonical-url": {
+    title: "Canonical URL Generator — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Generate a correct canonical tag from any URL, with the address normalized and ready to paste into your page's head. Free, instant, no signup.",
+    intro:
+      "Canonical URL Generator normalizes a URL (resolving it to a proper absolute address) and produces the exact <link rel=\"canonical\"> tag to paste into a page's head, so search engines know which version of a page to treat as the real one when several addresses could reach it.",
+    steps: [
+      "Enter the URL you want to canonicalize.",
+      "Click \"Generate\" to normalize it into a proper absolute address.",
+      "Copy the ready-to-paste <link rel=\"canonical\"> tag.",
+      "Add it inside the <head> of the matching page.",
+    ],
+    faqs: [
+      { q: "Why does a page need a canonical tag at all?", a: "The same page is often reachable through several addresses — with or without www, with a trailing slash, or with tracking parameters attached. Without a canonical tag, search engines can treat these as separate duplicate pages and split ranking signals between them." },
+      { q: "Should a page ever point its canonical at a different page?", a: "Usually a page should canonicalize to itself. Pointing it elsewhere is for genuine duplicates, like a printer-friendly version that should defer to the main article." },
+      { q: "Is a canonical tag a strict instruction to search engines?", a: "It's treated as a strong hint, not an absolute command — search engines usually follow it, but may choose differently if other signals (like internal links) disagree with it." },
+      { q: "Does this tool send the URL to a server?", a: "Yes — the URL is sent to our servers to normalize it and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "cron-generator": {
+    title: "Cron Expression Explainer — Free, Instant | SaaSToolz",
+    metaDescription:
+      "Paste a 5-field cron expression and see exactly what each field means in plain English. Free, instant, no signup.",
+    intro:
+      "Cron Expression Explainer takes a standard 5-field cron schedule (minute, hour, day of month, month, day of week) and breaks down exactly what each field means in plain English, so you can confirm a schedule does what you intended before it runs unattended on a server.",
+    steps: [
+      "Paste your cron expression (5 fields, separated by spaces).",
+      "Click \"Explain\" to see each field broken down.",
+      "Check the plain-English explanation matches the schedule you intended.",
+      "Adjust and re-check until it reads the way you expect.",
+    ],
+    faqs: [
+      { q: "What are the 5 fields, in order?", a: "Minute, hour, day of month, month, and day of week — in that order. Each can be a specific value, a range, a list, a step (like */5), or an asterisk meaning \"every\"." },
+      { q: "What if my expression has 6 fields instead of 5?", a: "Some schedulers (like Quartz) add a seconds field at the start, which isn't standard cron. This tool expects the standard 5-field format; drop the extra field before pasting it in." },
+      { q: "Why does a schedule sometimes run on both a day-of-month AND a day-of-week match?", a: "Standard cron treats day-of-month and day-of-week as an \"or\" when both are set to something other than *, which surprises people expecting \"and\". See our full guide to cron expressions for worked examples of this exact trap." },
+      { q: "Does this tool send my expression to a server?", a: "Yes — it's sent to our servers to parse and explain, and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "word-to-html": {
+    title: "Word to HTML Converter — Free, Clean Output | SaaSToolz",
+    metaDescription:
+      "Convert a .docx Word document into clean, pasteable HTML in seconds. Free, no signup, no watermark on the output.",
+    intro:
+      "Word to HTML converts a modern .docx Word document into clean HTML you can paste straight into a CMS, email template or web page — preserving headings, lists, links and basic formatting without the bloated markup Word itself produces when you \"Save as HTML\".",
+    steps: [
+      "Upload your .docx Word document.",
+      "Click \"Convert\" to generate the HTML.",
+      "Review the output in the preview.",
+      "Copy or download the clean HTML.",
+    ],
+    faqs: [
+      { q: "Does this work with the old .doc format?", a: "No — only the modern .docx format (the zip-and-XML based format every version of Word since 2007 saves by default) is supported. If you have an old .doc file, open and re-save it as .docx in Word first." },
+      { q: "Is the output safe to paste directly onto my site?", a: "Links are checked before being included — only safe schemes (https, mailto, tel, in-page anchors, relative paths) are kept, and anything else is neutralized, which protects against a document carrying a hidden malicious link through to your page." },
+      { q: "Will complex formatting like tables and images convert perfectly?", a: "Common formatting — headings, lists, bold/italic, links, basic tables — converts cleanly. Very complex layouts, embedded objects, or unusual Word-specific formatting may need manual cleanup afterward." },
+      { q: "Does this tool send my document to a server?", a: "Yes — your file is uploaded securely, converted, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no watermark on the output." },
+    ],
+  },
+  "css-formatter": {
+    title: "CSS Formatter — Free, Instant Beautifier | SaaSToolz",
+    metaDescription:
+      "Format messy or minified CSS into clean, properly indented, readable code in seconds. Free, instant, no signup.",
+    intro:
+      "CSS Formatter takes compressed or inconsistently-formatted CSS and rewrites it with consistent indentation and line breaks — one rule, one declaration, one brace per line — so it's actually readable and easy to edit, without changing a single style rule.",
+    steps: [
+      "Paste your CSS, minified or messy.",
+      "Click \"Format\" to beautify it instantly.",
+      "Review the cleanly indented result.",
+      "Copy the formatted CSS.",
+    ],
+    faqs: [
+      { q: "Does formatting change how the CSS behaves?", a: "No — only whitespace, indentation and line breaks change. Every selector, property and value stays exactly as it was, so the formatted file renders identically to the original." },
+      { q: "What's the opposite of this tool?", a: "CSS Minifier strips whitespace and comments to shrink a file for production. Use that once you're done editing and ready to ship the smallest possible file." },
+      { q: "Can I format CSS with comments in it?", a: "Yes — comments are preserved in the formatted output, unlike minifying, which strips them." },
+      { q: "Does this tool send my CSS to a server?", a: "Yes — it's sent to our servers to format and the result is returned to you; nothing is stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "gradient-generator": {
+    title: "CSS Gradient Generator — Free, Instant Code | SaaSToolz",
+    metaDescription:
+      "Build a linear or radial CSS gradient visually and copy the ready-to-use code. Free, instant, no signup.",
+    intro:
+      "Gradient Generator lets you pick colors and a direction, then shows a live preview alongside the exact CSS code — linear-gradient or radial-gradient — ready to paste straight into your stylesheet.",
+    steps: [
+      "Choose your gradient colors.",
+      "Set the direction or shape (linear or radial).",
+      "Preview the gradient update live as you adjust it.",
+      "Copy the generated CSS code.",
+    ],
+    faqs: [
+      { q: "What's the difference between linear and radial gradients?", a: "A linear gradient transitions colors in a straight line across a chosen angle. A radial gradient transitions outward from a center point in a circle or ellipse. Pick based on the shape you want the color transition to follow." },
+      { q: "Can I use more than two colors?", a: "Yes — add as many color stops as you need, each with its own position along the gradient, for a multi-color transition." },
+      { q: "Will the generated CSS work in every browser?", a: "The standard linear-gradient() and radial-gradient() syntax is supported by every current major browser, so the code works without needing vendor prefixes." },
+      { q: "Does this tool send anything to a server?", a: "No — the gradient is built and rendered entirely in your browser; nothing you choose is transmitted or stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "jwt-decoder": {
+    title: "JWT Decoder — Free, Instant Header & Payload | SaaSToolz",
+    metaDescription:
+      "Paste a JWT and instantly see its decoded header, payload and expiry status. Free, instant, no signup — nothing is verified or stored.",
+    intro:
+      "JWT Decoder splits a JSON Web Token into its three parts, decodes the header and payload from Base64 into readable JSON, and checks the token's exp claim against the current time to tell you plainly whether it's expired.",
+    steps: [
+      "Paste your JWT (the full header.payload.signature string).",
+      "The decoded header and payload appear instantly as readable JSON.",
+      "Check the expiry status, shown clearly if the token has an exp claim.",
+      "Copy any part you need for debugging.",
+    ],
+    faqs: [
+      { q: "Does this verify the token's signature?", a: "No — this only decodes the header and payload, which is possible for anyone since JWTs are Base64-encoded, not encrypted. It does not check whether the signature is valid, since that requires the issuer's secret or public key, which this tool never asks for." },
+      { q: "How is \"expired\" determined?", a: "If the payload has an exp claim (a Unix timestamp), it's compared against the current time. A token with no exp claim is reported as not expired, since there's nothing to check it against." },
+      { q: "Is it safe to paste a real token from my application here?", a: "Treat any JWT as sensitive, since its payload is fully readable to anyone who has it. For production tokens, prefer decoding ones from a test or staging environment where possible." },
+      { q: "Does this tool send my token to a server?", a: "Yes — the token is sent to our servers to decode and the result is returned to you; it isn't stored." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no usage limits for casual use." },
+    ],
+  },
+  "roi-calculator": {
+    title: "ROI Calculator — Free, Instant Return % | SaaSToolz",
+    metaDescription:
+      "Calculate return on investment from your gain and cost, as a percentage and a net profit figure. Free, instant, no signup.",
+    intro:
+      "ROI Calculator takes what you gained from an investment and what it cost, then returns both the net profit and the return on investment as a percentage — (gain − cost) ÷ cost × 100 — so you can compare the result across different investments on equal footing.",
+    steps: [
+      "Enter the total gain (what the investment returned).",
+      "Enter the cost (what you put in).",
+      "Click \"Calculate\" to see your net profit and ROI percentage.",
+      "Compare the ROI figure against other investments or opportunities.",
+    ],
+    faqs: [
+      { q: "What's the actual formula?", a: "Net profit is gain minus cost. ROI percentage is that net profit divided by the cost, multiplied by 100 — so a 1,000 cost that returns 1,300 gives a net profit of 300 and an ROI of 30%." },
+      { q: "Does this account for the time the investment took?", a: "No — this is a simple ROI figure, not an annualized return. A 30% ROI over one month and a 30% ROI over five years are very different outcomes in practice, so factor in the time period yourself when comparing options." },
+      { q: "Can ROI be negative?", a: "Yes — if the gain is less than the cost, both the net profit and ROI percentage come back negative, showing a loss rather than a return." },
+      { q: "Does this tool send my numbers to a server?", a: "Yes — your figures are sent to our servers to compute the result and the result is returned to you; we don't store the values." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+    ],
+  },
+  "image-rotate": {
+    title: "Rotate Image Online — Free, Any Angle | SaaSToolz",
+    metaDescription:
+      "Rotate an image by any angle, not just 90-degree steps, directly in your browser. Free, instant, no signup, no watermark.",
+    intro:
+      "Rotate Image turns an image by the exact angle you specify, not just fixed 90-degree steps — useful for straightening a tilted phone photo of a document as well as standard quarter-turn rotations.",
+    steps: [
+      "Upload the image you want to rotate.",
+      "Enter the rotation angle in degrees.",
+      "Click \"Rotate\" to process it.",
+      "Download the rotated image.",
+    ],
+    faqs: [
+      { q: "Can I rotate by an angle other than 90, 180 or 270 degrees?", a: "Yes — any angle is accepted, which is what makes this different from a simple quarter-turn rotate button. A small angle like 3 or 5 degrees is exactly what you need to straighten a slightly tilted scan or photo." },
+      { q: "What happens to the corners when I rotate at an odd angle?", a: "Rotating at an angle that isn't a multiple of 90 degrees changes the image's bounding box, so the output canvas expands to fit the whole rotated image rather than cropping any of it off." },
+      { q: "Does rotating affect image quality?", a: "The image is re-encoded after rotating, at a quality that keeps it visually close to the original. For large quality-sensitive rotations, start from the highest-resolution source you have." },
+      { q: "Does this tool send my image to a server?", a: "Yes — your image is uploaded securely, rotated, and deleted from our servers within 1 hour." },
+      { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no watermark on the output." },
+    ],
+  },
   "invoice-generator": {
     title: "Free Invoice Generator Online — Instant PDF | SaaSToolz",
     metaDescription:
