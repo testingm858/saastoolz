@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, ArrowRight } from "lucide-react";
 
-export default function HeroSearch() {
+export default function HeroSearch({ toolCount }: { toolCount: number }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
 
@@ -21,7 +21,7 @@ export default function HeroSearch() {
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search 115 tools — PDF merge, QR code, JSON formatter..."
+        placeholder={`Search ${toolCount} tools — PDF merge, QR code, JSON formatter...`}
         className="w-full pl-11 sm:pl-12 pr-14 sm:pr-32 py-3.5 sm:py-4 rounded-2xl border border-gray-200 bg-white shadow-sm text-sm sm:text-base text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-violet-400 focus:ring-4 focus:ring-violet-100 transition-shadow"
       />
       <button

@@ -3,7 +3,7 @@
 // Every free tool gets a unique <title>, meta description, short explanation,
 // step-by-step usage instructions, and FAQ — sourced from OVERRIDES when a
 // tool has hand-written content, falling back to a category-aware generator
-// otherwise so every one of the 115 tool pages still gets genuinely
+// otherwise so every tool page still gets genuinely
 // differentiated (not boilerplate-identical) copy. OVERRIDES covers the
 // highest-search-volume tool in each category first.
 
