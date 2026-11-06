@@ -30,6 +30,12 @@ const nextConfig: NextConfig = {
   // change (brand assets) or are content-addressed with a timestamp
   // (uploads, see src/lib/blog-images.ts), so a year-long immutable cache is
   // safe; a changed cover image gets a new filename, not a mutated old one.
+  // NOTE: on the production Hostinger host, LiteSpeed serves files that
+  // physically exist in public_html directly and never reaches the Next.js
+  // server for them — so this config has no effect there; public/.htaccess
+  // is what actually sets the header in production. This still applies for
+  // `next start` setups (and local verification) where Next.js itself
+  // serves /public.
   async headers() {
     const immutable = [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }];
     return [

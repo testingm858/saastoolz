@@ -1,0 +1,13 @@
+# Hostinger's LiteSpeed server serves files that physically exist in
+# public_html directly, bypassing the Next.js app entirely — so the
+# Cache-Control rules in next.config.ts's headers() (which only run for
+# requests the Next.js server itself handles) never apply to these files in
+# this deployment. This is the actual mechanism that puts long-lived caching
+# on them. Applies recursively, so it also covers /uploads/blog (created at
+# runtime by src/lib/blog-images.ts, not present in the repo) and /blog
+# (committed cover images) without listing them separately.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(jpg|jpeg|png|webp|gif|avif|svg|ico|woff2?)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
