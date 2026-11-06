@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Next.js sends "X-Powered-By: Next.js" on every response by default —
+  // pure info leakage about the stack, no functional purpose.
+  poweredByHeader: false,
   // sharp and @napi-rs/canvas ship native .node binaries, and ffmpeg-static
   // ships a standalone .exe/binary — all three need Node to resolve their
   // real on-disk path at runtime. Left to the bundler, it either rewrites
