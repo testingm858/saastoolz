@@ -12,7 +12,7 @@ import { getAdCodes } from "@/lib/ads";
 import { canShowAds, adSlotVisible } from "@/lib/ads/policy";
 import { adSlotKey } from "@/lib/adPlacements";
 
-const HOME_TITLE = "Free Online Tools for PDF, Images, SEO, Coding & More | SaaSToolz";
+const HOME_TITLE = "Free Online Tools for PDF, Image & Dev Work | SaaSToolz";
 const HOME_DESCRIPTION = `Use ${FREE_TOOLS.length} free online tools for PDF conversion, image editing, developer utilities, SEO, writing, calculators and more. No signup required.`;
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title: { absolute: HOME_TITLE },
   description: HOME_DESCRIPTION,
   alternates: { canonical: "/" },
-  openGraph: { title: HOME_TITLE, description: HOME_DESCRIPTION },
+  openGraph: { title: HOME_TITLE, description: HOME_DESCRIPTION, type: "website" },
 };
 
 // Per-card visit/like stats make this dynamic per request instead of

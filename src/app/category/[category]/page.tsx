@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${meta.label} — Free Online Tools`,
     description,
     alternates: { canonical: `/category/${category}` },
-    openGraph: { title: `${meta.label} | SaaSToolz`, description, images: [{ url: "/opengraph-image", width: 1200, height: 630 }] },
+    openGraph: { title: `${meta.label} | SaaSToolz`, description, type: "website", images: [{ url: "/opengraph-image", width: 1200, height: 630 }] },
   };
 }
 

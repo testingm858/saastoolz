@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Free Online Tools — ${FREE_TOOLS.length} Tools, No Signup | SaaSToolz`,
     description: `Browse every free online tool on SaaSToolz — ${FREE_TOOLS.length} PDF, image, developer, calculator, design and writing tools, searchable by name. No signup, no cost.`,
+    type: "website",
     images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
   },
 };
