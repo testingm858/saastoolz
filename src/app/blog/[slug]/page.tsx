@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, Eye } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { renderMarkdown } from "@/lib/markdown";
@@ -38,9 +39,14 @@ export default async function BlogPostPage({ params }: Props) {
   const post = await prisma.blogPost.findUnique({ where: { slug } });
   if (!post || !post.published) notFound();
 
-  const [, visitorId] = await Promise.all([
-    prisma.blogPost.update({ where: { id: post.id }, data: { views: { increment: 1 } } }),
+  // The view-count bump doesn't gate anything the reader sees — fire it
+  // without blocking the render.
+  void prisma.blogPost.update({ where: { id: post.id }, data: { views: { increment: 1 } } }).catch(() => {});
+
+  const postUrl = `${BASE_URL}/blog/${post.slug}`;
+  const [visitorId, adCodes] = await Promise.all([
     getVisitorId(),
+    canShowAds(`/blog/${post.slug}`) ? getAdCodes("blog-post", ["middle", "bottom"]) : Promise.resolve<Record<string, string | null>>({}),
   ]);
   const alreadyLiked = visitorId
     ? (await prisma.like.findUnique({
@@ -49,8 +55,6 @@ export default async function BlogPostPage({ params }: Props) {
     : false;
 
   const html = renderMarkdown(post.content);
-  const postUrl = `${BASE_URL}/blog/${post.slug}`;
-  const adCodes = canShowAds(`/blog/${post.slug}`) ? await getAdCodes("blog-post", ["middle", "bottom"]) : {};
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -87,8 +91,15 @@ export default async function BlogPostPage({ params }: Props) {
       </div>
 
       {post.coverImage && (
-        // eslint-disable-next-line @next/next/no-img-element -- data: URL, not a static asset next/image can optimize
-        <img src={post.coverImage} alt={post.title} className="w-full aspect-video object-cover rounded-2xl mb-10" />
+        post.coverImage.startsWith("data:") ? (
+          // Legacy row saved before covers moved to /public/uploads/blog —
+          // eslint-disable-next-line @next/next/no-img-element -- base64 data: URL, next/image can't optimize it
+          <img src={post.coverImage} alt={post.title} className="w-full aspect-video object-cover rounded-2xl mb-10" />
+        ) : (
+          <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-10">
+            <Image src={post.coverImage} alt={post.title} fill sizes="(max-width: 768px) 100vw, 672px" className="object-cover" priority />
+          </div>
+        )
       )}
 
       <AdSlot code={adCodes[adSlotKey("blog-post", "middle")] ?? null} position="middle" />

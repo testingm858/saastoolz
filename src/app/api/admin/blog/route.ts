@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { requireAdminEmail } from "@/lib/admin";
 import { slugify } from "@/lib/utils";
 import { validateCoverImage } from "@/lib/file-limits";
+import { persistCoverImage } from "@/lib/blog-images";
 import prisma from "@/lib/prisma";
 
 export async function GET() {
@@ -42,13 +43,15 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: `Slug "${requestedSlug}" is already in use` }, { status: 409 });
   }
 
+  const coverImage = await persistCoverImage(coverImageResult.value, requestedSlug);
+
   const published = body.published === true;
   const post = await prisma.blogPost.create({
     data: {
       title,
       slug: requestedSlug,
       excerpt,
-      coverImage: coverImageResult.value,
+      coverImage,
       content,
       published,
       publishedAt: published ? new Date() : null,

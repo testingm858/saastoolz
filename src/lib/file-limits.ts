@@ -31,11 +31,10 @@ export function uploadLimitHint(limitMB: number): string {
     : ` Upgrade to Pro for up to ${MAX_UPLOAD_MB}MB.`;
 }
 
-// Blog cover images are stored inline as base64 data: URLs (no external
-// storage is wired up), which travel through the same Vercel body-limit
-// admin API routes and inflate ~33% when base64-encoded — kept well under
-// MAX_UPLOAD_BYTES so the encoded string plus the rest of the post JSON
-// still clears the ~4.5MB ceiling above.
+// Blog cover images arrive from the admin form as base64 data: URLs, which
+// inflate ~33% over the raw file size — this caps that upload before
+// `persistCoverImage` (see src/lib/blog-images.ts) writes it to
+// /public/uploads/blog and the DB only ever stores the resulting file path.
 export const MAX_COVER_IMAGE_BYTES = 1.5 * 1024 * 1024; // 1.5MB
 export const MAX_COVER_IMAGE_MB = 1.5;
 
@@ -49,6 +48,9 @@ export function formatMB(bytes: number): string {
 export function validateCoverImage(value: unknown): { ok: true; value: string | null } | { ok: false; error: string } {
   if (value === null || value === undefined) return { ok: true, value: null };
   if (typeof value !== "string") return { ok: false, error: "Invalid cover image" };
+  // Already persisted to /public/uploads/blog by a previous save — the form
+  // resubmits this verbatim when the image itself wasn't changed.
+  if (value.startsWith("/uploads/blog/")) return { ok: true, value };
   if (!value.startsWith("data:image/")) return { ok: false, error: "Cover image must be an uploaded image file" };
   if (value.length > MAX_COVER_IMAGE_BYTES * 1.4) {
     return { ok: false, error: `Cover image exceeds the ${MAX_COVER_IMAGE_MB}MB limit` };

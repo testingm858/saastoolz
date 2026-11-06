@@ -59,9 +59,13 @@ export default async function BlogPage() {
             >
               <div className="relative aspect-video bg-gradient-to-br from-violet-100 to-fuchsia-100">
                 {post.coverImage ? (
-                  // data: URL (uploaded cover) — next/image's optimizer doesn't apply to these
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={post.coverImage} alt={post.title} className="absolute inset-0 w-full h-full object-cover" />
+                  post.coverImage.startsWith("data:") ? (
+                    // Legacy row saved before covers moved to /public/uploads/blog
+                    // eslint-disable-next-line @next/next/no-img-element -- base64 data: URL, next/image can't optimize it
+                    <img src={post.coverImage} alt={post.title} className="absolute inset-0 w-full h-full object-cover" />
+                  ) : (
+                    <Image src={post.coverImage} alt={post.title} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover" />
+                  )
                 ) : cover ? (
                   <Image src={cover} alt={post.title} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover" />
                 ) : (

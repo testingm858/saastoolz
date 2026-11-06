@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { requireAdminEmail } from "@/lib/admin";
 import { slugify } from "@/lib/utils";
 import { validateCoverImage } from "@/lib/file-limits";
+import { deleteCoverImageFile, persistCoverImage } from "@/lib/blog-images";
 import prisma from "@/lib/prisma";
 
 interface Props {
@@ -39,7 +40,11 @@ export async function PATCH(req: Request, { params }: Props) {
   if (body.coverImage !== undefined) {
     const coverImageResult = validateCoverImage(body.coverImage);
     if (!coverImageResult.ok) return NextResponse.json({ error: coverImageResult.error }, { status: 400 });
-    data.coverImage = coverImageResult.value;
+    const nextCoverImage = await persistCoverImage(coverImageResult.value, existing.slug);
+    if (existing.coverImage && existing.coverImage !== nextCoverImage) {
+      await deleteCoverImageFile(existing.coverImage);
+    }
+    data.coverImage = nextCoverImage;
   }
 
   if (typeof body.slug === "string" && body.slug.trim()) {
@@ -66,6 +71,7 @@ export async function DELETE(_req: Request, { params }: Props) {
     return NextResponse.json({ error: "Not authorized" }, { status: 403 });
   }
   const { id } = await params;
-  await prisma.blogPost.delete({ where: { id } }).catch(() => null);
+  const deleted = await prisma.blogPost.delete({ where: { id } }).catch(() => null);
+  if (deleted) await deleteCoverImageFile(deleted.coverImage);
   return NextResponse.json({ ok: true });
 }
