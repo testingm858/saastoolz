@@ -13,8 +13,7 @@ import { canShowAds, adSlotVisible } from "@/lib/ads/policy";
 import { adSlotKey } from "@/lib/adPlacements";
 
 const HOME_TITLE = "Free Online Tools for PDF, Images, SEO, Coding & More | SaaSToolz";
-const HOME_DESCRIPTION =
-  "Use 115 free online tools for PDF conversion, image editing, developer utilities, SEO, writing, calculators and more. No signup required.";
+const HOME_DESCRIPTION = `Use ${FREE_TOOLS.length} free online tools for PDF conversion, image editing, developer utilities, SEO, writing, calculators and more. No signup required.`;
 
 export const metadata: Metadata = {
   // `absolute` bypasses the root layout's `"%s | SaaSToolz"` title template —
@@ -39,18 +38,21 @@ export default async function HomePage() {
   const featuredFree = FREE_TOOLS.filter((t) => FEATURED_FREE.includes(t.id));
   const categories   = Object.entries(CATEGORY_META).filter(([k]) => !k.startsWith("ai-"));
 
-  // Stats are cosmetic (view/like counts on cards) — don't let a DB hiccup
-  // take down the whole homepage.
-  const stats = await prisma.toolStats
-    .findMany({
-      where: { toolId: { in: featuredFree.map((t) => t.id) } },
-      select: { toolId: true, views: true, likes: true },
-    })
-    .catch(() => []);
+  // Independent reads — run them concurrently instead of one-by-one so TTFB
+  // pays for the slowest of the three, not their sum. Stats are cosmetic
+  // (view/like counts on cards) — don't let a DB hiccup take down the whole
+  // homepage.
+  const [stats, announcement, adCodes] = await Promise.all([
+    prisma.toolStats
+      .findMany({
+        where: { toolId: { in: featuredFree.map((t) => t.id) } },
+        select: { toolId: true, views: true, likes: true },
+      })
+      .catch(() => []),
+    getActiveAnnouncement(),
+    canShowAds("/") ? getAdCodes("home", ["top", "bottom"]) : Promise.resolve<Record<string, string | null>>({}),
+  ]);
   const statsById = new Map(stats.map((s) => [s.toolId, s]));
-
-  const announcement = await getActiveAnnouncement();
-  const adCodes = canShowAds("/") ? await getAdCodes("home", ["top", "bottom"]) : {};
   // When the slot under "View all" is showing, the section padding below it
   // collapses so the gap above and below the ad card matches.
   const bottomAdShown = adSlotVisible(adCodes[adSlotKey("home", "bottom")] ?? null);
@@ -84,7 +86,7 @@ export default async function HomePage() {
             Free forever, no account required.
           </p>
 
-          <HeroSearch />
+          <HeroSearch toolCount={FREE_TOOLS.length} />
 
           <div className="flex flex-wrap items-center justify-center gap-2 mt-6">
             {categories.slice(0, 6).map(([key, meta]) => (
