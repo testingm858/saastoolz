@@ -257,7 +257,6 @@ export const TOOL_GUIDES: Partial<Record<string, ToolGuide>> = {
             ["PNG", "Graphics/logos needing transparency, or when you need lossless quality"],
             ["WebP", "The best size-to-quality ratio for the web today, with wide browser support"],
             ["AVIF", "Even smaller than WebP at equal quality, on newer browsers"],
-            ["SVG", "Genuinely vector artwork (logos, icons, illustrations) — not photographs"],
           ],
         },
       },
@@ -270,7 +269,7 @@ export const TOOL_GUIDES: Partial<Record<string, ToolGuide>> = {
       {
         title: "A common mistake to avoid",
         paragraphs: [
-          "Converting a photograph to SVG doesn't work the way people sometimes expect — SVG is a vector format built to describe shapes mathematically (a circle, a path, a line), not to store the pixel-by-pixel detail a photo needs. SVG conversion only makes sense for artwork that's genuinely vector-based to begin with, like an icon or logo.",
+          "Converting a PNG with transparency to JPG doesn't work the way people sometimes expect — JPG has no alpha channel, so any transparent area gets filled with a solid background color instead. If you need the transparency to survive, convert to WebP, AVIF, or stay on PNG.",
         ],
       },
     ],

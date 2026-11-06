@@ -43,10 +43,12 @@ type ToolDef = Omit<Tool, "processing">;
 
 // Tools whose file/text content is processed entirely in the browser and
 // never sent to a server (invoice-generator renders the PDF/PNG client-side
-// with html2canvas/jsPDF; json-viewer just does JSON.parse + tree render).
-// Every other tool round-trips through /api/tools/[toolId] or a file
-// dispatch route server-side, including ones whose old copy claimed
-// otherwise.
+// with html2canvas/jsPDF — though it does POST invoice metadata like
+// company/customer name, email, VAT number and total to /api/invoices for
+// analytics; the document itself never leaves the browser. json-viewer just
+// does JSON.parse + tree render). Every other tool round-trips through
+// /api/tools/[toolId] or a file dispatch route server-side, including ones
+// whose old copy claimed otherwise.
 const CLIENT_SIDE_TOOL_IDS = new Set(["invoice-generator", "json-viewer", "unit-converter"]);
 
 function withProcessing(defs: ToolDef[]): Tool[] {
@@ -81,7 +83,7 @@ const FREE_TOOL_DEFS: ToolDef[] = [
   { id: "image-resize",        name: "Image Resizer",          description: "Resize images to any dimension while preserving aspect ratio",   category: "image",     isPremium: false, icon: "↔️", tags: ["image","resize","dimensions"] },
   { id: "image-crop",          name: "Crop Image",             description: "Crop images to custom dimensions or aspect ratios",              category: "image",     isPremium: false, icon: "✂️", tags: ["image","crop"] },
   { id: "image-rotate",        name: "Rotate Image",           description: "Rotate images by any angle",                                     category: "image",     isPremium: false, icon: "🔄", tags: ["image","rotate"] },
-  { id: "image-convert",       name: "Image Converter",        description: "Convert between JPG, PNG, WebP, AVIF, and SVG formats",          category: "image",     isPremium: false, icon: "🔀", tags: ["image","convert","jpg","png","webp"] },
+  { id: "image-convert",       name: "Image Converter",        description: "Convert between JPG, PNG, WebP, and AVIF formats",               category: "image",     isPremium: false, icon: "🔀", tags: ["image","convert","jpg","png","webp"] },
   { id: "svg-converter",       name: "SVG Converter",          description: "Convert SVG files to PNG, JPG or WebP",                          category: "image",     isPremium: false, icon: "🎨", tags: ["svg","convert","image"] },
   { id: "favicon-generator",   name: "Favicon Generator",      description: "Generate favicon.ico and all required sizes from any image",     category: "image",     isPremium: false, icon: "⭐", tags: ["favicon","icon","generator"] },
   { id: "image-to-base64",     name: "Image to Base64",        description: "Convert images to Base64 encoded strings",                       category: "image",     isPremium: false, icon: "🔤", tags: ["image","base64","encode"] },

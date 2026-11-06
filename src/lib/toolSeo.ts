@@ -155,19 +155,19 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
   "image-convert": {
     title: "Convert Images Free — JPG, PNG, WebP, AVIF | SaaSToolz",
     metaDescription:
-      "Convert images between JPG, PNG, WebP, AVIF and SVG in one click. Free, fast, no signup, no software to install.",
+      "Convert images between JPG, PNG, WebP and AVIF in one click. Free, fast, no signup, no software to install.",
     intro:
-      "Image Converter switches an image between JPG, PNG, WebP, AVIF and SVG formats — useful when a website needs a specific format, a design tool won't accept your current one, or you want the smaller file sizes that WebP/AVIF offer over JPG/PNG.",
+      "Image Converter switches an image between JPG, PNG, WebP and AVIF formats — useful when a website needs a specific format, a design tool won't accept your current one, or you want the smaller file sizes that WebP/AVIF offer over JPG/PNG.",
     steps: [
       "Upload the image you want to convert.",
-      "Choose the target format (JPG, PNG, WebP, AVIF or SVG).",
+      "Choose the target format (JPG, PNG, WebP or AVIF).",
       "Click convert and let it process.",
       "Download the converted file.",
     ],
     faqs: [
-      { q: "Which format should I choose?", a: "WebP or AVIF for the smallest file size with modern browser support, JPG for maximum compatibility with photos, PNG when you need transparency, and SVG only for genuinely vector artwork." },
+      { q: "Which format should I choose?", a: "WebP or AVIF for the smallest file size with modern browser support, JPG for maximum compatibility with photos, and PNG when you need transparency." },
       { q: "Will converting to a smaller format hurt quality?", a: "Converting between lossy formats (like PNG to JPG) can introduce minor compression artifacts — converting to WebP or AVIF at high quality settings is generally safe for photos." },
-      { q: "Can I convert a photo to SVG?", a: "No — SVG is a vector format and can't represent a photo's pixel detail. SVG conversion works for genuinely vector source images, not photographs." },
+      { q: "Can I convert an image to SVG?", a: "No — this tool converts between raster formats (JPG, PNG, WebP, AVIF) only; SVG isn't a supported input or output here. For tracing a raster image into vector artwork, you'll need a dedicated vectorizer tool." },
       { q: "What's the difference between lossy and lossless formats?", a: "Lossy formats (JPG, and WebP/AVIF at typical settings) discard some detail to shrink file size; lossless formats (PNG) keep every pixel exactly as-is at a larger file size." },
       { q: "Should I use WebP or AVIF?", a: "Both offer better compression than JPG/PNG at equal quality. AVIF is generally smaller still, but WebP has slightly broader older-browser support — either is a solid modern default." },
       { q: "Is my data safe when using this tool?", a: "Yes. Files are processed securely and deleted from our servers within 1 hour." },
@@ -2140,9 +2140,9 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
   "invoice-generator": {
     title: "Free Invoice Generator Online — Instant PDF | SaaSToolz",
     metaDescription:
-      "Create a professional invoice in your browser and export it as PDF or PNG in seconds. Free, no signup, no watermark, no account required.",
+      "Create a professional invoice and export it as PDF or PNG in seconds. Free, no signup, no watermark, no account required.",
     intro:
-      "Invoice Generator lets you build a professional invoice — fill your details, then export it as a print-ready PDF or PNG, entirely in your browser.",
+      "Invoice Generator lets you build a professional invoice — fill your details, then export it as a print-ready PDF or PNG. The invoice document itself is built client-side and never uploaded.",
     steps: [
       "Fill in your company details (name, logo, VAT/tax number, contact info).",
       "Add the customer's details and one or more line items with quantity, price, discount and tax.",
