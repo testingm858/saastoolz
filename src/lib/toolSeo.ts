@@ -960,7 +960,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     ],
   },
   "js-beautifier": {
-    title: "JS Beautifier — Free, Instant JavaScript Formatter | SaaSToolz",
+    title: "JS Beautifier — Free JavaScript Formatter | SaaSToolz",
     metaDescription:
       "Paste minified or messy JavaScript and get readable, properly indented code back instantly. Free, no signup.",
     intro:
@@ -1140,7 +1140,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     ],
   },
   "hash-generator": {
-    title: "Hash Generator — MD5, SHA-1, SHA-256, SHA-384, SHA-512 | SaaSToolz",
+    title: "Hash Generator — MD5 & SHA Hashes | SaaSToolz",
     metaDescription:
       "Generate MD5, SHA-1, SHA-256, SHA-384 and SHA-512 hashes of any text, all at once. Free, instant, no signup.",
     intro:
@@ -1180,7 +1180,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     ],
   },
   "lorem-ipsum": {
-    title: "Lorem Ipsum Generator — Free, Instant Placeholder Text | SaaSToolz",
+    title: "Lorem Ipsum Generator — Placeholder Text | SaaSToolz",
     metaDescription:
       "Generate classic Lorem Ipsum placeholder text by words, sentences, or paragraphs. Free, instant, no signup.",
     intro:
@@ -1420,7 +1420,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     ],
   },
   "image-metadata": {
-    title: "Image Metadata Viewer — Free, Instant EXIF Reader | SaaSToolz",
+    title: "Image Metadata Viewer — EXIF Reader | SaaSToolz",
     metaDescription:
       "See an image's format, dimensions, color space, and other embedded metadata at a glance. Free, instant, no signup.",
     intro:
@@ -1660,7 +1660,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     ],
   },
   "contract-builder": {
-    title: "Contract Builder — Free NDA & Freelance Agreement | SaaSToolz",
+    title: "Contract Builder — NDA & Freelance Agreement | SaaSToolz",
     metaDescription:
       "Generate a Mutual NDA or Freelance Services Agreement from your details. Free, instant — educational starting point, not legal advice.",
     intro:
@@ -1898,7 +1898,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     ],
   },
   "svg-blob-generator": {
-    title: "SVG Blob Generator — Free, Instant Organic Shapes | SaaSToolz",
+    title: "SVG Blob Generator — Organic Shapes | SaaSToolz",
     metaDescription:
       "Generate random organic blob shapes as SVG, with reproducible results via a seed value. Free, instant, no signup.",
     intro:
@@ -1998,7 +1998,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     ],
   },
   "animation-generator": {
-    title: "CSS Animation Generator — Free, Instant Keyframes | SaaSToolz",
+    title: "CSS Animation Generator — Keyframes | SaaSToolz",
     metaDescription:
       "Generate CSS @keyframes animations — fade, slide, bounce, spin, or pulse — with custom duration and easing. Free, instant, no signup.",
     intro:

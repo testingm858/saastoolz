@@ -76,7 +76,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: seo.metaDescription,
     keywords: tool.tags ?? [],
     alternates: { canonical: `/tools/${tool.id}` },
-    openGraph: { title: seo.title, description: seo.metaDescription },
+    openGraph: { title: seo.title, description: seo.metaDescription, type: "website" },
   };
 }
 
@@ -156,6 +156,22 @@ export default async function ToolPage({ params }: Props) {
           { "@type": "ListItem", position: 3, name: tool.name, item: toolUrl },
         ],
       },
+      // HowTo only when steps are actually rendered visibly below (same rule
+      // as FAQPage) — steps already exist per-tool in toolSeo.ts and are
+      // shown in the "How to use" section further down the page.
+      ...(steps.length > 0
+        ? [
+            {
+              "@type": "HowTo",
+              name: `How to use ${tool.name}`,
+              step: steps.map((step, i) => ({
+                "@type": "HowToStep",
+                position: i + 1,
+                text: step,
+              })),
+            },
+          ]
+        : []),
       // FAQPage only when the same FAQs are actually rendered visibly below —
       // matching Google's guidance against markup for content users can't see.
       ...(faqs.length > 0
