@@ -10,16 +10,18 @@ import prisma from "@/lib/prisma";
 // re-fetch periodically anyway.
 export const revalidate = 3600;
 
+// Bump this to today whenever the shared site chrome, nav, or copy on the
+// static/category/tool pages actually changes. These pages are static code,
+// not DB rows, so there's no real per-page "last changed" timestamp to read
+// — but reusing `new Date()` on every hourly `revalidate` (as this file
+// previously did) told crawlers every page changes every hour, which is a
+// false freshness signal, not an accurate one. A manually-bumped constant is
+// honest: it says "unchanged since this date," which stays true until
+// someone remembers to bump it.
+const CONTENT_LAST_UPDATED = new Date("2026-11-06T00:00:00Z");
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // A single "now" for every entry that isn't backed by a real DB timestamp.
-  // Google explicitly uses <lastmod> (unlike priority/changefreq, which it
-  // has said it mostly ignores) to decide what's worth re-crawling — leaving
-  // it off entirely, as this file previously did for everything but blog
-  // posts, gives crawlers (both Googlebot and AdSense's Mediapartners-Google)
-  // no freshness signal at all. Since this route itself only regenerates
-  // hourly (see `revalidate` above), "now" here genuinely means "confirmed
-  // current as of this hourly pass," not a fabricated timestamp.
-  const now = new Date();
+  const now = CONTENT_LAST_UPDATED;
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE_URL, lastModified: now, changeFrequency: "daily", priority: 1 },
@@ -51,7 +53,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const recentlyChanged = tool.isNew || tool.isUpdated;
     return {
       url: `${BASE_URL}/tools/${tool.id}`,
-      lastModified: now,
+      lastModified: recentlyChanged ? new Date() : now,
       changeFrequency: recentlyChanged ? "weekly" : "monthly",
       priority: recentlyChanged ? 0.8 : 0.7,
     };
