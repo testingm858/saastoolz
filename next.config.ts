@@ -15,6 +15,23 @@ const nextConfig: NextConfig = {
   // PostCSS ("node process exited before we could connect to it"), failing every
   // build. Worker threads avoid spawning a process.
   experimental: { turbopackPluginRuntimeStrategy: "workerThreads" },
+  // Next.js only auto-adds long-lived caching to /_next/static — genuinely
+  // static files under /public (the logo, blog cover art, uploaded images)
+  // were served with no Cache-Control at all. Filenames here either never
+  // change (brand assets) or are content-addressed with a timestamp
+  // (uploads, see src/lib/blog-images.ts), so a year-long immutable cache is
+  // safe; a changed cover image gets a new filename, not a mutated old one.
+  async headers() {
+    const immutable = [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }];
+    return [
+      { source: "/uploads/:path*", headers: immutable },
+      // Scoped to the extension, not the whole /blog/ prefix — that prefix
+      // is also the live blog post route (/blog/[slug]), which must stay
+      // uncached.
+      { source: "/blog/:path(.*\\.(?:jpg|jpeg|png|webp|gif))", headers: immutable },
+      { source: "/logo.jpeg", headers: immutable },
+    ];
+  },
 };
 
 export default nextConfig;
