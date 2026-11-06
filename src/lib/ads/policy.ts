@@ -22,12 +22,6 @@ export function adSlotVisible(code: string | null): boolean {
 }
 
 export function canShowAds(pathname: string): boolean {
-  // The homepage and the /tools index carry manually placed units (see
-  // src/app/page.tsx and src/app/tools/ToolsListClient.tsx). Listing pages are
-  // the highest-risk place for ads under AdSense policy; remove these two
-  // lines to take every ad off them again.
-  if (pathname === "/" || pathname === "/tools") return true;
-
   const toolMatch = pathname.match(/^\/tools\/([^/]+)\/?$/);
   if (toolMatch) return !AD_DENIED_TOOL_SLUGS.has(toolMatch[1]);
 
