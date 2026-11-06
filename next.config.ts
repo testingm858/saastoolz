@@ -17,7 +17,13 @@ const nextConfig: NextConfig = {
   // Hostinger's build host kills the child process Turbopack spawns to run
   // PostCSS ("node process exited before we could connect to it"), failing every
   // build. Worker threads avoid spawning a process.
-  experimental: { turbopackPluginRuntimeStrategy: "workerThreads" },
+  // Hostinger's build host reports a high CPU count (Next.js tried to spawn
+  // 50 static-generation workers) but enforces a much lower OS thread limit
+  // for the build container — spawning that many aborted with "OS can't
+  // spawn worker thread: Resource temporarily unavailable". Capping worker
+  // count directly sidesteps the mismatch between detected CPUs and the
+  // container's real ceiling.
+  experimental: { turbopackPluginRuntimeStrategy: "workerThreads", cpus: 2 },
   // Next.js only auto-adds long-lived caching to /_next/static — genuinely
   // static files under /public (the logo, blog cover art, uploaded images)
   // were served with no Cache-Control at all. Filenames here either never
