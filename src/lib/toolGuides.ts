@@ -602,6 +602,47 @@ export const TOOL_GUIDES: Partial<Record<string, ToolGuide>> = {
           "If you later need to edit content that only exists as a PDF, **PDF to Word** does the reverse conversion — extracting the text and layout back into an editable .docx file.",
         ],
       },
+      {
+        title: "How to convert Word to PDF, step by step",
+        list: {
+          ordered: true,
+          items: [
+            "**Save your document as .docx first.** Older .doc files are not supported — open the file in Word or a compatible word processor and use Save As to make a .docx copy. Keep it under the 20 MB limit.",
+            "**Upload the .docx file.** Drag it onto the upload area or click to browse. There is no button to press: processing starts automatically, and there are no settings to choose.",
+            "**Wait for the layout to finish, then download the PDF.** Headings, paragraphs, lists and tables are laid out page by page. Keep the original filename and change the extension, so `report-final.docx` becomes `report-final.pdf`.",
+            "**Open the PDF and check it before you send it.** Skim the whole document: headings in place, tables not split awkwardly, nothing missing. If it is wrong, fix the source .docx and convert again — your original is never changed.",
+          ],
+        },
+      },
+      {
+        title: "Who converts Word to PDF — and what for",
+        list: {
+          items: [
+            "**Freelancers and consultants sending a final deliverable.** A PDF makes it clear the document is finished: the client can read it on any device and cannot accidentally edit a figure. You keep the editable .docx.",
+            "**Keeping a finished version on file.** A contract signed in March or a policy approved in June, saved as PDF, is a fixed record of what was agreed, while the .docx remains available for a future version.",
+            "**Printing at a print shop or shared printer.** Word documents can reflow when the printer's computer lacks your fonts. A PDF locks the layout down before it reaches the printer.",
+          ],
+        },
+      },
+      {
+        title: "What \"text fidelity\" means in practice",
+        paragraphs: [
+          "The conversion promises text fidelity rather than a pixel-exact copy. What carries over is the structure of your writing: headings at the right level, paragraphs in order, numbered and bulleted lists, table rows, and bold and italic emphasis. A reader gets the same words, in the same order, with the same emphasis.",
+          "What does not carry over is the visual dressing. Images are not reproduced at all, complex table styling is simplified, and custom fonts or colours are not reproduced. That suits a letter, report, set of terms or essay very well, and a heavily designed brochure badly — if the meaning lives in the pictures or the exact layout, look at the result first.",
+        ],
+      },
+      {
+        title: "Before you convert: a quick checklist",
+        list: {
+          items: [
+            "**Confirm the format is .docx.** An older .doc will not convert.",
+            "**Check the file size.** The limit is 20 MB per file. If you are close, embedded images are the likely cause — and they will not appear in the PDF anyway.",
+            "**Decide whether images matter.** If a picture, chart or logo is essential, this tool will leave it out.",
+            "**Proofread the .docx, not just the PDF.** Mistakes carry over exactly, so fix them in Word and convert the corrected file.",
+            "**Keep the original.** The .docx is your editable master copy.",
+          ],
+        },
+      },
     ],
   },
 
@@ -630,6 +671,46 @@ export const TOOL_GUIDES: Partial<Record<string, ToolGuide>> = {
           "If you're starting from images instead — say, a stack of scanned photos or screenshots — **JPG to PDF** combines them into a single shareable document instead.",
         ],
       },
+      {
+        title: "How to convert PDF to JPG, step by step",
+        list: {
+          ordered: true,
+          items: [
+            "**Upload your PDF.** Drag it onto the upload area or click to browse. Each file can be up to 20 MB. Unlock a password-protected PDF first with the Unlock PDF tool.",
+            "**Choose which pages to convert, if you do not want them all.** Leave the page-range field blank for every page, or type comma-separated pages or ranges such as `1, 3, 5-8`. Page 1 is the first page of the file, so count from the cover.",
+            "**Let it process — there is no button to press.** Processing starts automatically as soon as you choose the file. A long document takes a few extra seconds.",
+            "**Download the images.** One page downloads as a single JPG; several pages download together as a .zip. Open one or two images to confirm the right pages came out before using them.",
+          ],
+        },
+      },
+      {
+        title: "Who converts PDF to JPG — and what for",
+        list: {
+          items: [
+            "**Sharing a page where PDFs do not work.** Many chat apps and social platforms accept images but will not preview a PDF. A JPG shows up inline as a picture instead of an unopened file.",
+            "**Posting a document page on social media.** A certificate, poster or report cover can be shared as a post or story — convert just that page instead of sharing the whole document.",
+            "**Using a PDF page as an illustration.** A chart, map or table from a report works better inside an article as an image than as a link to a PDF most visitors will not open.",
+          ],
+        },
+      },
+      {
+        title: "JPG images from a PDF: what you actually get",
+        paragraphs: [
+          "Each page becomes one JPG — a picture of that page, not an editable document. Text in the JPG is no longer selectable or searchable, so keep the original PDF if you need the words.",
+          "Images are rendered at a resolution suited for screen use and standard printing, which covers slides, websites, social posts and ordinary printouts. It does not promise the very high resolution needed for large-format print work; for that, use the original PDF. The exact file names inside the .zip are not specified, so rename the images after unzipping if you need a naming scheme.",
+        ],
+      },
+      {
+        title: "Before you convert: a quick checklist",
+        list: {
+          items: [
+            "**Check the file size.** The limit is 20 MB per file. If a PDF exceeds it, split it with the Split PDF tool and convert the part you need.",
+            "**Unlock a protected PDF first.** Encrypted files cannot be processed directly.",
+            "**Convert only the pages you need.** A blank range converts the whole document, which is wasteful for a 40-page report when you want one chart.",
+            "**Keep the original PDF.** The JPGs are pictures of pages, not replacements for the document.",
+          ],
+        },
+      },
     ],
   },
 
@@ -657,6 +738,46 @@ export const TOOL_GUIDES: Partial<Record<string, ToolGuide>> = {
         paragraphs: [
           "The output follows the exact order you arrange the images in before converting — check the sequence before downloading, since fixing page order afterward means either re-converting or using **PDF Organizer** on the result.",
         ],
+      },
+      {
+        title: "How to convert JPG to PDF, step by step",
+        list: {
+          ordered: true,
+          items: [
+            "**Gather your images first.** Collect the JPG or PNG files and check each one opens properly. A blurry or sideways photo stays that way in the PDF, so fix it now. If a file is over the 20 MB limit, shrink it with the Image Compressor or Image Resizer.",
+            "**Upload one or more images.** Drag them onto the upload area or use the file picker. Processing starts automatically once the images are chosen — there is no separate button to press.",
+            "**Drag the thumbnails into page order.** The PDF follows your arrangement exactly, first thumbnail to last page. A title or cover image goes first.",
+            "**Download the PDF and check it.** A ten-image batch should give a ten-page PDF. If a page is out of place, re-upload, rearrange and convert again — your originals are never changed.",
+          ],
+        },
+      },
+      {
+        title: "Who converts JPGs to PDF — and what for",
+        list: {
+          items: [
+            "**Expense claims and receipts.** Photograph each receipt as you go, then convert the set into one PDF at month end, with every receipt a page in date order.",
+            "**Teachers and tutors.** Combine photos of worksheets or handwritten notes into one PDF handout instead of sending ten separate images.",
+            "**Artists and photographers building a portfolio.** The same images combined into one PDF open as a sequence, print cleanly, and attach to a single email.",
+          ],
+        },
+      },
+      {
+        title: "What converting does — and doesn't do",
+        paragraphs: [
+          "Converting is a packaging job, not an editing job. Images are embedded as-is with no re-compression, so they stay as sharp as the originals — but the PDF's size is roughly the sum of your images, so ten phone photos can be too large to email. If so, run the result through **Compress PDF** afterwards.",
+          "A converted scan is still a picture of text: you cannot search it or copy a paragraph out of it. **PDF OCR** is the next step for that. Converting also does not straighten a crooked scan, crop a photo or fix brightness — do those before you upload.",
+        ],
+      },
+      {
+        title: "Before you convert: a quick checklist",
+        list: {
+          items: [
+            "**Check every image opens** on your own device before uploading.",
+            "**Confirm the order on screen.** The only fix for a wrong order is to convert again, or reorder the result with PDF Organizer.",
+            "**Watch the total size.** Convert first, then compress the PDF once, rather than shrinking every image separately.",
+            "**Keep your originals.** If you later want the images back out of the PDF, PDF to JPG extracts them.",
+          ],
+        },
       },
     ],
   },
@@ -970,6 +1091,53 @@ export const TOOL_GUIDES: Partial<Record<string, ToolGuide>> = {
             ["Contain", "Fits entirely within the target size, may add empty space"],
             ["Fill", "Stretches to the exact target size, may distort proportions"],
             ["Inside / Outside", "Shrinks or grows only, preserving the original aspect ratio"],
+          ],
+        },
+      },
+      {
+        title: "How to resize an image, step by step",
+        list: {
+          ordered: true,
+          items: [
+            "**Start from the best original you have.** Resizing can only work with the pixels an image already contains, so use the original photo, not a copy already shrunk by a chat app.",
+            "**Upload your image.** Files up to 20 MB are accepted, and processing starts automatically once the image is chosen.",
+            "**Enter the target width and height in pixels.** Check the platform's spec or the form's requirement first — it usually states the exact dimensions.",
+            "**Choose a fit mode.** This is the decision that matters; the guide below explains each mode.",
+            "**Download and check the result at its real display size.** Make sure nothing important was cropped and faces and text are not stretched. If it is wrong, change the fit mode and resize again — your original is never changed.",
+          ],
+        },
+      },
+      {
+        title: "The 5 fit modes, explained",
+        list: {
+          items: [
+            "**Cover — crop to fill.** Scales the image until it fills the target, then crops the overflow. Best for profile photos, avatars, thumbnails and banners.",
+            "**Contain — fit within.** Scales the whole image down to fit inside the target, leaving empty space where shapes differ. Nothing is cropped or distorted — best for product photos, diagrams, screenshots and logos.",
+            "**Fill — stretch.** Forces the exact width and height, with no cropping or empty space, but it can distort the image. Use it rarely.",
+            "**Inside — shrink only.** Scales down only if the image is larger than the target; a smaller image is left untouched, so it never gets soft from enlarging.",
+            "**Outside — grow only.** The mirror image: scales up only if the image is smaller than the target. Use it when a minimum size is required, accepting a softer result.",
+          ],
+        },
+      },
+      {
+        title: "Who resizes images — and what for",
+        list: {
+          items: [
+            "**Shrinking phone photos for upload forms.** A photo straight from a phone is often several megabytes. Resizing to the dimensions the form displays makes it small enough to upload without visible loss.",
+            "**Standardising product photos for a listing.** Resize every photo to the same dimensions with the same fit mode — usually Cover — for a clean, consistent grid.",
+            "**Preparing screenshots for documents and slides.** Resize a full-screen screenshot to roughly the width it will be displayed at to keep the document light while the text stays readable.",
+          ],
+        },
+      },
+      {
+        title: "Before you resize: a quick checklist",
+        list: {
+          items: [
+            "**Check the required dimensions first.**",
+            "**Pick the fit mode before you download** — it, not the numbers, decides whether anything is cropped, stretched or padded.",
+            "**Keep the original.** If you need a different size later, resize the original again, not the resized copy.",
+            "**Resize for display size, not file size.** For a smaller file at the same dimensions, use Image Compressor instead.",
+            "**Check faces and text after a Cover resize,** since the edges are where they tend to sit.",
           ],
         },
       },
@@ -1818,6 +1986,46 @@ export const TOOL_GUIDES: Partial<Record<string, ToolGuide>> = {
           ],
         },
       },
+      {
+        title: "How to count words, step by step",
+        list: {
+          ordered: true,
+          items: [
+            "**Paste or type your text into the box.** There is no file upload — paste the full draft rather than a section, so the counts cover everything you will submit or publish.",
+            "**Click \"Run\" to get the count.** You can keep editing and re-run any time, so there is no need to finish the draft before you start checking it.",
+            "**Review the word, character, sentence and paragraph counts together.** Character counts are shown with and without spaces — those matter when a limit is set in characters rather than words.",
+            "**Check the estimated reading time.** It is calculated at roughly 200 words per minute, so treat it as an estimate rather than an exact figure.",
+          ],
+        },
+      },
+      {
+        title: "Who uses a word counter — and what for",
+        list: {
+          items: [
+            "**Students and researchers working to a word limit.** An essay of \"1,500 to 2,000 words\" is really two limits at once — checking as the draft grows shows whether it needs another example or a tighter paragraph while there is still time to fix it.",
+            "**Writers and editors shaping a draft to a brief.** A draft 300 words short usually needs a section, a worked example or a clearer conclusion, not padding. The paragraph count also reveals a wall of text.",
+            "**Anyone trimming text to a character limit.** Meta descriptions, titles, short bios and form fields are often limited in characters. Showing both totals lets you check against whichever version applies.",
+          ],
+        },
+      },
+      {
+        title: "Why two word counters can give you different numbers",
+        paragraphs: [
+          "Counting words depends on small decisions that are rarely spelled out: whether a hyphenated word counts as one or two, whether a standalone number counts, and how the text is split in the first place. This page does not state its exact word-splitting rule, so if your count must match another tool's exactly, compare the two on a short sample first.",
+          "Sentences are counted by splitting on periods, question marks and exclamation points, so abbreviations such as \"Dr.\" or \"e.g.\" can shift the count by one. Paragraphs are counted by blank lines, so a draft separated by single line breaks may count as one long paragraph — add a blank line between paragraphs and run again.",
+        ],
+      },
+      {
+        title: "Getting a clean count: a quick checklist",
+        list: {
+          items: [
+            "**Count the final text, not a draft with notes in it.** Placeholders like \"add example here\" are counted too.",
+            "**Paste the whole piece.** Headings, captions and quoted passages usually count towards a word limit.",
+            "**Check both character counts.** If the limit does not say whether it includes spaces, the with-spaces total is the safer one to work to.",
+            "**Re-run after every cut or addition.** Make the final count the last thing you check before you submit or publish.",
+          ],
+        },
+      },
     ],
   },
 
@@ -2056,6 +2264,93 @@ export const TOOL_GUIDES: Partial<Record<string, ToolGuide>> = {
           "Quantify achievements where possible — \"increased signups 30%\" reads far stronger than \"responsible for marketing,\" and gives an interviewer something concrete to ask about.",
         ],
       },
+      {
+        title: "How to build your resume, step by step",
+        list: {
+          ordered: true,
+          items: [
+            "**Start from the example JSON.** The input is a single JSON box whose placeholder shows the shape: name, title, email and summary, then `experience`, `education` and `skills` lists. Replace the example values with your own and leave the quotation marks, commas and brackets alone.",
+            "**Fill in experience as a list, one job per entry.** Each job has a title, company, dates and a `bullets` list. Put your most recent job first and write short, specific accomplishment statements.",
+            "**Add education and skills the same way.** Each school is its own entry with a degree, school and dates; skills are short items, one per entry.",
+            "**Click Run, check the result, then download the PDF.** Your details are sent to the server to generate the PDF and are not stored. Check every name and date. To fix anything, edit the JSON and click Run again.",
+          ],
+        },
+      },
+      {
+        title: "Who uses this resume builder — and what for",
+        list: {
+          items: [
+            "**A first resume, or a first resume in years.** The example gives you a structure to fill in rather than a document to design.",
+            "**Tailoring one resume for each application.** Copy the JSON, change the summary and the most relevant job's bullets for the role, and click Run again.",
+            "**Freelancers and contractors pulling a scattered career together.** Enter each engagement as its own experience entry with one or two bullets on what was delivered.",
+          ],
+        },
+      },
+      {
+        title: "Working with the single template: what to put where",
+        paragraphs: [
+          "The builder has one template: a clean, standard resume format focused on readability, with no visual templates, colours or fonts to pick. That makes what you write matter more than how it looks.",
+          "Use the **summary** to say in one or two sentences what you do and what you are looking for, not to repeat your job history. Under each job, the **bullets** do the real work: bullets are laid out exactly as entered, so a vague or misspelled one appears exactly that way. And keep a copy of your JSON in a text file — the tool does not store your details, so there is no saved draft to come back to.",
+        ],
+      },
+      {
+        title: "Before you download: a quick checklist",
+        list: {
+          items: [
+            "**Read the JSON once, slowly.** Every quotation mark needs a closing one, every comma must be in place, and every list closed with a square bracket.",
+            "**Check names, dates and email character by character.**",
+            "**Put your most recent job first** — entries are laid out in the order you enter them.",
+            "**Cut any bullet that says nothing specific.** Replace it with a result, a number or a project.",
+            "**Save your JSON before you close the page.** It is the only copy of your resume.",
+          ],
+        },
+      },
+    ],
+  },
+
+  "unit-converter": {
+    heading: "Everything you need to know about unit conversion",
+    sections: [
+      {
+        title: "How to convert units, step by step",
+        list: {
+          ordered: true,
+          items: [
+            "**Choose a category first.** Length, Weight, Temperature or Volume decides which units appear, and a conversion only works within one category.",
+            "**Pick the unit you are converting from, then the one you are converting to.** Copy the unit exactly as written in your source — millimetre versus centimetre is a factor of ten.",
+            "**Type the value.** There is no convert button: the result updates instantly as you type. The page starts with 1 entered, which shows the factor at a glance.",
+            "**Read the result, and use the swap button for the reverse.** It reverses the two units and keeps your value.",
+          ],
+        },
+      },
+      {
+        title: "Who converts units — and what for",
+        list: {
+          items: [
+            "**Cooking and baking with a recipe from another country.** Convert weights, volumes and the oven temperature before you start, instead of guessing.",
+            "**Homework and coursework.** Because the result updates as you type, it is easy to check one step of a longer calculation without losing the thread.",
+            "**Shopping, travel and comparing specifications.** Furniture in centimetres, rooms in feet, suitcase limits in kilograms: convert first so you compare numbers in the same unit.",
+          ],
+        },
+      },
+      {
+        title: "Reading the full conversion table",
+        paragraphs: [
+          "Under the main answer, the page shows a table for the unit you started from: every other unit in the category with the value of one of your starting unit. Convert 1 metre and you see 1,000 mm, 100 cm, 0.001 km, 39.3701 in, 3.2808 ft, 1.0936 yd and 0.000621 mi at a glance.",
+          "That answers \"which unit makes this number easiest to work with?\" — 0.000621 miles is hard to picture, 3.2808 feet is immediately usable. Pick a unit that gives a number roughly between 1 and 1,000. The table is also a sanity check: if an answer looks far too large or small, the factor between your units is right there.",
+        ],
+      },
+      {
+        title: "Before you convert: a quick checklist",
+        list: {
+          items: [
+            "**Check the category.** Pick it first, then the units.",
+            "**Copy the unit from the source.** Converting \"in\" as \"ft\" makes the answer twelve times too large.",
+            "**Remember temperature is different.** It uses a formula, not a fixed multiplier — 0°C is not 0°F.",
+            "**Swap, do not retype,** if the direction is backwards.",
+          ],
+        },
+      },
     ],
   },
 
@@ -2103,6 +2398,47 @@ export const TOOL_GUIDES: Partial<Record<string, ToolGuide>> = {
           "BMI doesn't distinguish muscle from fat, so a very muscular person can show a \"high\" BMI despite low body fat, and it doesn't account for age, sex, or body composition. It's a useful general screening tool, not a diagnosis — talk to a healthcare provider for a fuller picture of your health, especially if your result surprises you.",
         ],
       },
+      {
+        title: "How to calculate your BMI, step by step",
+        list: {
+          ordered: true,
+          items: [
+            "**Choose metric or imperial units.** Pick the set you are surest about — metric (kilograms and centimetres) or imperial (pounds and inches).",
+            "**Enter your weight and height, then double-check them.** BMI divides by height squared, so a small error in height moves the result more than the same-sized error in weight.",
+            "**Click \"Calculate BMI\".** You get three things together: your BMI number, your category, and the healthy weight range for your exact height.",
+            "**Switch units any time.** The same figures are recalculated instantly, so you do not need to re-enter or convert anything.",
+          ],
+        },
+      },
+      {
+        title: "Who uses a BMI calculator — and what for",
+        list: {
+          items: [
+            "**A quick general check before a health conversation.** The number and its category give an appointment a shared starting figure. It is general information, not medical advice.",
+            "**Keeping track as weight changes over time.** BMI is most useful compared with your own earlier results, measured the same way a few months apart.",
+            "**Understanding the healthy weight range for your height.** The range shows the span of weights inside the normal BMI band (18.5 to 24.9) for your height, rather than one number to aim at.",
+          ],
+        },
+      },
+      {
+        title: "Reading your result: the number, the category, and the range",
+        paragraphs: [
+          "In metric units BMI is weight in kilograms divided by height in metres squared (kg / m²); in imperial units it is 703 × weight in pounds divided by height in inches squared. For example, 65 kg at 170 cm is 65 ÷ 1.70² ≈ 22.5, inside the normal band.",
+          "The category follows the WHO's adult thresholds: below 18.5 is underweight, 18.5–24.9 normal, 25–29.9 overweight, and 30 or above obese. These are sharp lines across a continuous scale, so 24.9 and 25.0 land in different categories though they are almost identical. The healthy weight range applies the 18.5 and 24.9 boundaries to your own height. Read number, category and range together.",
+        ],
+      },
+      {
+        title: "What to keep in mind before you act on a result",
+        list: {
+          items: [
+            "**BMI does not measure body fat.** It does not distinguish muscle from fat, or account for age, sex or body composition.",
+            "**It is not designed for children,** who are assessed on age-and-sex growth charts instead.",
+            "**A result near a boundary is still near the boundary.** The number and the healthy weight range show how close to the line you are.",
+            "**Check your inputs first.** Height is squared, so a few centimetres out moves the result more than most people expect.",
+            "**Treat the result as general information.** This tool is not medical advice — speak to a doctor or other qualified health professional before acting on a result.",
+          ],
+        },
+      },
     ],
   },
 
@@ -2148,6 +2484,42 @@ export const TOOL_GUIDES: Partial<Record<string, ToolGuide>> = {
           "For a home loan specifically, **Mortgage Calculator** covers the same math with mortgage-specific context.",
         ],
       },
+      {
+        title: "How to calculate your EMI, step by step",
+        list: {
+          ordered: true,
+          items: [
+            "**Enter the loan amount.** This is the principal you borrow, not the total you will repay.",
+            "**Enter the annual interest rate** as a percentage, exactly as quoted on the offer. Do not convert it to a monthly rate yourself.",
+            "**Enter the term in months.** If your term is in years, multiply by 12: five years is 60 months, seven years is 84.",
+            "**Run the calculator and review the schedule.** See your fixed monthly EMI and total interest, then read the month-by-month split of principal and interest. Compare total interest, not just the monthly payment.",
+          ],
+        },
+      },
+      {
+        title: "Who uses a loan EMI calculator — and what for",
+        list: {
+          items: [
+            "**Comparing personal loan offers.** Monthly payments can look close while total interest is far apart. Running each offer through shows the full cost in the same format.",
+            "**Checking a car loan before signing.** A longer term makes the payment look comfortable while adding interest over the extra years — you see both numbers at once.",
+            "**Planning a student loan or large purchase.** Test whether the payment fits your budget over the whole term. Try a shorter term, then a longer one.",
+          ],
+        },
+      },
+      {
+        title: "How your EMI is worked out",
+        paragraphs: [
+          "EMI stands for Equated Monthly Installment: the fixed monthly amount, combining principal and interest, that stays the same size over the term. The calculator uses the standard reducing-balance EMI formula, so interest each month is charged on the amount you still owe, not on the original loan.",
+          "That is why the split inside each fixed payment changes even though the payment does not. Early on, most of each payment is interest; as the balance shrinks, more goes toward principal. The amortization schedule shows this shift payment by payment.",
+        ],
+      },
+      {
+        title: "Reading your results",
+        paragraphs: [
+          "Check the monthly EMI against your budget first, but read the total interest too — on a long term it can be a large share of what you pay. A shorter term raises the monthly payment but usually cuts total interest sharply; a longer term does the opposite. The calculator shows both sides of that trade-off in numbers.",
+          "This tool gives general estimates for informational purposes only and isn't financial advice. Consult a qualified financial advisor or your lender before making financial decisions.",
+        ],
+      },
     ],
   },
 
@@ -2170,6 +2542,42 @@ export const TOOL_GUIDES: Partial<Record<string, ToolGuide>> = {
         title: "A general loan calculation",
         paragraphs: [
           "For loan math outside the mortgage context specifically, **Loan / EMI Calculator** covers the same underlying formula.",
+        ],
+      },
+      {
+        title: "How to calculate your mortgage payment, step by step",
+        list: {
+          ordered: true,
+          items: [
+            "**Enter the home price.** This is the price of the home, not the amount you borrow — the loan amount is worked out from the price and your down payment.",
+            "**Enter your down payment as a percentage.** The field starts at 20%. A larger percentage means a smaller loan.",
+            "**Enter the annual interest rate and the term in years.** The term starts at 30 years. Fractional years are accepted and converted to the nearest whole month, so there is no need to convert to months.",
+            "**Calculate, then review the schedule.** The payment is principal and interest only — add property tax, homeowners insurance, and any mortgage insurance or HOA fees separately for your real monthly cost.",
+          ],
+        },
+      },
+      {
+        title: "Who uses a mortgage calculator — and what for",
+        list: {
+          items: [
+            "**First-time buyers testing a price range.** Try several prices with the same down payment, rate and term to see which sit inside your budget — before tax and insurance.",
+            "**Comparing a 15-year term with a 30-year term.** A 30-year term usually gives a lower payment but much more total interest; a 15-year term the reverse.",
+            "**Refinancing or re-checking a mortgage.** Enter the new offer's figures and compare with your current payment.",
+          ],
+        },
+      },
+      {
+        title: "How your mortgage payment is worked out",
+        paragraphs: [
+          "The loan amount is the home price minus the down payment, so with the default 20% down, payment and interest are calculated on the remaining 80%. From there the loan amount, rate and term produce a single fixed monthly payment that repays the loan, with interest, over exactly that term.",
+          "Interest is charged on the amount still owed, so early payments are mostly interest and later ones mostly principal. The payment stays the same; only its composition changes, as the schedule shows.",
+        ],
+      },
+      {
+        title: "Reading your results",
+        paragraphs: [
+          "Check the monthly payment against your budget, remembering it is principal and interest only. Then read the total interest: over a 30-year term it can be very large, and when comparing terms or rates it is usually where the gap is widest, even when monthly payments look close.",
+          "This tool gives general estimates for informational purposes only and isn't financial advice. Consult a qualified financial advisor or your lender before making financial decisions.",
         ],
       },
     ],

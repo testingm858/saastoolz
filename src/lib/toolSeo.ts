@@ -239,7 +239,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
   "word-counter": {
     title: "Word Counter Online Free — Words & Reading Time | SaaSToolz",
     metaDescription:
-      "Count words, characters, sentences and estimated reading time as you type or paste. Free, instant, no signup.",
+      "Count words, characters, sentences and paragraphs free — plus estimated reading time at 200 words per minute. Instant, no signup, nothing stored.",
     intro:
       "Word Counter gives you an instant breakdown of your text — word count, character count (with and without spaces), sentence and paragraph count, and estimated reading time — useful for hitting a word limit or checking how long a piece will take to read.",
     steps: [
@@ -255,6 +255,10 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "What counts as a sentence or paragraph?", a: "Sentences are counted by splitting on periods, question marks and exclamation points, so unusual abbreviations can occasionally shift the count by one. Paragraphs are counted by blank lines between blocks of text." },
       { q: "Is there a text length limit?", a: "No hard limit for typical use — very long documents may take a moment longer to process." },
       { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+      { q: "Do I need to click \"Run\" after every edit?", a: "Yes, if you want the counts to reflect your latest text. You can keep editing and re-run any time — the numbers on screen are from your last run, not a live update." },
+      { q: "Can I upload a Word document or PDF instead of pasting?", a: "There is no file upload — you paste or type your text directly into the box. To count a document, open it, copy the text you want counted, and paste it in." },
+      { q: "Why does another word counter give me a different number for the same text?", a: "Different tools split text into words in slightly different ways — for example, how they treat hyphenated words or standalone numbers — and this page does not state its exact word-splitting rule. For a strict limit, check your text in the tool the limit will be judged against." },
+      { q: "I only need the character count — do I still get the other counts?", a: "Yes. The tool returns the full breakdown every time: word count, character count with and without spaces, sentence and paragraph counts, and estimated reading time. Use the figure that matches your limit." },
     ],
   },
   "loan-calculator": {
@@ -276,6 +280,10 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "Why does the loan term need to be in months?", a: "Interest accrues monthly, so the calculation needs a whole number of months — enter years × 12 if your loan term is given in years." },
       { q: "What's the difference between this and the Mortgage Calculator?", a: "This calculator computes EMI for any general loan from the amount, rate and term directly. The Mortgage Calculator adds a home price and down payment percentage on top, specific to home loans." },
       { q: "Can I use this for any type of loan?", a: "Yes — personal loans, auto loans, student loans, or any fixed-rate installment loan, not just mortgages." },
+      { q: "How do I compare two loan offers with this calculator?", a: "Run each offer separately with its own amount, annual rate and term in months, and note both the monthly EMI and the total interest. The offer with the lower total interest is the cheaper loan overall, provided you can afford its monthly payment." },
+      { q: "Why are my early payments mostly interest?", a: "Interest is charged on the remaining balance, which is highest at the start. Each fixed payment first covers that month's interest and only the rest reduces the principal. As the balance falls, more of the same payment goes toward principal." },
+      { q: "Should I choose a shorter term or a longer term?", a: "A shorter term usually means a higher monthly payment and less total interest; a longer term the reverse. Try both with the same amount and rate and weigh the payment you can afford against the extra interest. This is a general illustration, not financial advice." },
+      { q: "What if my interest rate changes during the loan?", a: "This calculator works out the EMI for a fixed-rate loan. If your rate changes, the fixed EMI no longer applies from that point. Re-run it with the new rate and the remaining balance and term, and check the revised figures with your lender." },
     ],
   },
   "zakat-calculator": {
@@ -317,6 +325,10 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "Which unit categories are supported?", a: "Length, weight/mass, temperature, and volume — the categories covering the vast majority of everyday and professional conversions." },
       { q: "Why does temperature work differently from the others?", a: "Celsius, Fahrenheit and Kelvin aren't simple multiples of each other (0°C isn't 0°F), so temperature uses proper conversion formulas instead of a single multiplier like the other categories." },
       { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+      { q: "Can I convert between categories — for example, length into weight?", a: "No. A conversion only works between units in the same category, because length and weight measure different things and no factor turns one into the other." },
+      { q: "Do I need to click a convert button?", a: "No. The result updates instantly as you type, so you can change the value or either unit and see the new answer immediately." },
+      { q: "What does the swap button do?", a: "It reverses the direction: the From unit becomes the To unit and vice versa, while your number stays in place." },
+      { q: "Why does the answer have so many decimal places?", a: "Results use standard conversion factors, such as 1 inch = 2.54 cm exactly. A value like 3.2808 feet for 1 metre is the factor written out in full. Round to the precision you need — 3.28 feet is usually enough for a room measurement." },
     ],
   },
   "bmi-calculator": {
@@ -337,6 +349,10 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "How is the healthy weight range worked out?", a: "By applying the normal-BMI boundaries (18.5 and 24.9) to your own height, so you get a weight range in kg or lb rather than just a single BMI number." },
       { q: "Does this tool send my numbers to a server?", a: "Yes — your weight and height are sent to our servers to compute the result and the result is returned to you; we don't store the values." },
       { q: "Is this medical advice?", a: "No. This is general information, not medical advice — speak to a doctor or other qualified health professional about your weight or health." },
+      { q: "What will I see after I click \"Calculate BMI\"?", a: "Your BMI number, your category (underweight, normal, overweight or obese), and the healthy weight range for your exact height." },
+      { q: "My BMI is just above or below a category boundary — what does that mean?", a: "The categories are fixed thresholds, so 25.0 is classed as overweight while 24.9 is normal, even though the numbers are almost the same. Look at the number and the healthy weight range as well as the label. BMI is a general screening number, not a diagnosis, so if a result surprises you, talk to a qualified healthcare provider." },
+      { q: "Can I switch between metric and imperial after entering my numbers?", a: "Yes. You can switch units any time and the same figures are recalculated instantly, with no need to re-enter or convert them." },
+      { q: "Is the BMI calculator free? Do I need an account?", a: "Yes, it is free and needs no signup. Your weight and height are sent to the server to compute the result and are not stored." },
     ],
   },
   "age-calculator": {
@@ -497,6 +513,10 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "Does this account for property tax, insurance or HOA fees?", a: "No — this calculates the principal-and-interest payment only, based on the loan amount, rate and term. Add your local tax, insurance and any fees separately for your real total monthly cost." },
       { q: "Can I use this for a loan term in months instead of years?", a: "Enter years — fractional years (like 2.5) are accepted and converted to the nearest whole month internally." },
       { q: "Does this tool send my numbers to a server?", a: "Yes — your figures are sent to our servers to compute the result and the result is returned to you; we don't store the values." },
+      { q: "How does a bigger down payment change my monthly payment?", a: "A bigger down payment percentage means a smaller loan (home price minus down payment), so both the monthly payment and total interest fall. The 20% default is the starting value in the tool, not a recommendation." },
+      { q: "How do I compare a 15-year mortgage with a 30-year mortgage?", a: "Run the same price, down payment and rate twice, once with each term, and compare the monthly payment and total interest. A 15-year term usually has a higher payment but much less total interest. This is a general illustration, not financial advice." },
+      { q: "How can I use this to test what home price fits my budget?", a: "Note the monthly principal-and-interest payment for a price, then try higher and lower prices with the other inputs unchanged. Add property tax, homeowners insurance and any mortgage insurance or HOA fees on top, since the calculator covers principal and interest only." },
+      { q: "My lender quoted a different monthly payment. Why?", a: "Most often because the lender's figure includes costs this calculator leaves out, such as property tax, homeowners insurance, and sometimes mortgage insurance or HOA fees. A different rate, term or down payment would also change it, so check your inputs match the offer." },
     ],
   },
   "timezone-calculator": {
@@ -937,6 +957,10 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "Will resizing up make a small image sharper?", a: "No — enlarging an image can only interpolate existing pixels, not add real detail, so a small source image will look soft when scaled up. Start from the highest-resolution original you have." },
       { q: "Does this tool send my image to a server?", a: "Yes — your image is uploaded securely, resized, and deleted from our servers within 1 hour." },
       { q: "Is this tool free to use?", a: "Yes — completely free, with no signup and no watermark on the output." },
+      { q: "Will my JPG stay a JPG after resizing?", a: "Resizing changes an image's pixel dimensions without necessarily changing its format. If you need a different format, use the Image Converter tool afterwards." },
+      { q: "Will shrinking an image make the file smaller?", a: "Usually, yes — fewer pixels means less data. For a bigger saving at the same dimensions, run it through Image Compressor, which adjusts quality instead." },
+      { q: "I entered exact dimensions, but the result came out a different size. Why?", a: "That is the Inside and Outside modes doing their job: Inside only shrinks, Outside only grows, and both preserve the original aspect ratio. For the exact dimensions whatever the starting size, use Cover, Contain or Fill." },
+      { q: "Can I use this to make a favicon or a social media banner?", a: "For a banner, yes — enter the platform's dimensions and use Cover so the frame is filled exactly. For a favicon, use the Favicon Generator instead, which produces the favicon file and all required sizes in one go." },
     ],
   },
   "grid-generator": {
@@ -1522,13 +1546,13 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
   "resume-builder": {
     title: "Resume Builder — Free, Instant PDF Export | SaaSToolz",
     metaDescription:
-      "Build a professional resume from your details and export it as a clean PDF. Free, no signup.",
+      "Build a professional resume in minutes and export it as a clean, ready-to-send PDF. Free online resume builder — no signup, no formatting fights.",
     intro:
       "Resume Builder takes your name, title, summary, work experience, education, and skills and lays them out into a clean, professionally formatted PDF resume, ready to download and send.",
     steps: [
-      "Enter your name, title, and professional summary.",
-      "Add your work experience with company, dates, and bullet points.",
-      "Add your education and skills.",
+      "Edit the example JSON in the box, replacing the sample name, title, email and summary with your own.",
+      "Update the experience, education and skills lists — one entry per job or school, most recent first.",
+      "Click Run to generate your resume.",
       "Download your resume as a PDF.",
     ],
     faqs: [
@@ -1537,6 +1561,10 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "What should the bullet points under each job look like?", a: "Short, specific accomplishment statements work best — the PDF lays out whatever bullet points you provide under each job exactly as entered." },
       { q: "Does this tool send my resume details to a server?", a: "Yes — your information is sent to our servers to generate the PDF and the result is returned to you; we don't store it." },
       { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+      { q: "Do I need to know JSON to use this resume builder?", a: "No — you edit an example, not write JSON from scratch. The input box shows a complete example already filled in. Replace each value with your own and keep the surrounding punctuation exactly as it is." },
+      { q: "What fields can my resume include?", a: "Name, title, email and summary, followed by experience entries (title, company, dates and bullets), education entries (degree, school and dates), and a skills list. No other fields are shown on the page." },
+      { q: "What happens if my JSON has a mistake in it?", a: "The page does not state what error message, if any, appears for invalid JSON. The usual culprits are a missing comma, closing quotation mark or closing bracket — check those first." },
+      { q: "Can I make a different version of my resume for each job I apply for?", a: "Yes. Keep a copy of the JSON, edit the summary and bullets for a particular role, click Run again and download a new PDF." },
     ],
   },
   "pdf-organize": {
@@ -1682,7 +1710,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
   "word-to-pdf": {
     title: "Word to PDF — Free, Instant Conversion | SaaSToolz",
     metaDescription:
-      "Convert a .docx file to PDF, preserving headings, paragraphs, lists, tables, and text formatting. Free, no signup.",
+      "Convert a .docx file to PDF free online — headings, lists, tables and formatting preserved. No signup, no install, file deleted within 1 hour.",
     intro:
       "Word to PDF extracts your .docx document's structure — headings, paragraphs, list items, table rows, with bold and italic runs preserved — and lays it out onto PDF pages, aiming for text fidelity rather than a pixel-exact copy of the original layout.",
     steps: [
@@ -1697,6 +1725,10 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "What happens to images in my Word document?", a: "They aren't reproduced in the converted PDF — this conversion focuses on text and document structure." },
       { q: "Does this tool send my document to a server?", a: "Yes — your file is uploaded securely, converted, and deleted from our servers within 1 hour." },
       { q: "Is this tool free to use?", a: "Yes — completely free, with no signup required." },
+      { q: "Can I convert a .doc file, or only .docx?", a: "Only .docx. Older .doc files are not supported, so open the file in Word or a compatible word processor and save it as .docx first, then upload the copy." },
+      { q: "Will my images, charts, and logos appear in the PDF?", a: "No. This conversion focuses on text and document structure, so images are not reproduced. If they are essential, use a converter that reproduces them, or attach them separately." },
+      { q: "Why does my PDF look slightly different from the Word document?", a: "The conversion aims for text fidelity rather than a pixel-exact copy. Headings, paragraphs, lists, tables and bold/italic formatting carry over, but lines and pages may break differently, and complex table styling and custom fonts or colours are not reproduced." },
+      { q: "Is there a limit on how large my Word file can be?", a: "Yes — 20 MB per file. Most ordinary documents are well under that. If yours is close, embedded images are the usual cause, and they will not appear in the PDF anyway." },
     ],
   },
   "pdf-watermark": {
@@ -2337,7 +2369,7 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     steps: [
       "Upload one or more JPG images using the file picker or by dragging them in.",
       "Drag the thumbnails to set the page order for the final PDF.",
-      "Click \"Convert to PDF\" to combine them.",
+      "Processing starts automatically once the images are chosen — there is no button to click.",
       "Download the resulting PDF — ready to send or print immediately.",
     ],
     faqs: [
@@ -2347,6 +2379,10 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "Can I make a scanned document searchable after converting?", a: "Yes — a JPG-to-PDF conversion is still just an image. Run the result through PDF OCR afterward to make the text searchable and copyable." },
       { q: "How do I go the other direction?", a: "Use PDF to JPG to extract individual images from an existing PDF." },
       { q: "Is my data safe when using this tool?", a: "Yes. Files are processed securely and deleted from our servers within 1 hour." },
+      { q: "Can I convert PNG images too, or only JPG?", a: "Both. The upload area accepts JPG or PNG images, and you can upload a mix in one batch." },
+      { q: "Can I convert just one image to PDF?", a: "Yes. A single image becomes a one-page PDF, which is useful when a portal insists on a PDF and all you have is a photo of the document." },
+      { q: "What if one of my images is over the 20 MB limit?", a: "The converter accepts files up to 20 MB each, so shrink an oversized image first with Image Compressor or Image Resizer, then upload the smaller version." },
+      { q: "Do I need to install anything or create an account?", a: "No. The tool is free with no signup, and there is nothing to install. Upload, arrange, download — your files are deleted from our servers within 1 hour." },
     ],
   },
   "pdf-to-jpg": {
@@ -2358,8 +2394,8 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
     steps: [
       "Upload the PDF you want to convert.",
       "Choose the pages to convert — all pages, or a specific range.",
-      "Click \"Convert to JPG\" and let it process.",
-      "Download the images individually or as a .zip file.",
+      "Processing starts automatically once the file is chosen — there is no button to click.",
+      "Download a single JPG, or multiple pages together as a .zip file.",
     ],
     faqs: [
       { q: "Do I get one image per page?", a: "Yes — each PDF page is converted into its own separate JPG image, packaged as a .zip when there's more than one." },
@@ -2368,6 +2404,10 @@ const OVERRIDES: Record<string, ToolSeoContent> = {
       { q: "Can I go the other direction, from images to PDF?", a: "Yes — use JPG to PDF to combine images back into a single PDF document." },
       { q: "Will this work on a password-protected PDF?", a: "Unlock it first with the Unlock PDF tool, then convert — encrypted files can't be processed directly." },
       { q: "Is my data safe when using this tool?", a: "Yes. Files are processed securely and deleted from our servers within 1 hour." },
+      { q: "Is there a button I need to click to start the conversion?", a: "No. Processing starts automatically as soon as you choose a PDF file. Upload the file, optionally enter a page range, and wait for the images to be ready to download." },
+      { q: "How do I convert only pages 2 and 5 of my PDF?", a: "Type `2, 5` in the \"Pages to convert\" field. You can mix single pages and ranges, for example `1, 3, 5-8`. Leave the field blank to convert every page." },
+      { q: "Can I download the images one at a time instead of as a .zip?", a: "A single converted page downloads as one JPG. Multiple pages download as a .zip; unzip it to use the individual JPGs inside." },
+      { q: "Will the JPG text still be selectable or searchable?", a: "No. Each JPG is a picture of a page, so the text inside cannot be selected, copied or searched. Keep the original PDF if you need the text." },
     ],
   },
   "pdf-rotate": {
