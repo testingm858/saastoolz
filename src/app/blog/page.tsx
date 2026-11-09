@@ -5,7 +5,7 @@ import { Newspaper, Eye, Heart } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { extractCoverImage } from "@/lib/markdown";
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: "Blog — Guides to PDF, Image & Developer Tools",
   description: "Practical guides and how-tos for PDF, image, audio and developer tools, plus product updates from SaaSToolz. Find the fastest way to get things done.",
   alternates: { canonical: "/blog" },
