@@ -20,6 +20,24 @@ export const revalidate = 3600;
 // someone remembers to bump it.
 const CONTENT_LAST_UPDATED = new Date("2026-11-06T00:00:00Z");
 
+// Real per-tool "content last changed" dates, taken from git history.
+const D_NOV6 = new Date("2026-11-06T00:00:00Z"); // Image Convert / Invoice copy fixes
+const D_NOV7 = new Date("2026-11-07T00:00:00Z"); // 10 expanded tool pages
+const TOOL_LAST_UPDATED: Record<string, Date> = {
+  "image-convert": D_NOV6,
+  "invoice-generator": D_NOV6,
+  "word-counter": D_NOV7,
+  "pdf-to-jpg": D_NOV7,
+  "jpg-to-pdf": D_NOV7,
+  "word-to-pdf": D_NOV7,
+  "image-resize": D_NOV7,
+  "bmi-calculator": D_NOV7,
+  "loan-calculator": D_NOV7,
+  "mortgage-calculator": D_NOV7,
+  "unit-converter": D_NOV7,
+  "resume-builder": D_NOV7,
+};
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = CONTENT_LAST_UPDATED;
 
@@ -45,15 +63,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     }));
 
-  // Recently new/updated tools (see FREE_TOOLS' isNew/isUpdated flags) get a
-  // priority and crawl-frequency bump — a direct, honest signal to re-crawl
-  // pages whose content just materially changed, rather than treating a
-  // freshly-rebuilt tool the same as one that's been stable for a year.
+  // Per-tool lastmod: tools whose page content was reworked get that date;
+  // everything else keeps the site-wide CONTENT_LAST_UPDATED. Dates are fixed
+  // (never `new Date()`) so a sitemap re-render never claims a page just
+  // changed. Add an entry here whenever a tool's copy materially changes.
   const toolPages: MetadataRoute.Sitemap = FREE_TOOLS.map((tool) => {
     const recentlyChanged = tool.isNew || tool.isUpdated;
     return {
       url: `${BASE_URL}/tools/${tool.id}`,
-      lastModified: recentlyChanged ? new Date() : now,
+      lastModified: TOOL_LAST_UPDATED[tool.id] ?? now,
       changeFrequency: recentlyChanged ? "weekly" : "monthly",
       priority: recentlyChanged ? 0.8 : 0.7,
     };

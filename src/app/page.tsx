@@ -77,8 +77,8 @@ export default async function HomePage() {
           </div>
 
           <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 tracking-tight mb-6 leading-tight">
-            All Tools,<br />
-            <span className="bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">One Place</span>
+            Free Online Tools for{" "}
+            <span className="bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">PDF, Image, SEO &amp; Developer Work</span>
           </h1>
 
           <p className="text-xl text-gray-500 max-w-2xl mx-auto mb-10 leading-relaxed">
