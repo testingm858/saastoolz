@@ -1,4 +1,4 @@
-// PATCH/DELETE /api/admin/blog/[id] — update (incl. publish toggle) and delete a post. Admin-only.
+// GET/PATCH/DELETE /api/admin/blog/[id] — fetch one (full content), update (incl. publish toggle) and delete a post. Admin-only.
 
 import { NextResponse } from "next/server";
 import { requireAdminEmail } from "@/lib/admin";
@@ -9,6 +9,16 @@ import prisma from "@/lib/prisma";
 
 interface Props {
   params: Promise<{ id: string }>;
+}
+
+export async function GET(_req: Request, { params }: Props) {
+  if (!(await requireAdminEmail())) {
+    return NextResponse.json({ error: "Not authorized" }, { status: 403 });
+  }
+  const { id } = await params;
+  const post = await prisma.blogPost.findUnique({ where: { id } });
+  if (!post) return NextResponse.json({ error: "Post not found" }, { status: 404 });
+  return NextResponse.json({ post });
 }
 
 export async function PATCH(req: Request, { params }: Props) {

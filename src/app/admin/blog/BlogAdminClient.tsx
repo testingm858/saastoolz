@@ -11,8 +11,8 @@ interface Post {
   title: string;
   slug: string;
   excerpt: string | null;
-  coverImage: string | null;
-  content: string;
+  coverImage?: string | null;
+  content?: string;
   published: boolean;
   publishedAt: string | null;
   createdAt: string;
@@ -84,6 +84,7 @@ export default function BlogAdminClient({ initialPosts }: { initialPosts: Post[]
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [slugTouched, setSlugTouched] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [loadingId, setLoadingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   function startNew() {
@@ -93,11 +94,26 @@ export default function BlogAdminClient({ initialPosts }: { initialPosts: Post[]
     setEditingId("new");
   }
 
-  function startEdit(post: Post) {
-    setForm({ title: post.title, slug: post.slug, excerpt: post.excerpt ?? "", coverImage: post.coverImage ?? "", content: post.content, published: post.published });
-    setSlugTouched(true);
+  async function startEdit(post: Post) {
     setError(null);
-    setEditingId(post.id);
+    setLoadingId(post.id);
+    try {
+      // The list omits content/coverImage to keep the page light — load them now.
+      const res = await fetch(`/api/admin/blog/${post.id}`);
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error ?? "Could not load post");
+        return;
+      }
+      const full: Post = data.post;
+      setForm({ title: full.title, slug: full.slug, excerpt: full.excerpt ?? "", coverImage: full.coverImage ?? "", content: full.content ?? "", published: full.published });
+      setSlugTouched(true);
+      setEditingId(full.id);
+    } catch {
+      setError("Network error — could not load post");
+    } finally {
+      setLoadingId(null);
+    }
   }
 
   function cancelEdit() {
@@ -188,6 +204,8 @@ export default function BlogAdminClient({ initialPosts }: { initialPosts: Post[]
         )}
       </div>
 
+      {!isEditing && error && <p className="text-sm text-red-600 mb-4">{error}</p>}
+
       {isEditing ? (
         <div className="bg-white border border-gray-100 rounded-2xl p-6 space-y-4">
           <div>
@@ -266,7 +284,7 @@ export default function BlogAdminClient({ initialPosts }: { initialPosts: Post[]
                 <button onClick={() => togglePublish(post)} title={post.published ? "Unpublish" : "Publish"} className="p-2 text-gray-400 hover:text-violet-600 rounded-lg hover:bg-gray-50 transition-colors">
                   {post.published ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
-                <button onClick={() => startEdit(post)} title="Edit" className="p-2 text-gray-400 hover:text-violet-600 rounded-lg hover:bg-gray-50 transition-colors">
+                <button onClick={() => startEdit(post)} disabled={loadingId === post.id} title="Edit" className="p-2 text-gray-400 hover:text-violet-600 rounded-lg hover:bg-gray-50 transition-colors">
                   <Pencil className="w-4 h-4" />
                 </button>
                 <button onClick={() => remove(post)} title="Delete" className="p-2 text-gray-400 hover:text-red-500 rounded-lg hover:bg-gray-50 transition-colors">

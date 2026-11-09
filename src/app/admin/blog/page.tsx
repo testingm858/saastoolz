@@ -7,6 +7,7 @@ import prisma from "@/lib/prisma";
 import BlogAdminClient from "./BlogAdminClient";
 
 export const metadata: Metadata = { title: "Blog Admin", robots: { index: false, follow: false } };
+export const dynamic = "force-dynamic";
 
 export default async function BlogAdminPage() {
   const session = await getServerSession(authOptions);
@@ -22,7 +23,13 @@ export default async function BlogAdminPage() {
     );
   }
 
-  const posts = await prisma.blogPost.findMany({ orderBy: { createdAt: "desc" } });
+  // List view only needs metadata. `content` and `coverImage` (possibly a
+  // multi-MB legacy base64 data: URL) are fetched per post when you click Edit,
+  // so they never bloat this page's payload.
+  const posts = await prisma.blogPost.findMany({
+    orderBy: { createdAt: "desc" },
+    select: { id: true, title: true, slug: true, excerpt: true, published: true, publishedAt: true, createdAt: true, updatedAt: true },
+  });
 
   return <BlogAdminClient initialPosts={posts.map((p) => ({ ...p, publishedAt: p.publishedAt?.toISOString() ?? null, createdAt: p.createdAt.toISOString(), updatedAt: p.updatedAt.toISOString() }))} />;
 }
