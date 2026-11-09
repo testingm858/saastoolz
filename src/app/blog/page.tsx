@@ -12,17 +12,33 @@ export const metadata: Metadata = {
   openGraph: { title: "Blog | SaaSToolz", description: "Practical guides and how-tos for PDF, image, audio and developer tools, plus product updates from SaaSToolz. Find the fastest way to get things done.", type: "website", images: [{ url: "/opengraph-image", width: 1200, height: 630 }] },
 };
 
+// Each paginated page is its own canonical URL (page 1 stays /blog).
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ page?: string }> }): Promise<Metadata> {
+  const n = Math.floor(Number((await searchParams).page)) || 1;
+  return { ...metadata, alternates: { canonical: n > 1 ? `/blog?page=${n}` : "/blog" } };
+}
+
 // Posts are published live through /admin/blog with no redeploy — always
 // read the current state instead of a build-time snapshot.
 export const dynamic = "force-dynamic";
 
-export default async function BlogPage() {
+const PAGE_SIZE = 12;
+
+export default async function BlogPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
+  const { page: pageParam } = await searchParams;
+  const requested = Math.max(1, Math.floor(Number(pageParam)) || 1);
+  const total = await prisma.blogPost.count({ where: { published: true } }).catch(() => 0);
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const page = Math.min(requested, totalPages);
+
   // Falls back to the empty state below on a DB hiccup rather than crashing
-  // the whole page.
+  // the whole page. Paginated so the index never loads every cover at once.
   const posts = await prisma.blogPost
     .findMany({
       where: { published: true },
       orderBy: { publishedAt: "desc" },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
       select: { slug: true, title: true, excerpt: true, coverImage: true, publishedAt: true, content: true, views: true, likes: true },
     })
     .catch(() => []);
@@ -91,6 +107,17 @@ export default async function BlogPage() {
           );
         })}
       </div>
+      {totalPages > 1 && (
+        <nav aria-label="Blog pages" className="flex items-center justify-between mt-10 text-sm">
+          {page > 1 ? (
+            <Link href={page === 2 ? "/blog" : `/blog?page=${page - 1}`} rel="prev" className="text-violet-600 hover:underline">← Newer posts</Link>
+          ) : <span />}
+          <span className="text-gray-400">Page {page} of {totalPages}</span>
+          {page < totalPages ? (
+            <Link href={`/blog?page=${page + 1}`} rel="next" className="text-violet-600 hover:underline">Older posts →</Link>
+          ) : <span />}
+        </nav>
+      )}
     </div>
   );
 }
