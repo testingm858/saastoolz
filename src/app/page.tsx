@@ -176,6 +176,32 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* About — owner-approved homepage copy (2026-11-09). The privacy
+          paragraph mirrors the "Privacy First" card wording; don't reword it. */}
+      <section className="max-w-3xl mx-auto px-4 pb-20">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Free online tools, all in one place</h2>
+        <div className="space-y-4 text-gray-600 leading-relaxed">
+          <p>
+            SaaSToolz is a collection of {FREE_TOOLS.length} free online tools for everyday work with PDFs, images, audio, text, and code — all in one place, with no signup and no account required. Instead of searching for a different website every time you need to merge a PDF, compress an image, or format a block of JSON, you open the tool, do the job, and move on. There is nothing to install, nothing to download, and no credit card to enter.
+          </p>
+          <p>
+            Every tool works the same simple way. You open it in your browser, upload a file or paste your text if the tool needs one, and get your result in seconds. Most tools finish in a single step, and the ones that need a choice — which pages to keep, how much to compress, which format to convert to — ask for it plainly, before they run.
+          </p>
+          <p>
+            The tools fall into a few everyday groups. The PDF tools cover the jobs that come up again and again: merging files into one document, splitting out the pages you need, compressing a file that is too large to email, and converting between PDF, Word, JPG, and other formats. The image tools resize, compress, and convert pictures for websites, email, and social media, so a photo that is too large to send becomes a file that is small enough to share without losing the look of it. The developer tools handle the small, fiddly jobs — formatting JSON, generating a password, making a QR code, beautifying code — that would otherwise eat ten minutes of a working day. And the calculators and converters answer quick questions: what a loan costs, what a word count is, what a measurement is in another unit.
+          </p>
+          <p>
+            One of the most-used tools on the site is the <Link href="/tools/invoice-generator" className="text-violet-600 hover:underline">Free Invoice Generator</Link>. It builds a professional, print-ready invoice in minutes — your company details, your customer&apos;s details, itemised lines with tax and discounts, and a total in your currency — and exports it as a PDF or PNG, with no signup and no watermark on the invoice itself. It is the tool for freelancers and small businesses who need to bill a client today, not set up an accounting system first.
+          </p>
+          <p>
+            Privacy is built into how the tools work, not added as an afterthought. Tools that run in your browser never send your files anywhere — they never leave your device. Tools that need a server to do the work process your file securely and delete it within one hour. Nothing is kept to sell or share, and because there is no account, there is no profile of you to keep.
+          </p>
+          <p>
+            SaaSToolz is free forever, and the free tier is the whole product: all {FREE_TOOLS.length} tools, no account, no trial that runs out. Start with the tool you need right now and come back whenever the next small job comes up.
+          </p>
+        </div>
+      </section>
+
       {/* CTA Banner */}
       <section className="relative overflow-hidden bg-gray-900 text-white py-8">
         <div aria-hidden className="pointer-events-none absolute inset-0">
